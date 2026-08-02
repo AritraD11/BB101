@@ -1,0 +1,1513 @@
+<title>BB 101 · Tutorial 1 — The Cell (TA Handbook)</title>
+
+<style>
+/* ============================================================
+   BB 101 — Tutorial 1 TA Handbook
+   Palette derived from H&E histology staining:
+   haematoxylin violet + eosin pink, on a violet-biased neutral.
+   ============================================================ */
+
+:root{
+  --ground:      #FAFAFC;
+  --surface:     #FFFFFF;
+  --surface-2:   #F3F1F7;
+  --line:        #E2DEEA;
+  --line-strong: #CFC8DE;
+
+  --ink:         #1A1726;
+  --ink-2:       #46405C;
+  --ink-3:       #6E6880;
+
+  --violet:      #6B4E9E;   /* haematoxylin */
+  --violet-soft: #EDE7F6;
+  --eosin:       #C9436E;   /* eosin */
+  --eosin-soft:  #FBE9F0;
+
+  --good:        #1D7A5F;
+  --good-soft:   #E2F2EC;
+  --warn:        #9A6510;
+  --warn-soft:   #FBF0DC;
+
+  --shadow: 0 1px 2px rgba(26,23,38,.05), 0 8px 24px -12px rgba(26,23,38,.18);
+
+  --serif: "Iowan Old Style", "Charter", "Bitstream Charter", Georgia, "Times New Roman", serif;
+  --sans:  "Avenir Next", "Avenir", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --mono:  "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --r: 10px;
+  --maxw: 78ch;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --ground:      #131120;
+    --surface:     #1C1930;
+    --surface-2:   #262138;
+    --line:        #322C4A;
+    --line-strong: #443C63;
+
+    --ink:         #EDEAF6;
+    --ink-2:       #BDB6D0;
+    --ink-3:       #8F87A6;
+
+    --violet:      #A98FE0;
+    --violet-soft: #2A2340;
+    --eosin:       #F0819F;
+    --eosin-soft:  #3A2130;
+
+    --good:        #5FD3AC;
+    --good-soft:   #16332A;
+    --warn:        #E5B45F;
+    --warn-soft:   #35290F;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#131120; --surface:#1C1930; --surface-2:#262138;
+  --line:#322C4A; --line-strong:#443C63;
+  --ink:#EDEAF6; --ink-2:#BDB6D0; --ink-3:#8F87A6;
+  --violet:#A98FE0; --violet-soft:#2A2340;
+  --eosin:#F0819F; --eosin-soft:#3A2130;
+  --good:#5FD3AC; --good-soft:#16332A;
+  --warn:#E5B45F; --warn-soft:#35290F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+:root[data-theme="light"]{
+  --ground:#FAFAFC; --surface:#FFFFFF; --surface-2:#F3F1F7;
+  --line:#E2DEEA; --line-strong:#CFC8DE;
+  --ink:#1A1726; --ink-2:#46405C; --ink-3:#6E6880;
+  --violet:#6B4E9E; --violet-soft:#EDE7F6;
+  --eosin:#C9436E; --eosin-soft:#FBE9F0;
+  --good:#1D7A5F; --good-soft:#E2F2EC;
+  --warn:#9A6510; --warn-soft:#FBF0DC;
+  --shadow:0 1px 2px rgba(26,23,38,.05), 0 8px 24px -12px rgba(26,23,38,.18);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:17px;
+  line-height:1.62;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ---------------------------------------------------- masthead + nav */
+.mast{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.mast-in{
+  max-width:1180px; margin:0 auto; padding:12px 20px 0;
+  display:flex; flex-direction:column; gap:10px;
+}
+.mast-top{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.mast-title{
+  font-family:var(--serif); font-size:1.32rem; font-weight:600;
+  letter-spacing:-.01em; margin:0;
+}
+.mast-sub{
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.mast-actions{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+.nav{
+  display:flex; gap:4px; overflow-x:auto; padding-bottom:2px;
+  scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{ display:none; }
+.nav button{
+  flex:0 0 auto;
+  appearance:none; background:none; border:0;
+  border-bottom:2px solid transparent;
+  padding:9px 14px 11px; margin:0;
+  font-family:var(--sans); font-size:.94rem; font-weight:500;
+  color:var(--ink-3); cursor:pointer; white-space:nowrap;
+  border-radius:6px 6px 0 0; transition:color .15s, background .15s;
+}
+.nav button:hover{ color:var(--ink); background:var(--surface-2); }
+.nav button[aria-selected="true"]{
+  color:var(--violet); border-bottom-color:var(--violet); font-weight:600;
+}
+.nav .num{
+  font-family:var(--mono); font-size:.74em; opacity:.6; margin-right:6px;
+}
+
+/* ---------------------------------------------------------- buttons */
+.btn{
+  appearance:none; font-family:var(--sans); font-size:.85rem; font-weight:500;
+  padding:7px 13px; border-radius:7px; cursor:pointer;
+  background:var(--surface); color:var(--ink-2);
+  border:1px solid var(--line-strong);
+  transition:background .15s, color .15s, border-color .15s;
+}
+.btn:hover{ background:var(--surface-2); color:var(--ink); }
+.btn-accent{ background:var(--violet); border-color:var(--violet); color:#fff; }
+.btn-accent:hover{ filter:brightness(1.08); background:var(--violet); color:#fff; }
+
+:focus-visible{ outline:2.5px solid var(--eosin); outline-offset:2px; border-radius:4px; }
+
+/* ------------------------------------------------------------ layout */
+main{ max-width:1180px; margin:0 auto; padding:26px 20px 100px; }
+.panel[hidden]{ display:none; }
+.panel{ animation:rise .28s ease both; }
+@keyframes rise{ from{ opacity:0; transform:translateY(6px);} to{opacity:1;transform:none;} }
+@media (prefers-reduced-motion: reduce){
+  .panel{ animation:none; }
+  *{ transition-duration:.01ms !important; }
+}
+
+h2.sec{
+  font-family:var(--serif); font-size:2.05rem; font-weight:600;
+  letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance; line-height:1.18;
+}
+.sec-lede{
+  font-size:1.05rem; color:var(--ink-2); max-width:var(--maxw);
+  margin:0 0 26px;
+}
+h3{
+  font-family:var(--serif); font-size:1.3rem; font-weight:600;
+  letter-spacing:-.01em; margin:32px 0 10px; text-wrap:balance;
+}
+h4{
+  font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); margin:24px 0 8px; font-family:var(--sans);
+}
+p{ max-width:var(--maxw); margin:0 0 14px; }
+ul,ol{ max-width:var(--maxw); margin:0 0 14px; padding-left:1.25em; }
+li{ margin-bottom:7px; }
+b,strong{ font-weight:650; color:var(--ink); }
+code{
+  font-family:var(--mono); font-size:.86em;
+  background:var(--surface-2); padding:1px 5px; border-radius:4px;
+  border:1px solid var(--line);
+}
+
+/* ------------------------------------------------------------- cards */
+.card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow);
+}
+.grid{ display:grid; gap:16px; }
+.g2{ grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
+.g3{ grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); }
+
+.callout{
+  border-radius:var(--r); padding:15px 18px; margin:18px 0;
+  border:1px solid var(--line); background:var(--surface-2);
+  max-width:var(--maxw);
+}
+.callout .tag{
+  display:block; font-family:var(--mono); font-size:.68rem;
+  letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; font-weight:600;
+}
+.callout p:last-child, .callout ul:last-child{ margin-bottom:0; }
+.c-ask{ background:var(--eosin-soft); border-color:color-mix(in srgb,var(--eosin) 30%, transparent); }
+.c-ask .tag{ color:var(--eosin); }
+.c-key{ background:var(--violet-soft); border-color:color-mix(in srgb,var(--violet) 30%, transparent); }
+.c-key .tag{ color:var(--violet); }
+.c-warn{ background:var(--warn-soft); border-color:color-mix(in srgb,var(--warn) 34%, transparent); }
+.c-warn .tag{ color:var(--warn); }
+
+/* ------------------------------------------------------------ tables */
+.tw{ overflow-x:auto; margin:16px 0 22px; border:1px solid var(--line);
+     border-radius:var(--r); background:var(--surface); }
+table{ border-collapse:collapse; width:100%; min-width:520px; font-size:.94rem; }
+th,td{ text-align:left; padding:11px 15px; border-bottom:1px solid var(--line); vertical-align:top; }
+thead th{
+  background:var(--surface-2); font-size:.72rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:700; white-space:nowrap;
+}
+tbody tr:last-child td{ border-bottom:0; }
+td:first-child{ font-weight:600; color:var(--ink); }
+.num-cell{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
+
+/* ------------------------------------------------- organisation ladder */
+.ladder{ display:flex; flex-direction:column; gap:8px; margin:20px 0; }
+.rung{
+  display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center;
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:13px 16px; cursor:pointer; text-align:left;
+  font:inherit; color:inherit; width:100%; transition:border-color .15s, background .15s;
+}
+.rung:hover{ border-color:var(--violet); background:var(--surface-2); }
+.rung[aria-expanded="true"]{ border-color:var(--violet); }
+.rung .lv{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.06em;
+  color:#fff; background:var(--violet); padding:4px 8px; border-radius:5px;
+  min-width:34px; text-align:center; font-weight:600;
+}
+.rung .nm{ font-family:var(--serif); font-size:1.12rem; font-weight:600; }
+.rung .eg{ color:var(--ink-3); font-size:.9rem; }
+.rung-body{
+  padding:2px 16px 16px 66px; margin-top:-6px; margin-bottom:4px;
+  color:var(--ink-2); font-size:.95rem; max-width:var(--maxw);
+}
+.rung-body[hidden]{ display:none; }
+
+/* ------------------------------------------------------ cell diagram */
+.diagram-wrap{
+  display:grid; grid-template-columns:minmax(0,1.55fr) minmax(250px,1fr);
+  gap:18px; align-items:start; margin:18px 0;
+}
+@media (max-width:860px){ .diagram-wrap{ grid-template-columns:1fr; } }
+.stage{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:10px; box-shadow:var(--shadow);
+}
+.stage svg{ width:100%; height:auto; display:block; touch-action:manipulation; }
+.hot{ cursor:pointer; }
+.hot .shape{ transition:opacity .15s, stroke-width .15s; }
+.hot:hover .shape{ opacity:.82; }
+.hot.on .shape{ stroke:var(--eosin); stroke-width:3.5; }
+.hot text{ pointer-events:none; }
+/* the UA ring on a focused <g> draws a black box round the whole group's
+   bbox — suppress it and use the same stroke highlight for keyboard focus */
+.hot:focus{ outline:none; }
+.hot:focus-visible .shape{ stroke:var(--eosin); stroke-width:3.5; }
+.svg-lbl{ font-family:var(--sans); font-size:11px; fill:var(--ink-2); font-weight:600; }
+/* labels printed on top of a fixed light fill (wall, vacuole) need a fixed
+   dark ink — the themed one goes pale and unreadable in dark mode */
+.svg-lbl.on-light{ fill:#1E3140; }
+
+.info{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:18px 20px; box-shadow:var(--shadow);
+  position:sticky; top:132px; min-height:210px;
+}
+.info h5{
+  font-family:var(--serif); font-size:1.2rem; margin:0 0 4px; font-weight:600;
+}
+.info .role{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--eosin); font-weight:600; margin-bottom:10px;
+}
+.info p{ font-size:.94rem; margin-bottom:10px; color:var(--ink-2); }
+.info .ana{
+  font-size:.9rem; background:var(--violet-soft); padding:10px 13px;
+  border-radius:8px; color:var(--ink-2);
+}
+.info .ana b{ color:var(--violet); }
+.seg{
+  display:inline-flex; background:var(--surface-2); border:1px solid var(--line);
+  border-radius:9px; padding:3px; gap:3px; margin-bottom:4px;
+}
+.seg button{
+  appearance:none; border:0; background:none; font:inherit; font-size:.9rem;
+  padding:7px 16px; border-radius:6px; cursor:pointer; color:var(--ink-3); font-weight:500;
+}
+.seg button[aria-pressed="true"]{ background:var(--violet); color:#fff; font-weight:600; }
+
+/* ------------------------------------------------------- SA:V module */
+.sav{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow); margin:18px 0;
+}
+.sav-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin:16px 0; }
+.stat{ background:var(--surface-2); border-radius:9px; padding:12px 14px; border:1px solid var(--line); }
+.stat .k{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.stat .v{
+  font-family:var(--mono); font-size:1.42rem; font-weight:600; color:var(--ink);
+  font-variant-numeric:tabular-nums; line-height:1.3;
+}
+.stat .v small{ font-size:.6em; color:var(--ink-3); font-weight:500; }
+.stat.hero .v{ color:var(--eosin); font-size:1.62rem; }
+input[type=range]{
+  width:100%; margin:8px 0; accent-color:var(--violet); height:30px;
+}
+.slabel{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+.slabel .cur{ font-family:var(--mono); font-weight:600; color:var(--violet); font-variant-numeric:tabular-nums; }
+
+/* --------------------------------------------------------- size scale */
+.scale{ margin:18px 0; }
+.scale-row{
+  display:grid; grid-template-columns:minmax(120px,164px) 1fr auto;
+  gap:12px; align-items:center; padding:7px 0; border-bottom:1px solid var(--line);
+}
+.scale-row:last-child{ border-bottom:0; }
+.scale-row .nm{ font-size:.92rem; font-weight:600; }
+.scale-bar{ height:11px; background:var(--surface-2); border-radius:6px; overflow:hidden; }
+.scale-bar i{ display:block; height:100%; background:var(--violet); border-radius:6px; }
+.scale-row .val{
+  font-family:var(--mono); font-size:.83rem; color:var(--ink-3);
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+
+/* ------------------------------------------------------- specialised */
+.cellcard{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px 18px; box-shadow:var(--shadow);
+}
+.cellcard h5{ font-family:var(--serif); font-size:1.12rem; margin:0 0 2px; font-weight:600; }
+.cellcard .shape{ font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--eosin); font-weight:600; margin-bottom:9px; }
+.cellcard p{ font-size:.9rem; margin:0 0 8px; color:var(--ink-2); }
+.cellcard .why{ font-size:.88rem; background:var(--good-soft); color:var(--ink-2);
+  padding:9px 12px; border-radius:7px; }
+.cellcard .why b{ color:var(--good); }
+
+/* ------------------------------------------------------- doubt bank */
+.tools{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  margin:0 0 16px; position:sticky; top:126px; z-index:20;
+  background:color-mix(in srgb, var(--ground) 92%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  padding:10px 0;
+}
+.search{
+  flex:1 1 250px; min-width:0;
+  font:inherit; font-size:.95rem; padding:10px 14px;
+  border-radius:9px; border:1px solid var(--line-strong);
+  background:var(--surface); color:var(--ink);
+}
+.search::placeholder{ color:var(--ink-3); }
+.chips{ display:flex; gap:6px; flex-wrap:wrap; }
+.chip{
+  appearance:none; font:inherit; font-size:.82rem; font-weight:500;
+  padding:7px 12px; border-radius:20px; cursor:pointer;
+  background:var(--surface); border:1px solid var(--line-strong); color:var(--ink-3);
+}
+.chip[aria-pressed="true"]{ background:var(--violet); border-color:var(--violet); color:#fff; font-weight:600; }
+
+.q{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); margin-bottom:10px; overflow:hidden;
+}
+.q[hidden]{ display:none; }
+.q-head{
+  display:flex; gap:13px; align-items:flex-start; width:100%;
+  padding:15px 18px; background:none; border:0; font:inherit; color:inherit;
+  text-align:left; cursor:pointer;
+}
+.q-head:hover{ background:var(--surface-2); }
+.q-head .qm{
+  font-family:var(--mono); font-size:.9rem; font-weight:700; color:var(--eosin);
+  flex:0 0 auto; margin-top:1px;
+}
+.q-head .qt{ flex:1; font-weight:550; font-size:1rem; line-height:1.45; }
+.q-head .qc{ flex:0 0 auto; color:var(--ink-3); font-size:1.1rem; transition:transform .2s; }
+.q-head[aria-expanded="true"] .qc{ transform:rotate(45deg); }
+.q-body{ padding:0 18px 18px 49px; }
+.q-body[hidden]{ display:none; }
+.q-body p{ font-size:.96rem; margin-bottom:11px; }
+.q-body p:last-child{ margin-bottom:0; }
+.q-tags{ display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+.q-tag{
+  font-family:var(--mono); font-size:.64rem; letter-spacing:.07em; text-transform:uppercase;
+  padding:3px 8px; border-radius:5px; background:var(--surface-2);
+  color:var(--ink-3); border:1px solid var(--line); font-weight:600;
+}
+.q-tag.hard{ background:var(--eosin-soft); color:var(--eosin); border-color:transparent; }
+.line{ display:block; font-size:.93rem; padding:10px 13px; border-radius:8px;
+  background:var(--good-soft); margin-top:4px; }
+.line b{ color:var(--good); }
+
+/* ------------------------------------------------------------- quiz */
+.quiz-q{ background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:18px 20px; margin-bottom:14px; box-shadow:var(--shadow); }
+.quiz-q .stem{ font-weight:600; margin-bottom:12px; font-size:1rem; }
+.opts{ display:flex; flex-direction:column; gap:8px; }
+.opt{
+  appearance:none; text-align:left; font:inherit; font-size:.94rem;
+  padding:11px 15px; border-radius:8px; cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--line); color:var(--ink);
+  transition:border-color .15s, background .15s;
+}
+.opt:hover:not(:disabled){ border-color:var(--violet); }
+.opt:disabled{ cursor:default; }
+.opt.right{ background:var(--good-soft); border-color:var(--good); font-weight:600; }
+.opt.wrong{ background:var(--eosin-soft); border-color:var(--eosin); }
+.expl{ margin-top:12px; font-size:.93rem; color:var(--ink-2);
+  padding:11px 14px; background:var(--violet-soft); border-radius:8px; }
+.expl[hidden]{ display:none; }
+.score{
+  font-family:var(--mono); font-size:.95rem; font-weight:600; color:var(--violet);
+  padding:10px 0;
+}
+
+.mini{ font-size:.86rem; color:var(--ink-3); max-width:var(--maxw); }
+.foot{
+  margin-top:44px; padding-top:20px; border-top:1px solid var(--line);
+  font-size:.84rem; color:var(--ink-3); max-width:var(--maxw);
+}
+</style>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="mast-top">
+      <h1 class="mast-title">The Cell — TA Handbook</h1>
+      <span class="mast-sub">BB 101 · Tutorial 1 · Batch T1 · LT 206</span>
+      <span class="mast-actions">
+        <button class="btn" id="themeBtn" type="button">Theme</button>
+      </span>
+    </div>
+    <nav class="nav" id="nav" role="tablist" aria-label="Sections"></nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================ BRIEF -->
+<section class="panel" id="p-brief" role="tabpanel" hidden>
+  <h2 class="sec">Run the tutorial</h2>
+  <p class="sec-lede">The slide deck has six slides and about four real ideas. This page holds those four ideas, the layer of background underneath them, and the questions students actually ask — so nothing lands as a surprise.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The through-line</span>
+    <p>Every slide answers one question: <b>why is life built out of cells at all?</b> The answer is size. A cell is small because chemistry has to reach the middle fast enough to keep it alive. Everything else — organelles, tissues, organs, specialised shapes — is what life does once it accepts that limit. If a student remembers only one thing, make it this.</p>
+  </div>
+
+  <h3>A 50-minute shape</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Time</th><th>Beat</th><th>What you actually do</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">0–5</td><td>Attendance + hook</td><td>Ask: "How many cells are in your body?" Let them guess. Answer: about 30–37 trillion. Then: "And every one came from one single cell." That buys you the room.</td></tr>
+        <tr><td class="num-cell">5–12</td><td>Organisation of life</td><td>Walk the ladder molecules → organism. Point out the cell is the first rung that is <i>alive</i>.</td></tr>
+        <tr><td class="num-cell">12–22</td><td>What is a cell + why small</td><td>Definition, cell theory, then the surface-area-to-volume argument. Use the interactive slider here — it is the strongest five minutes of the tutorial.</td></tr>
+        <tr><td class="num-cell">22–33</td><td>Prokaryote vs eukaryote</td><td>Four axes from the slide: size &amp; complexity, organelles, nucleus, organisms. Land the nucleus as the defining one.</td></tr>
+        <tr><td class="num-cell">33–42</td><td>Plant vs animal</td><td>Three axes: cell wall, chloroplast, vacuole. Kill the "plants don't have mitochondria" myth on the spot.</td></tr>
+        <tr><td class="num-cell">42–50</td><td>Cells in our body</td><td>Structure follows function. Two or three examples, then the closing question: same DNA, different cells — how?</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>If you get stuck</h3>
+  <p>You are not expected to be a biologist, and the students know you are a TA. Three moves that always work:</p>
+  <ol>
+    <li><b>Convert the question into the principle.</b> Most first-year questions are a special case of surface area, of membranes, or of structure-follows-function. Name which one it is, reason from there out loud.</li>
+    <li><b>Say the boundary honestly.</b> "That's past what this tutorial covers — it's in the lecture on membrane transport" is a completely respectable answer, and far better than a guess. Write it down and follow up next week.</li>
+    <li><b>Turn it back to the room.</b> "Good — what would you predict, and why?" Half the time a student answers it, and you learn how they are thinking.</li>
+  </ol>
+
+  <div class="callout c-warn">
+    <span class="tag">Guard against</span>
+    <p>The three statements most likely to get you into trouble, because they are the ones textbooks oversimplify: <b>"prokaryotes have no organelles"</b> (they have ribosomes), <b>"only plants have cell walls"</b> (fungi and bacteria do too), and <b>"plant cells don't need mitochondria"</b> (they very much do). All three are unpacked in the Doubt Bank.</p>
+  </div>
+</section>
+
+<!-- ==================================================== ORGANISATION -->
+<section class="panel" id="p-org" role="tabpanel" hidden>
+  <h2 class="sec">Organisation of life</h2>
+  <p class="sec-lede">Slide 2. Life is built in nested layers, each one made of the layer below it. The point of the ladder is not to memorise six words — it is to see where <em>alive</em> begins.</p>
+
+  <div class="ladder" id="ladder"></div>
+
+  <div class="callout c-key">
+    <span class="tag">The line that matters</span>
+    <p>Molecules and organelles are <b>not alive</b> on their own. A ribosome cannot grow, respond, or reproduce itself. A cell can do all three. That is why the cell — and not the molecule, not the organelle — is called the smallest <b>unit of life</b>. Everything above the cell is life <i>organised</i>; everything below is life's <i>parts</i>.</p>
+  </div>
+
+  <div class="callout c-ask">
+    <span class="tag">Expect this</span>
+    <p><b>"Where do organ systems fit? The slide skips them."</b> The full ladder is organ → organ system → organism. The heart is an organ; the heart plus blood vessels plus blood is the circulatory system. The slide compresses it — say so, don't pretend the gap isn't there.</p>
+    <p><b>"What about atoms — below molecules?"</b> Yes: atoms → molecules → macromolecules → organelles. Biologists usually start at molecules because that is where the chemistry becomes specifically <i>biological</i>.</p>
+  </div>
+</section>
+
+<!-- ========================================================= WHAT IS -->
+<section class="panel" id="p-what" role="tabpanel" hidden>
+  <h2 class="sec">What is a cell?</h2>
+  <p class="sec-lede">Slide 3. The definition on the slide is correct but inert. Here is the definition plus the reasoning that makes it stick.</p>
+
+  <div class="callout c-key">
+    <span class="tag">Definition on the slide</span>
+    <p>A cell is the smallest, basic unit of life that makes up all living things, acting as the structural and functional building block of all organisms.</p>
+  </div>
+
+  <p>Unpack the three claims in that sentence, because students will be examined on exactly these:</p>
+  <ul>
+    <li><b>Structural unit</b> — every organism is built out of cells, the way a wall is built out of bricks. Nothing living is made of anything else.</li>
+    <li><b>Functional unit</b> — and unlike a brick, each cell independently <i>does</i> the things life does: takes in energy, builds molecules, responds to its surroundings, divides.</li>
+    <li><b>Smallest</b> — cut a cell in half and you do not get two smaller living things. You get debris. This is the test of a "unit".</li>
+  </ul>
+
+  <h3>Cell theory</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Claim</th><th>Who</th><th>Year</th></tr></thead>
+      <tbody>
+        <tr><td>All plants are made of cells</td><td>Matthias Schleiden</td><td class="num-cell">1838</td></tr>
+        <tr><td>All animals are made of cells</td><td>Theodor Schwann</td><td class="num-cell">1839</td></tr>
+        <tr><td>All cells arise from pre-existing cells<br><i>omnis cellula e cellula</i></td><td>Rudolf Virchow</td><td class="num-cell">1855</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="mini">Earlier: <b>Robert Hooke</b> (1665) saw and named "cells" in cork — dead cell walls, not living cells. <b>Antonie van Leeuwenhoek</b> (1674) was the first to see living cells, his "animalcules". Hooke named it; Leeuwenhoek saw it alive. Students mix these two up constantly.</p>
+
+  <h3>Why cells are small — the whole argument</h3>
+  <p>A cell takes everything in and pushes everything out across its <b>surface</b>. But everything it must feed and clear is in its <b>volume</b>. Grow a cell and the volume outruns the surface, because volume scales with the cube of length and surface only with the square. Past a certain size the membrane simply cannot keep up.</p>
+
+  <div class="sav">
+    <div class="slabel">
+      <label for="sizeSlider"><b>Cube-shaped cell, side length</b></label>
+      <span class="cur" id="sizeOut">20 µm</span>
+    </div>
+    <input type="range" id="sizeSlider" min="1" max="200" value="20" step="1"
+           aria-label="Cell side length in micrometres">
+    <div class="sav-row">
+      <div class="stat"><div class="k">Surface area</div><div class="v" id="saOut">—</div></div>
+      <div class="stat"><div class="k">Volume</div><div class="v" id="volOut">—</div></div>
+      <div class="stat hero"><div class="k">Surface ÷ volume</div><div class="v" id="ratioOut">—</div></div>
+      <div class="stat"><div class="k">Diffusion to centre</div><div class="v" id="diffOut">—</div></div>
+    </div>
+    <p class="mini" id="savNote"></p>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">Say it like this</span>
+    <p>"Double the cell's width. Its surface goes up 4×, but its volume goes up 8×. So every unit of surface now has twice as much cell to supply — and the trip to the middle takes four times as long, because diffusion time scales with distance <i>squared</i>. A cell doesn't stay small out of modesty. It stays small because it would suffocate."</p>
+  </div>
+
+  <h3>How big are things, actually</h3>
+  <div class="scale card" id="scale"></div>
+  <p class="mini">Bar length is on a logarithmic scale — each equal step is a 10× jump. Worth saying out loud: a neuron running from your spinal cord to your toe is a <b>single cell</b> about a metre long. It gets away with it by being extremely thin, so nothing is ever far from its surface.</p>
+
+  <div class="callout c-ask">
+    <span class="tag">Expect this</span>
+    <p><b>"Then how are egg cells so big?"</b> An ostrich egg yolk is a single cell about 8 cm across. It cheats: the bulk is stored, chemically inert yolk, not busy metabolising cytoplasm. The living, active layer is thin and near the surface. The rule holds for <i>active</i> cytoplasm.</p>
+  </div>
+</section>
+
+<!-- ============================================================ TYPES -->
+<section class="panel" id="p-types" role="tabpanel" hidden>
+  <h2 class="sec">Prokaryotic vs eukaryotic</h2>
+  <p class="sec-lede">Slide 4. The slide names four axes — size and complexity, organelles, nucleus, organisms. Take them in reverse order of importance so the nucleus lands last and hardest.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The one-line distinction</span>
+    <p><b>Eukaryote</b> = "true nucleus" (Greek <i>eu</i> = true, <i>karyon</i> = kernel/nut). <b>Prokaryote</b> = "before the nucleus". Membrane-bound nucleus present or absent — that is the whole dividing line, and the etymology does the teaching for you.</p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Axis</th><th>Prokaryotic</th><th>Eukaryotic</th></tr></thead>
+      <tbody>
+        <tr><td>Nucleus</td><td>No membrane-bound nucleus. DNA sits in an unbounded region called the <b>nucleoid</b>.</td><td>True nucleus, wrapped in a double membrane with pores.</td></tr>
+        <tr><td>Size</td><td class="num-cell">~0.1–5 µm</td><td class="num-cell">~10–100 µm (roughly 10× wider, ~1000× the volume)</td></tr>
+        <tr><td>Complexity</td><td>Simple, no internal compartments</td><td>Compartmentalised — reactions separated into organelles</td></tr>
+        <tr><td>Organelles</td><td>No membrane-bound organelles. <b>Ribosomes present.</b></td><td>Full set: mitochondria, ER, Golgi, lysosomes, etc.</td></tr>
+        <tr><td>DNA form</td><td>Single circular chromosome, naked (no histones); often plus plasmids</td><td>Multiple linear chromosomes wound on histone proteins</td></tr>
+        <tr><td>Ribosomes</td><td class="num-cell">70S (50S + 30S)</td><td class="num-cell">80S (60S + 40S) — but 70S inside mitochondria</td></tr>
+        <tr><td>Cell wall</td><td>Usually present — <b>peptidoglycan</b> in bacteria</td><td>Absent in animals; cellulose in plants, chitin in fungi</td></tr>
+        <tr><td>Division</td><td>Binary fission</td><td>Mitosis / meiosis</td></tr>
+        <tr><td>Organisms</td><td>Bacteria and Archaea — essentially all unicellular</td><td>Protists, fungi, plants, animals — unicellular <i>and</i> multicellular</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">The trap on this slide</span>
+    <p>"Prokaryotes have no organelles" is what the slide says and what students will write. It is <b>half</b> true: they have no <i>membrane-bound</i> organelles. They do have <b>ribosomes</b>, which are organelles — just non-membrane-bound ones. Always say the word "membrane-bound". If a student catches you, they are right, and you should say so.</p>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">Also</span>
+    <p>Prokaryote does <b>not</b> mean bacterium. There are two prokaryotic domains: <b>Bacteria</b> and <b>Archaea</b>. Archaea look like bacteria but their membrane lipids and gene-handling machinery are different — in several ways they are closer to us than to bacteria. The three domains are Bacteria, Archaea, Eukarya.</p>
+  </div>
+
+  <div class="callout c-ask">
+    <span class="tag">The question that will come</span>
+    <p><b>"Why is 50S + 30S = 70S and not 80S?"</b> Because S is a <b>Svedberg unit</b> — a sedimentation coefficient, measuring how fast a particle settles in a centrifuge. It depends on mass <i>and</i> on shape and density, so it does not add. When the two subunits join, the assembled particle is more compact than the two apart, and sediments at 70S. This gets asked every single year. Have it ready.</p>
+  </div>
+</section>
+
+<!-- ================================================== PLANT / ANIMAL -->
+<section class="panel" id="p-pa" role="tabpanel" hidden>
+  <h2 class="sec">Plant and animal cells</h2>
+  <p class="sec-lede">Slide 5. Three differences on the slide: cell wall and rigidity, chloroplast, vacuole size and number. Tap any part of the diagram to get the explanation and the doubt attached to it.</p>
+
+  <div class="seg" role="group" aria-label="Cell type">
+    <button type="button" id="btnAnimal" aria-pressed="true">Animal cell</button>
+    <button type="button" id="btnPlant" aria-pressed="false">Plant cell</button>
+  </div>
+
+  <div class="diagram-wrap">
+    <div class="stage" id="stage"></div>
+    <aside class="info" id="info" aria-live="polite">
+      <h5>Tap a structure</h5>
+      <div class="role">interactive diagram</div>
+      <p>Every labelled part is tappable. You get what it does, and the doubt students most often raise about it.</p>
+      <div class="ana">Works on touch — good to hand the iPad to a student and let them find the organelle you just named.</div>
+    </aside>
+  </div>
+
+  <h3>The three differences, properly</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Feature</th><th>Plant</th><th>Animal</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td>Cell wall</td><td>Present — cellulose, outside the membrane</td><td>Absent</td><td>Rigidity and a fixed shape. Plants stand up without a skeleton because every cell is in its own rigid box.</td></tr>
+        <tr><td>Chloroplast</td><td>Present in green tissue</td><td>Absent</td><td>Photosynthesis — makes glucose from light. Root cells have none; they are not green.</td></tr>
+        <tr><td>Vacuole</td><td>One huge central vacuole, up to 90% of cell volume</td><td>Several small ones, if any</td><td>Water storage and turgor pressure. It is what makes a plant firm, and losing it is what makes it wilt.</td></tr>
+        <tr><td>Shape</td><td>Fixed, boxy</td><td>Irregular, flexible</td><td>Consequence of the wall.</td></tr>
+        <tr><td>Centrioles</td><td>Absent in higher plants</td><td>Present</td><td>Plants still divide — they build spindles without centrioles.</td></tr>
+        <tr><td>Lysosomes</td><td>Rare; the vacuole does most digestion</td><td>Present and common</td><td>Same job, different compartment.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">Kill this myth on sight</span>
+    <p><b>"Plants have chloroplasts, so they don't need mitochondria."</b> Wrong, and extremely common. Chloroplasts <i>make</i> glucose; mitochondria <i>spend</i> it to make ATP. A plant respires all day and all night, in every cell — including roots, which never see light and have no chloroplasts at all. Every plant cell has mitochondria.</p>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">Turgor — the demo you can do with words</span>
+    <p>The vacuole fills with water and pushes the cytoplasm hard against the cell wall. That outward push is <b>turgor pressure</b>, and it is what holds a leaf flat and a stem upright. Stop watering the plant, the vacuoles lose water, the push disappears — the plant <b>wilts</b>. Water it and it recovers, because the wall was still there holding the shape. Ask them why a wilted plant recovers but a crushed one doesn't.</p>
+  </div>
+</section>
+
+<!-- ============================================================ BODY -->
+<section class="panel" id="p-body" role="tabpanel" hidden>
+  <h2 class="sec">Cells in our body</h2>
+  <p class="sec-lede">Slide 6. One idea, stated on the slide: cells differ in shape and size <em>because</em> each is specialised for a job. Run it as structure → function, every time.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The rule</span>
+    <p><b>Structure follows function.</b> Do not present these as seven shapes to memorise. Present each shape as the answer to a design problem — then ask the room to guess the shape before you show it. "This cell has to carry oxygen and squeeze through vessels narrower than itself. What shape would you build?"</p>
+  </div>
+
+  <div class="grid g3" id="cellGrid"></div>
+
+  <div class="callout c-ask">
+    <span class="tag">The closing question — plant it yourself</span>
+    <p><b>"If every cell in my body has the same DNA, why is a neuron not a fat cell?"</b> Because they use <b>different parts</b> of the same DNA. Every cell carries the full genome, but each cell type switches on only the genes it needs and keeps the rest silent — this is <b>differential gene expression</b>. Same cookbook in every kitchen; each kitchen cooks a different page. This is the single best question to end the tutorial on, because it opens directly onto the rest of the course.</p>
+  </div>
+</section>
+
+<!-- ======================================================= DOUBT BANK -->
+<section class="panel" id="p-doubts" role="tabpanel" hidden>
+  <h2 class="sec">Doubt bank</h2>
+  <p class="sec-lede">Every question a first-year is realistically going to throw at you on this material, with an answer you can say out loud. Search it live during the tutorial if you need to.</p>
+
+  <div class="tools">
+    <input class="search" id="qSearch" type="search" placeholder="Search — try 'virus', 'ribosome', 'wall'…" aria-label="Search doubts">
+    <div class="chips" id="qChips"></div>
+  </div>
+
+  <div id="qList"></div>
+  <p class="mini" id="qCount"></p>
+</section>
+
+<!-- ============================================================= QUIZ -->
+<section class="panel" id="p-quiz" role="tabpanel" hidden>
+  <h2 class="sec">Check the room</h2>
+  <p class="sec-lede">Ten questions built around the misconceptions above, not around recall. Use them as a closing five minutes, or throw one up mid-tutorial when attention drops.</p>
+  <div class="score" id="score">Not started</div>
+  <div id="quiz"></div>
+  <p><button class="btn btn-accent" id="resetQuiz" type="button">Reset quiz</button></p>
+</section>
+
+<!-- ========================================================== NUMBERS -->
+<section class="panel" id="p-nums" role="tabpanel" hidden>
+  <h2 class="sec">Numbers &amp; names</h2>
+  <p class="sec-lede">The facts you want available without thinking. Skim this on the walk to LT 206.</p>
+
+  <h4>Sizes</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Thing</th><th>Size</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Mycoplasma</td><td class="num-cell">0.1–0.3 µm</td><td>Smallest known cell</td></tr>
+        <tr><td><i>E. coli</i></td><td class="num-cell">~2 µm long</td><td>Standard bacterium</td></tr>
+        <tr><td>Red blood cell</td><td class="num-cell">~7–8 µm</td><td>Handy internal ruler</td></tr>
+        <tr><td>Typical animal cell</td><td class="num-cell">10–30 µm</td><td></td></tr>
+        <tr><td>Typical plant cell</td><td class="num-cell">10–100 µm</td><td>Larger, mostly vacuole</td></tr>
+        <tr><td>Human egg (ovum)</td><td class="num-cell">~120 µm</td><td>Largest human cell; just visible unaided</td></tr>
+        <tr><td>Ostrich egg yolk</td><td class="num-cell">~8 cm</td><td>Largest single cell</td></tr>
+        <tr><td>Human neuron</td><td class="num-cell">up to ~1 m</td><td>Longest human cell</td></tr>
+        <tr><td>Light microscope limit</td><td class="num-cell">~200 nm</td><td>Why organelles need an electron microscope</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Counts</h4>
+  <ul>
+    <li>Cells in a human body: <b>~30–37 trillion</b> (3.0–3.7 × 10<sup>13</sup>).</li>
+    <li>Bacterial cells living in and on you: <b>roughly the same order</b> — about 38 trillion. The old "10× more bacteria than human cells" line is outdated; the current estimate is close to 1:1.</li>
+    <li>Distinct human cell types: <b>~200+</b>, depending on how you count.</li>
+    <li>Red blood cell lifespan <b>~120 days</b>; gut lining <b>~5 days</b>; most neurons <b>a lifetime</b>.</li>
+  </ul>
+
+  <h4>Names to get right</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Name</th><th>Contribution</th></tr></thead>
+      <tbody>
+        <tr><td>Robert Hooke (1665)</td><td>Coined "cell", looking at dead cork — he saw empty cell <i>walls</i></td></tr>
+        <tr><td>Antonie van Leeuwenhoek (1674)</td><td>First to see living cells and microbes</td></tr>
+        <tr><td>Robert Brown (1831)</td><td>Identified the nucleus</td></tr>
+        <tr><td>Schleiden &amp; Schwann (1838–39)</td><td>Cell theory: all plants, all animals are made of cells</td></tr>
+        <tr><td>Rudolf Virchow (1855)</td><td><i>Omnis cellula e cellula</i> — cells come only from cells</td></tr>
+        <tr><td>Lynn Margulis (1967)</td><td>Endosymbiotic theory for mitochondria and chloroplasts</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Etymology that does your teaching for you</h4>
+  <ul>
+    <li><b>Eu-karyote</b> = true kernel · <b>Pro-karyote</b> = before the kernel</li>
+    <li><b>Mito-chondrion</b> = thread granule · <b>Chloro-plast</b> = green formed-thing</li>
+    <li><b>Lyso-some</b> = loosening body (it breaks things down) · <b>Ribo-some</b> = RNA body</li>
+    <li><b>Cyto-</b> = cell, everywhere: cytoplasm, cytosol, cytoskeleton, cytokinesis</li>
+    <li><b>Chromo-some</b> = coloured body — named for how strongly it took up stain</li>
+  </ul>
+
+  <div class="foot">
+    <p>Built from <i>BB101Tutorial3Aug.pptx</i> (6 slides) for Tutorial Batch T1, LT 206. Diagrams here are schematic and drawn for tapping, not to scale — the deck's own images stay the reference for what a real cell looks like.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ------------------------------------------------------------- theme */
+var root = document.documentElement;
+document.getElementById("themeBtn").addEventListener("click", function(){
+  var now = root.getAttribute("data-theme");
+  if(!now){
+    now = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  root.setAttribute("data-theme", now === "dark" ? "light" : "dark");
+});
+
+/* --------------------------------------------------------- nav / tabs */
+var SECTIONS = [
+  ["brief",  "Run it"],
+  ["org",    "Organisation"],
+  ["what",   "What is a cell"],
+  ["types",  "Pro vs Eu"],
+  ["pa",     "Plant vs Animal"],
+  ["body",   "Cells in us"],
+  ["doubts", "Doubt bank"],
+  ["quiz",   "Quiz"],
+  ["nums",   "Numbers"]
+];
+var nav = document.getElementById("nav");
+SECTIONS.forEach(function(s, i){
+  var b = document.createElement("button");
+  b.type = "button";
+  b.setAttribute("role","tab");
+  b.setAttribute("aria-selected", i===0 ? "true":"false");
+  b.setAttribute("aria-controls","p-"+s[0]);
+  b.dataset.k = s[0];
+  b.innerHTML = '<span class="num">'+(i+1)+'</span>'+s[1];
+  b.addEventListener("click", function(){ show(s[0]); });
+  nav.appendChild(b);
+});
+function show(k){
+  SECTIONS.forEach(function(s){
+    document.getElementById("p-"+s[0]).hidden = (s[0] !== k);
+  });
+  Array.prototype.forEach.call(nav.children, function(b){
+    b.setAttribute("aria-selected", b.dataset.k === k ? "true" : "false");
+  });
+  window.scrollTo({ top:0, behavior:"instant" in window ? "auto" : "auto" });
+}
+show("brief");
+
+/* ------------------------------------------------ organisation ladder */
+var LADDER = [
+  ["Molecules","Water, glucose, DNA, proteins",
+   "The chemical alphabet. Individually just chemistry — none of it is alive. DNA in a test tube does nothing on its own."],
+  ["Organelles","Nucleus, mitochondrion, ribosome",
+   "Molecules assembled into machines with a job. A mitochondrion makes ATP, a ribosome builds protein. Still not alive: it cannot maintain or reproduce itself outside a cell."],
+  ["Cell","Neuron, red blood cell, bacterium",
+   "The first rung that is alive. Take in energy, build molecules, respond, divide — all of it happens here. This is the unit."],
+  ["Tissue","Muscle tissue, epithelium, blood",
+   "A group of similar cells doing one job together. Cardiac muscle tissue is many muscle cells contracting in step."],
+  ["Organ","Heart, leaf, brain, kidney",
+   "Several tissue types working as one structure. The heart is muscle plus nerve plus connective tissue plus epithelium."],
+  ["Organ system","Circulatory, digestive, nervous",
+   "Organs cooperating on one large function. Compressed out of the slide — mention it so nobody is caught out later."],
+  ["Organism","One human, one plant, one bacterium",
+   "The whole living thing. Note the bottom and the top can be the same rung: a bacterium is a single cell and a complete organism."]
+];
+var lad = document.getElementById("ladder");
+LADDER.forEach(function(r, i){
+  var btn = document.createElement("button");
+  btn.type = "button"; btn.className = "rung";
+  btn.setAttribute("aria-expanded","false");
+  btn.innerHTML = '<span class="lv">'+(i+1)+'</span><span><span class="nm">'+r[0]+'</span> '+
+                  '<span class="eg">— '+r[1]+'</span></span>';
+  var body = document.createElement("div");
+  body.className = "rung-body"; body.hidden = true; body.textContent = r[2];
+  btn.setAttribute("aria-controls","rung-"+i); body.id = "rung-"+i;
+  btn.addEventListener("click", function(){
+    var open = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", open ? "false":"true");
+    body.hidden = open;
+  });
+  lad.appendChild(btn); lad.appendChild(body);
+});
+
+/* ------------------------------------------------------ SA:V module */
+var slider = document.getElementById("sizeSlider");
+function fmt(n){
+  if(n >= 1e6) return (n/1e6).toFixed(n/1e6 < 10 ? 2 : 1) + "M";
+  if(n >= 1e3) return (n/1e3).toFixed(n/1e3 < 10 ? 2 : 1) + "k";
+  return n.toFixed(n < 10 ? 2 : 0);
+}
+function updateSAV(){
+  var L  = +slider.value;              // µm
+  var sa = 6*L*L;                      // µm²
+  var v  = L*L*L;                      // µm³
+  var r  = sa/v;                       // = 6/L, per µm
+  // 3-D diffusion time to the centre: t ≈ x²/(6D), D ≈ 1000 µm²/s for a small
+  // metabolite in cytosol. x = half the side length.
+  var x  = L/2, D = 1000;
+  var t  = (x*x)/(6*D);                // seconds
+
+  document.getElementById("sizeOut").textContent  = L + " µm";
+  document.getElementById("saOut").innerHTML      = fmt(sa) + ' <small>µm²</small>';
+  document.getElementById("volOut").innerHTML     = fmt(v)  + ' <small>µm³</small>';
+  document.getElementById("ratioOut").innerHTML   = r.toFixed(2) + ' <small>/µm</small>';
+  document.getElementById("diffOut").innerHTML    =
+    (t < 1 ? (t*1000).toFixed(t*1000 < 10 ? 1 : 0) + ' <small>ms</small>'
+           : t.toFixed(t < 10 ? 1 : 0) + ' <small>s</small>');
+
+  var note;
+  if(L <= 5)        note = "Bacterial range. Enormous surface per unit volume, and the centre is supplied almost instantly — this cell has no transport problem at all.";
+  else if(L <= 30)  note = "Typical eukaryotic cell. Still comfortable, but this is roughly where organelles start earning their keep by bringing reactions to their own membranes instead of relying on the outer surface.";
+  else if(L <= 80)  note = "Getting large. Ratio is falling and the centre is now seconds away. Real cells this size lean on cytoplasmic streaming or a large inert vacuole rather than pure diffusion.";
+  else              note = "Past the practical limit for active cytoplasm. Compare with 20 µm: the ratio has collapsed and the diffusion time is up by the square of the size change. A cell like this starves in the middle — which is exactly why life divides instead of growing.";
+  document.getElementById("savNote").textContent = note;
+}
+slider.addEventListener("input", updateSAV);
+updateSAV();
+
+/* --------------------------------------------------------- size scale */
+var SCALE = [
+  ["Mycoplasma",            0.2,      "0.2 µm"],
+  ["Ribosome (~25 nm)",     0.025,    "0.025 µm"],
+  ["E. coli",               2,        "2 µm"],
+  ["Red blood cell",        8,        "8 µm"],
+  ["Typical animal cell",   20,       "20 µm"],
+  ["Typical plant cell",    60,       "60 µm"],
+  ["Human egg cell",        120,      "120 µm"],
+  ["Ostrich egg yolk",      80000,    "8 cm"],
+  ["Human neuron (length)", 1000000,  "1 m"]
+];
+var scaleEl = document.getElementById("scale");
+var lo = Math.log10(0.02), hi = Math.log10(1.2e6);
+SCALE.slice().sort(function(a,b){ return a[1]-b[1]; }).forEach(function(s){
+  var pct = (Math.log10(s[1]) - lo) / (hi - lo) * 100;
+  var row = document.createElement("div");
+  row.className = "scale-row";
+  row.innerHTML = '<span class="nm">'+s[0]+'</span>'+
+                  '<span class="scale-bar"><i style="width:'+Math.max(2,pct).toFixed(1)+'%"></i></span>'+
+                  '<span class="val">'+s[2]+'</span>';
+  scaleEl.appendChild(row);
+});
+
+/* ------------------------------------------------ interactive diagram */
+var PARTS = {
+  membrane:{n:"Cell membrane",r:"Boundary — every cell has one",
+    d:"A double layer of phospholipids with proteins floating in it. It decides what enters and leaves, which is the single most important job in the cell. Described as a <b>fluid mosaic</b>: fluid because the molecules drift sideways, mosaic because of the scattered proteins.",
+    a:"Doubt: <b>“Selectively permeable — selective how?”</b> Small non-polar things (O₂, CO₂) cross freely. Ions and large polar molecules need a protein channel or pump. The membrane isn't a sieve sorting by size — it sorts by chemistry."},
+  nucleus:{n:"Nucleus",r:"Control centre",
+    d:"Holds the DNA and directs everything the cell does by controlling which proteins get made. Wrapped in a <b>double</b> membrane — the nuclear envelope — punched through with <b>nuclear pores</b>.",
+    a:"Doubt: <b>“Why pores?”</b> DNA never leaves. mRNA copies must get out and proteins must get in, so the envelope needs controlled gates. A sealed nucleus would be useless."},
+  nucleolus:{n:"Nucleolus",r:"Ribosome factory",
+    d:"A dense region inside the nucleus where ribosomal RNA is made and ribosome subunits are assembled. Not membrane-bound — it is a dense patch, not a compartment.",
+    a:"Handy: cells that make a lot of protein have a big, obvious nucleolus. Structure follows function again."},
+  mito:{n:"Mitochondrion",r:"Powerhouse",
+    d:"Site of aerobic respiration — turns glucose and oxygen into <b>ATP</b>, the cell's usable energy. Double membrane, with the inner one folded into <b>cristae</b>.",
+    a:"Doubt: <b>“Why folded?”</b> The folds pack far more surface area into the same volume, and the ATP machinery sits on that surface. More surface, more ATP — the same surface-area logic as the whole cell. Also: mitochondria have their <b>own circular DNA and 70S ribosomes</b>, which is the evidence for endosymbiotic theory."},
+  rer:{n:"Rough ER",r:"Protein production line",
+    d:"A membrane network continuous with the nuclear envelope, studded with ribosomes — that's what makes it 'rough'. Proteins made here are destined for export or for membranes.",
+    a:"Contrast: <b>smooth ER</b> has no ribosomes and does lipid synthesis and detoxification. Liver cells are packed with smooth ER."},
+  ser:{n:"Smooth ER",r:"Lipids and detox",
+    d:"ER without ribosomes. Makes lipids and steroids, stores calcium, and breaks down toxins and drugs.",
+    a:"Memory hook: rough makes <b>protein</b> (ribosomes are protein machines), smooth makes <b>fat</b>."},
+  golgi:{n:"Golgi apparatus",r:"Sorting and dispatch",
+    d:"Receives proteins from the ER, modifies them, then packages and addresses them into vesicles for their destination.",
+    a:"Analogy that lands: the ER is the factory floor, the Golgi is the <b>packing and dispatch department</b>. Nothing new is manufactured — it is finished, boxed and labelled."},
+  ribo:{n:"Ribosomes",r:"Protein synthesis",
+    d:"Read mRNA and build proteins from amino acids. Found free in the cytoplasm and bound to the rough ER. <b>80S</b> in eukaryotes, <b>70S</b> in prokaryotes and inside mitochondria and chloroplasts.",
+    a:"Doubt: <b>“Is a ribosome an organelle?”</b> Yes — a <b>non-membrane-bound</b> organelle. This is exactly why 'prokaryotes have no organelles' is sloppy. They have these."},
+  lyso:{n:"Lysosome",r:"Waste disposal",
+    d:"A sac of digestive enzymes that breaks down worn-out organelles, food particles and invading bacteria. Nicknamed the cell's <b>suicide bag</b>.",
+    a:"Doubt: <b>“Why doesn't it digest its own cell?”</b> Two reasons — the enzymes are sealed behind a membrane, and they only work at the acidic pH (~4.5) kept <i>inside</i> the lysosome. Leaked into the neutral cytoplasm, they largely stop working."},
+  cyto:{n:"Cytoplasm",r:"Everything inside",
+    d:"The whole contents inside the membrane apart from the nucleus — the fluid plus all the organelles suspended in it.",
+    a:"Precision students love: <b>cytosol</b> is the fluid alone; <b>cytoplasm</b> is cytosol + organelles; <b>protoplasm</b> is cytoplasm + nucleus, i.e. the entire living content."},
+  centro:{n:"Centrosome / centrioles",r:"Division organiser",
+    d:"A pair of cylinders that organise the microtubule spindle which pulls chromosomes apart during division.",
+    a:"Doubt: <b>“Plants divide too — how, without centrioles?”</b> Higher plants have no centrioles but still build a spindle, organised from diffuse sites instead. Centrioles help; they aren't essential."},
+  wall:{n:"Cell wall",r:"Rigid outer casing",
+    d:"A rigid layer of <b>cellulose</b> outside the membrane, giving the plant cell a fixed shape and stopping it bursting when it takes in water. Fully permeable and non-living.",
+    a:"Doubt: <b>“Only plants have walls?”</b> No. Fungi have walls of <b>chitin</b>, bacteria of <b>peptidoglycan</b>, algae of cellulose. What is unique to plants is the <i>cellulose</i>, not the wall."},
+  chloro:{n:"Chloroplast",r:"Photosynthesis",
+    d:"Captures light and turns CO₂ and water into glucose. Contains the green pigment <b>chlorophyll</b>, held in stacked membrane discs called grana. Double membrane.",
+    a:"Doubt: <b>“Do all plant cells have them?”</b> No — only green tissue. Root cells have none, which is why roots aren't green. Like mitochondria, chloroplasts have their own DNA and 70S ribosomes."},
+  vac:{n:"Central vacuole",r:"Storage and turgor",
+    d:"One large sac of cell sap that can occupy up to <b>90%</b> of the cell's volume, pushing everything else against the wall. Stores water, ions and waste.",
+    a:"This is why a plant wilts. Water lost → vacuole shrinks → turgor pressure drops → the cell goes floppy. Animal cells have small vacuoles at most, and no equivalent turgor."},
+  plasmo:{n:"Plasmodesmata",r:"Cell-to-cell channels",
+    d:"Narrow channels crossing the cell walls, joining the cytoplasm of neighbouring plant cells so water and small molecules can pass directly.",
+    a:"The animal equivalent is a <b>gap junction</b> — same idea, but it crosses two membranes rather than two walls."}
+};
+
+var ANIMAL =
+'<svg viewBox="0 0 540 400" role="img" aria-label="Schematic animal cell, interactive">'+
+ '<g class="hot" data-k="membrane"><ellipse class="shape" cx="270" cy="200" rx="252" ry="178" fill="var(--eosin-soft)" stroke="var(--eosin)" stroke-width="3"/></g>'+
+ '<g class="hot" data-k="cyto"><ellipse class="shape" cx="270" cy="200" rx="243" ry="169" fill="var(--surface-2)" stroke="none"/></g>'+
+ '<g class="hot" data-k="nucleus"><circle class="shape" cx="205" cy="178" r="70" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="3"/>'+
+   '<circle cx="205" cy="178" r="62" fill="none" stroke="var(--violet)" stroke-width="1.4" opacity=".6"/>'+
+   '<text class="svg-lbl" x="205" y="238" text-anchor="middle">Nucleus</text></g>'+
+ '<g class="hot" data-k="nucleolus"><circle class="shape" cx="192" cy="166" r="23" fill="var(--violet)" opacity=".75" stroke="var(--violet)" stroke-width="2"/></g>'+
+ '<g class="hot" data-k="mito">'+
+   '<ellipse class="shape" cx="395" cy="130" rx="46" ry="24" fill="#E7825F" stroke="#B4522F" stroke-width="2.4" transform="rotate(-18 395 130)"/>'+
+   '<path d="M362 136 q12 -14 22 0 q12 -14 22 0 q12 -14 22 0" fill="none" stroke="#8E3A1D" stroke-width="2" opacity=".8" transform="rotate(-18 395 130)"/>'+
+   '<ellipse class="shape" cx="140" cy="312" rx="40" ry="21" fill="#E7825F" stroke="#B4522F" stroke-width="2.4" transform="rotate(14 140 312)"/>'+
+   '<text class="svg-lbl" x="395" y="98" text-anchor="middle">Mitochondria</text></g>'+
+ '<g class="hot" data-k="rer">'+
+   '<path class="shape" d="M282 122 q46 -18 74 4 M286 142 q48 -18 76 4 M290 162 q48 -18 76 4" fill="none" stroke="var(--violet)" stroke-width="4.5" stroke-linecap="round"/>'+
+   '<g fill="var(--eosin)"><circle cx="296" cy="118" r="3"/><circle cx="318" cy="110" r="3"/><circle cx="340" cy="116" r="3"/>'+
+    '<circle cx="300" cy="138" r="3"/><circle cx="322" cy="130" r="3"/><circle cx="344" cy="136" r="3"/>'+
+    '<circle cx="304" cy="158" r="3"/><circle cx="326" cy="150" r="3"/><circle cx="348" cy="156" r="3"/></g>'+
+   '<text class="svg-lbl" x="352" y="182" text-anchor="start">Rough ER</text></g>'+
+ '<g class="hot" data-k="ser">'+
+   '<path class="shape" d="M400 226 q34 -12 40 14 q6 26 -30 24 M406 250 q28 -8 32 12" fill="none" stroke="var(--good)" stroke-width="4.5" stroke-linecap="round"/>'+
+   '<text class="svg-lbl" x="446" y="212" text-anchor="middle">Smooth ER</text></g>'+
+ '<g class="hot" data-k="golgi">'+
+   '<path class="shape" d="M186 296 q54 -20 106 -4 M182 312 q54 -20 106 -4 M178 328 q54 -20 106 -4" fill="none" stroke="#C79A22" stroke-width="6" stroke-linecap="round"/>'+
+   '<text class="svg-lbl" x="234" y="352" text-anchor="middle">Golgi</text></g>'+
+ '<g class="hot" data-k="lyso">'+
+   '<circle class="shape" cx="360" cy="300" r="19" fill="#7EC2D8" stroke="#2F7E99" stroke-width="2.4"/>'+
+   '<circle class="shape" cx="402" cy="330" r="13" fill="#7EC2D8" stroke="#2F7E99" stroke-width="2.4"/>'+
+   '<text class="svg-lbl" x="386" y="278" text-anchor="middle">Lysosomes</text></g>'+
+ '<g class="hot" data-k="centro">'+
+   '<rect class="shape" x="90" y="118" width="26" height="11" rx="3" fill="var(--ink-3)" stroke="var(--ink-2)" stroke-width="2"/>'+
+   '<rect class="shape" x="96" y="136" width="11" height="26" rx="3" fill="var(--ink-3)" stroke="var(--ink-2)" stroke-width="2"/>'+
+   '<text class="svg-lbl" x="102" y="108" text-anchor="middle">Centrioles</text></g>'+
+ '<g class="hot" data-k="ribo">'+
+   '<g fill="var(--eosin)"><circle cx="126" cy="222" r="4"/><circle cx="148" cy="248" r="4"/><circle cx="112" cy="256" r="4"/>'+
+    '<circle cx="330" cy="222" r="4"/><circle cx="250" cy="336" r="4"/><circle cx="300" cy="248" r="4"/></g>'+
+   '<text class="svg-lbl" x="120" y="204" text-anchor="middle">Ribosomes</text></g>'+
+'</svg>';
+
+var PLANT =
+'<svg viewBox="0 0 540 400" role="img" aria-label="Schematic plant cell, interactive">'+
+ '<g class="hot" data-k="wall"><rect class="shape" x="16" y="16" width="508" height="368" rx="16" fill="#CFE3B8" stroke="#5C8C3A" stroke-width="7"/>'+
+   '<text class="svg-lbl on-light" x="270" y="38" text-anchor="middle">Cell wall (cellulose)</text></g>'+
+ '<g class="hot" data-k="membrane"><rect class="shape" x="32" y="50" width="476" height="320" rx="10" fill="var(--eosin-soft)" stroke="var(--eosin)" stroke-width="3"/></g>'+
+ '<g class="hot" data-k="cyto"><rect class="shape" x="39" y="57" width="462" height="306" rx="8" fill="var(--surface-2)" stroke="none"/></g>'+
+ '<g class="hot" data-k="vac"><rect class="shape" x="140" y="96" width="240" height="226" rx="34" fill="#BBD6F0" stroke="#3E7BB0" stroke-width="3"/>'+
+   '<text class="svg-lbl on-light" x="260" y="206" text-anchor="middle">Central vacuole</text>'+
+   '<text class="svg-lbl on-light" x="260" y="224" text-anchor="middle" opacity=".8">up to 90% of the cell</text></g>'+
+ '<g class="hot" data-k="nucleus"><circle class="shape" cx="86" cy="196" r="44" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="3"/>'+
+   '<circle cx="86" cy="196" r="37" fill="none" stroke="var(--violet)" stroke-width="1.4" opacity=".6"/>'+
+   '<text class="svg-lbl" x="86" y="254" text-anchor="middle">Nucleus</text></g>'+
+ '<g class="hot" data-k="nucleolus"><circle class="shape" cx="78" cy="188" r="15" fill="var(--violet)" opacity=".75" stroke="var(--violet)" stroke-width="2"/></g>'+
+ '<g class="hot" data-k="chloro">'+
+   '<ellipse class="shape" cx="462" cy="128" rx="30" ry="18" fill="#4F9A4A" stroke="#2C6B2A" stroke-width="2.4" transform="rotate(-24 462 128)"/>'+
+   '<ellipse class="shape" cx="466" cy="256" rx="30" ry="18" fill="#4F9A4A" stroke="#2C6B2A" stroke-width="2.4" transform="rotate(16 466 256)"/>'+
+   '<ellipse class="shape" cx="272" cy="352" rx="30" ry="17" fill="#4F9A4A" stroke="#2C6B2A" stroke-width="2.4"/>'+
+   '<g stroke="#1E4A1D" stroke-width="1.8" opacity=".85">'+
+     '<path d="M258 352 h28 M258 346 h28 M258 358 h28"/></g>'+
+   '<text class="svg-lbl" x="462" y="96" text-anchor="middle">Chloroplasts</text></g>'+
+ '<g class="hot" data-k="mito">'+
+   '<ellipse class="shape" cx="80" cy="308" rx="34" ry="18" fill="#E7825F" stroke="#B4522F" stroke-width="2.4" transform="rotate(12 80 308)"/>'+
+   '<text class="svg-lbl" x="80" y="342" text-anchor="middle">Mitochondrion</text></g>'+
+ '<g class="hot" data-k="golgi">'+
+   '<path class="shape" d="M330 348 q40 -16 78 -2 M328 360 q40 -16 78 -2" fill="none" stroke="#C79A22" stroke-width="5.5" stroke-linecap="round"/>'+
+   '<text class="svg-lbl" x="368" y="336" text-anchor="middle">Golgi</text></g>'+
+ '<g class="hot" data-k="rer">'+
+   '<path class="shape" d="M48 106 q32 -13 58 2 M52 126 q32 -13 58 2" fill="none" stroke="var(--violet)" stroke-width="4.5" stroke-linecap="round"/>'+
+   '<g fill="var(--eosin)"><circle cx="62" cy="100" r="3"/><circle cx="88" cy="96" r="3"/><circle cx="66" cy="120" r="3"/><circle cx="92" cy="116" r="3"/></g>'+
+   '<text class="svg-lbl" x="78" y="86" text-anchor="middle">Rough ER</text></g>'+
+ '<g class="hot" data-k="plasmo">'+
+   '<rect class="shape" x="10" y="190" width="26" height="13" rx="3" fill="#8FB86A" stroke="#416B28" stroke-width="2"/>'+
+   '<rect class="shape" x="504" y="190" width="26" height="13" rx="3" fill="#8FB86A" stroke="#416B28" stroke-width="2"/>'+
+   '<text class="svg-lbl" x="498" y="182" text-anchor="end">Plasmodesmata</text></g>'+
+'</svg>';
+
+var stage = document.getElementById("stage");
+var info  = document.getElementById("info");
+var current = null;
+
+function renderStage(which){
+  stage.innerHTML = (which === "plant") ? PLANT : ANIMAL;
+  current = null;
+  Array.prototype.forEach.call(stage.querySelectorAll(".hot"), function(g){
+    g.setAttribute("tabindex","0");
+    g.setAttribute("role","button");
+    var p = PARTS[g.dataset.k];
+    if(p) g.setAttribute("aria-label", p.n);
+    function pick(){ selectPart(g); }
+    g.addEventListener("click", pick);
+    g.addEventListener("keydown", function(e){
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); pick(); }
+    });
+  });
+}
+function selectPart(g){
+  var p = PARTS[g.dataset.k];
+  if(!p) return;
+  if(current) current.classList.remove("on");
+  g.classList.add("on"); current = g;
+  info.innerHTML = '<h5>'+p.n+'</h5><div class="role">'+p.r+'</div><p>'+p.d+'</p><div class="ana">'+p.a+'</div>';
+}
+document.getElementById("btnAnimal").addEventListener("click", function(){
+  this.setAttribute("aria-pressed","true");
+  document.getElementById("btnPlant").setAttribute("aria-pressed","false");
+  renderStage("animal");
+});
+document.getElementById("btnPlant").addEventListener("click", function(){
+  this.setAttribute("aria-pressed","true");
+  document.getElementById("btnAnimal").setAttribute("aria-pressed","false");
+  renderStage("plant");
+});
+renderStage("animal");
+
+/* ------------------------------------------------- specialised cells */
+var CELLS = [
+  ["Red blood cell","Biconcave disc, no nucleus",
+   "Carries oxygen from lungs to tissues, packed with haemoglobin.",
+   "The dent on both sides raises surface area for gas exchange and makes the cell flexible enough to fold through capillaries narrower than itself. Ejecting the nucleus frees up space for more haemoglobin."],
+  ["Neuron","Extremely long, branched",
+   "Carries electrical signals across the body.",
+   "The axon can run a metre so a single cell spans spinal cord to toe with no relay. Branched dendrites collect input from thousands of other neurons at once."],
+  ["Skeletal muscle cell","Long cylindrical fibre, many nuclei",
+   "Contracts to move the skeleton.",
+   "Long parallel fibres let contraction pull in one clean direction. It is so large that one nucleus could not supply it — so it fuses from many cells and keeps all their nuclei."],
+  ["White blood cell","Irregular, lobed nucleus",
+   "Hunts and destroys pathogens.",
+   "It has to squeeze out through vessel walls to reach infection. A flexible shape and a lobed, foldable nucleus let it deform through gaps a rigid cell could never cross."],
+  ["Fat cell (adipocyte)","Round, one huge lipid droplet",
+   "Stores energy and insulates.",
+   "Almost the entire cell is one fat droplet, with the cytoplasm and nucleus squashed into a thin rim. Maximum storage for minimum machinery."],
+  ["Epithelial cell","Cuboidal or columnar, tightly packed",
+   "Lines and protects surfaces and cavities.",
+   "Tight packing with almost no gaps makes a continuous barrier. Some carry microvilli — tiny surface folds — to raise absorbing area in the gut."],
+  ["Astrocyte","Star-shaped, many processes",
+   "Supports neurons and helps form the blood–brain barrier.",
+   "The many radiating arms let one cell contact both blood vessels and many neurons at once, which is exactly what a support and supply cell needs."],
+  ["Sperm cell","Streamlined head, long flagellum",
+   "Delivers paternal DNA to the egg.",
+   "A tail for swimming, a midpiece stuffed with mitochondria to fuel it, and almost no cytoplasm to carry. Every part is stripped down for the journey."]
+];
+var cg = document.getElementById("cellGrid");
+CELLS.forEach(function(c){
+  var d = document.createElement("div");
+  d.className = "cellcard";
+  d.innerHTML = '<h5>'+c[0]+'</h5><div class="shape">'+c[1]+'</div><p>'+c[2]+'</p>'+
+                '<div class="why"><b>Why that shape —</b> '+c[3]+'</div>';
+  cg.appendChild(d);
+});
+
+/* --------------------------------------------------------- doubt bank */
+var DOUBTS = [
+ ["Are viruses alive? Are they cells?","basics",1,
+  "No, and no. A virus is genetic material in a protein coat — it has no cytoplasm, no ribosomes, no membrane of its own making, and no metabolism. Outside a host it is chemically inert, effectively a crystal.",
+  "It only reproduces by hijacking a real cell's machinery. Since it is not made of cells and cannot arise from a pre-existing cell on its own, a virus stands outside cell theory entirely. Most biologists place it on the boundary of living and non-living rather than inside either.",
+  "Safe line: “A virus has the instructions for life but none of the equipment. It has to borrow a cell to do anything at all.”"],
+
+ ["What are the exceptions to cell theory?","basics",1,
+  "Four are usually accepted: <b>viruses</b> are not made of cells; <b>red blood cells</b> have no nucleus yet are still cells; <b>coenocytes and syncytia</b> (like skeletal muscle fibres, or <i>Rhizopus</i>) are single cells with many nuclei, breaking 'one cell, one nucleus'; and the <b>very first cell</b> cannot have come from a pre-existing cell.",
+  "The last one is the sharpest, because it makes the point that cell theory describes how life continues, not how it started.",
+  "If a student raises this, they are thinking well. Say so."],
+
+ ["Why is the cell called the smallest unit of life?","basics",0,
+  "Because it is the smallest thing that can do everything life requires on its own — take in energy, build its own molecules, respond to its surroundings, and reproduce.",
+  "An organelle cannot. A mitochondrion makes ATP but cannot feed or copy itself outside a cell. Cut a cell in half and you do not get two smaller living things — you get debris. That is the test of a 'unit'.",
+  ""],
+
+ ["Who actually discovered the cell?","basics",0,
+  "<b>Robert Hooke</b> (1665) coined the word, looking at a slice of cork through his own microscope. The empty boxes reminded him of the small rooms — <i>cellulae</i> — that monks lived in.",
+  "But cork is dead: Hooke saw only empty <b>cell walls</b>. The first person to see actual living cells was <b>Antonie van Leeuwenhoek</b> in 1674, who called them animalcules. Students routinely credit Hooke with both.",
+  "One-liner: “Hooke named it. Leeuwenhoek saw it alive.”"],
+
+ ["Why can't cells just grow bigger?","size",0,
+  "Because surface area and volume do not grow at the same rate. Volume scales with the cube of length, surface only with the square — so as a cell grows, its volume outruns the membrane that has to supply it.",
+  "Double the width and surface goes up 4× while volume goes up 8×: each unit of membrane now serves twice as much cell. On top of that, diffusion time scales with distance <b>squared</b>, so the centre gets supplied disproportionately slowly. Past a certain size the middle of the cell simply starves.",
+  "This is the argument to use the slider for. Move it from 20 µm to 200 µm live and read the numbers out."],
+
+ ["If cells must stay small, how is an ostrich egg one cell?","size",1,
+  "Because most of it is not metabolically active. The yolk is stored, chemically inert food, not busy cytoplasm — so it does not need supplying by diffusion.",
+  "The living, active part of the cell is a thin layer near the surface. The surface-area rule applies to <i>active</i> cytoplasm, and once you say that, the exception stops being an exception.",
+  "Same trick, different solution: a neuron a metre long stays extremely <b>thin</b>, so no point in it is ever far from its own surface."],
+
+ ["Do prokaryotes really have no organelles?","proeu",1,
+  "They have no <b>membrane-bound</b> organelles. They do have <b>ribosomes</b>, and a ribosome is an organelle — just a non-membrane-bound one.",
+  "Some also have specialised protein-shelled compartments: carboxysomes for carbon fixation, gas vesicles for buoyancy, magnetosomes for orientation. And they have cytoskeletal proteins (FtsZ, MreB) related to our tubulin and actin.",
+  "Always insert the words “membrane-bound”. If a student catches the omission, confirm they are right — it costs you nothing and buys you credibility."],
+
+ ["Does prokaryote just mean bacteria?","proeu",1,
+  "No. There are <b>two</b> prokaryotic domains: <b>Bacteria</b> and <b>Archaea</b>. The three domains of life are Bacteria, Archaea and Eukarya.",
+  "Archaea look like bacteria under a microscope but differ fundamentally — their membrane lipids use ether linkages rather than ester, their cell walls have no peptidoglycan, and their transcription machinery is closer to ours than to bacteria's. Many live in extreme heat, salt or acid.",
+  "Worth one sentence in the tutorial, because the slide's wording invites the wrong assumption."],
+
+ ["Why is 50S + 30S = 70S, not 80S?","proeu",1,
+  "Because S is a <b>Svedberg unit</b> — a sedimentation coefficient, not a mass. It measures how fast a particle settles under centrifugation, and that depends on shape and density as well as mass. Sedimentation coefficients are not additive.",
+  "When the 50S and 30S subunits assemble, the combined particle is more compact than the two separately, so it sediments at 70S rather than the arithmetic 80S.",
+  "This gets asked every year. Have the phrase “sedimentation coefficient, not a weight” ready."],
+
+ ["Why do mitochondria have their own DNA?","proeu",1,
+  "Because they descend from free-living bacteria. This is the <b>endosymbiotic theory</b>, argued by Lynn Margulis: an early host cell engulfed an aerobic bacterium and, instead of digesting it, kept it.",
+  "The evidence is strong and worth listing: mitochondria have their own <b>circular</b> DNA, their own <b>70S</b> ribosomes (the prokaryotic size), a <b>double</b> membrane as expected from engulfment, and they divide by binary fission independently of the cell. Chloroplasts show the same pattern, from an engulfed cyanobacterium.",
+  "This is the most satisfying story in the whole tutorial. Do not skip it — it makes the 70S/80S detail feel like evidence rather than trivia."],
+
+ ["Where is the DNA in a prokaryote, if there is no nucleus?","proeu",0,
+  "In a region of the cytoplasm called the <b>nucleoid</b>. It is a defined region but has <b>no membrane</b> around it — that is exactly the difference from a nucleus.",
+  "The DNA is a single circular chromosome, tightly supercoiled and associated with proteins, though not the histones eukaryotes use. Many bacteria also carry small extra circles called <b>plasmids</b>, which often carry antibiotic-resistance genes.",
+  ""],
+
+ ["Are all eukaryotes multicellular?","proeu",0,
+  "No — and this is a common assumption. <b>Yeast</b>, <b>Amoeba</b>, <b>Paramecium</b> and <b>Chlamydomonas</b> are all single-celled eukaryotes.",
+  "Prokaryotes, on the other hand, are essentially all unicellular, though some (like filamentous cyanobacteria) form chains with limited division of labour. So: eukaryote does not imply multicellular; prokaryote effectively does imply unicellular.",
+  ""],
+
+ ["Do plant cells have mitochondria?","plantanimal",0,
+  "<b>Yes.</b> Every plant cell has mitochondria. This is the most common misconception on the whole topic.",
+  "Chloroplasts and mitochondria do opposite jobs: chloroplasts <i>make</i> glucose from light; mitochondria <i>break down</i> glucose to release ATP. A plant needs ATP constantly — at night, in the dark, and in tissues like roots that have no chloroplasts at all and are never green.",
+  "Pre-empt it. Say it before they ask, on the plant-vs-animal slide."],
+
+ ["Do only plants have cell walls?","plantanimal",0,
+  "No. Fungi have cell walls of <b>chitin</b>, bacteria of <b>peptidoglycan</b>, and algae of cellulose. Animal cells are the ones with no wall at all.",
+  "What is distinctive about plants is the <b>cellulose</b> composition, not the presence of a wall. The safe phrasing is “plant cell walls are made of cellulose”, not “plants have cell walls and nothing else does”.",
+  ""],
+
+ ["Why don't animal cells have a cell wall?","plantanimal",0,
+  "Because animals move, and a rigid box around every cell would prevent it. Animals get their structural support from a skeleton instead, so individual cells are free to be flexible.",
+  "A wall would also block things animal cells need to do: change shape, crawl, engulf particles by phagocytosis, and make direct contact with neighbouring cells for signalling. A white blood cell squeezing through a vessel wall could not do it inside a rigid box.",
+  ""],
+
+ ["Do animal cells have vacuoles?","plantanimal",0,
+  "Yes — several small ones, and often temporary. What animal cells lack is the single <b>large central</b> vacuole.",
+  "The difference on the slide is size and number, not presence and absence. Plant: one huge vacuole, up to 90% of cell volume. Animal: several small ones, sometimes none obvious.",
+  ""],
+
+ ["Do plant cells have lysosomes?","plantanimal",1,
+  "Usually taught as: rare or absent, because the <b>central vacuole</b> performs most of the digestive role. It is acidic and contains hydrolytic enzymes, exactly like a lysosome.",
+  "More precisely, plants do have lytic compartments and vacuoles of lysosomal character — so “plants have no lysosomes” is a simplification. If a student pushes, the honest answer is that the function is present, housed in the vacuole rather than in separate small organelles.",
+  ""],
+
+ ["What actually is turgor pressure?","plantanimal",0,
+  "The outward push of the cell's contents against the cell wall, produced when the central vacuole is full of water.",
+  "It is what keeps a leaf flat and a stem upright. Lose water and the vacuole shrinks, the push disappears, and the plant <b>wilts</b>. Water it and it recovers, because the wall preserved the shape the whole time. In extreme water loss the membrane pulls away from the wall entirely — <b>plasmolysis</b>.",
+  "Good question to ask back: why does a wilted plant recover, but a crushed one doesn't?"],
+
+ ["What holds plant cells together?","plantanimal",1,
+  "The <b>middle lamella</b> — a layer rich in <b>pectin</b> that sits between the walls of adjacent cells and glues them together.",
+  "Pectin is the same substance that sets jam. When fruit ripens, enzymes break down the middle lamella, cells separate, and the fruit goes soft — which is a nice everyday hook.",
+  ""],
+
+ ["What are plasmodesmata?","plantanimal",1,
+  "Narrow channels passing through plant cell walls that connect the cytoplasm of neighbouring cells, so water and small molecules move directly from cell to cell without crossing the wall.",
+  "The animal-cell equivalent is a <b>gap junction</b>. Same function, different structure: plasmodesmata cross two walls, gap junctions cross two membranes.",
+  ""],
+
+ ["Are plant cells bigger than animal cells?","plantanimal",0,
+  "Generally yes. Plant cells are typically 10–100 µm against 10–30 µm for animal cells.",
+  "Most of the extra size is the central vacuole — which is water, not active cytoplasm. That is how a plant cell gets large without breaking the surface-area rule: the bulk of it is not metabolically demanding.",
+  "Nice callback to the size argument. Use it."],
+
+ ["Is a red blood cell still a cell if it has no nucleus?","body",0,
+  "Yes. It has a membrane, cytoplasm and a metabolism, and it does a job. It simply cannot divide or repair itself, which is why it lives only about <b>120 days</b> before being cleared and replaced.",
+  "It starts life with a nucleus and ejects it during maturation, freeing space for more haemoglobin. Platelets are similar — cell fragments with no nucleus. Because of this, RBCs are one of the standard exceptions to cell theory.",
+  ""],
+
+ ["If all my cells have the same DNA, why are they different?","body",1,
+  "Because each cell type <b>expresses a different subset</b> of the same genome. Every cell carries the full instruction set; each switches on only the genes it needs and keeps the rest silenced. This is <b>differential gene expression</b>.",
+  "A neuron and a fat cell contain identical DNA — but the neuron runs the genes for ion channels and neurotransmitters, while the fat cell runs the genes for lipid storage. The differences are in which pages get read, not in the book.",
+  "Analogy: same cookbook in every kitchen; each kitchen cooks a different page. Best question to close the tutorial on."],
+
+ ["How many cells are in the human body?","body",0,
+  "Roughly <b>30–37 trillion</b> — about 3 × 10<sup>13</sup>.",
+  "The number of bacterial cells living in and on you is of a similar order, around 38 trillion. The widely repeated claim that bacteria outnumber your cells 10 to 1 is outdated; the current best estimate is close to 1:1.",
+  "Good opening hook. Ask them to guess first — the guesses are always wildly low."],
+
+ ["Why is a neuron so long?","body",0,
+  "So a single cell can carry a signal the whole distance without handing it off. A motor neuron running from spinal cord to toe is one cell, up to about a metre long.",
+  "Passing a signal cell-to-cell at every step would be far slower and would lose fidelity. Each handover at a synapse costs time, so evolution minimises the number of handovers.",
+  "And it survives its own length by being extremely thin — nothing inside it is ever far from its surface."],
+
+ ["Why do muscle cells have many nuclei?","body",1,
+  "Because a skeletal muscle fibre is enormous — up to several centimetres long — and one nucleus cannot produce enough mRNA to supply that much cytoplasm.",
+  "The fibre forms by many separate cells <b>fusing</b> during development, and each contributes its nucleus. The result is a <b>syncytium</b>: one continuous cell with hundreds of nuclei, each servicing its own local territory.",
+  "This is also one of the exceptions to cell theory — 'one cell, one nucleus' fails here."],
+
+ ["Why is a white blood cell's nucleus lobed?","body",1,
+  "To let the cell deform. WBCs have to squeeze out of blood vessels between the cells of the vessel wall — a process called <b>diapedesis</b> — to reach an infection in the tissue.",
+  "The nucleus is the stiffest thing in a cell. Splitting it into connected lobes makes it foldable, so it stops being the bottleneck when the cell squeezes through a narrow gap.",
+  ""],
+
+ ["Why is the mitochondrion's inner membrane folded?","organelles",0,
+  "To maximise surface area. The ATP-producing machinery — the electron transport chain — sits <i>on</i> the inner membrane, so more membrane means more ATP per mitochondrion.",
+  "The folds are called <b>cristae</b>. Cells with high energy demand, like heart muscle, have mitochondria with far denser cristae than less active cells.",
+  "This is the surface-area principle again, one level down. Point that out — it makes the tutorial feel coherent rather than like a list."],
+
+ ["Why doesn't a lysosome digest its own cell?","organelles",1,
+  "Two safeguards. The enzymes are sealed behind a membrane, and they are <b>acid hydrolases</b> — they only work properly at the acidic pH (~4.5) maintained inside the lysosome by proton pumps.",
+  "The cytosol is near neutral (pH ~7.2), so any enzyme that leaks out largely stops working. It is a chemical safety catch on top of a physical one.",
+  "If the membrane ruptures wholesale the cell does self-destruct — hence the nickname <b>suicide bag</b>."],
+
+ ["Cytoplasm, cytosol, protoplasm — what's the difference?","organelles",0,
+  "<b>Cytosol</b> is the fluid alone. <b>Cytoplasm</b> is the cytosol <i>plus</i> all the organelles suspended in it, but not the nucleus. <b>Protoplasm</b> is cytoplasm <i>plus</i> the nucleus — the entire living content of the cell.",
+  "Students often use all three as synonyms. Writing the nesting on the board once fixes it permanently.",
+  ""],
+
+ ["Rough ER vs smooth ER — how do I keep them straight?","organelles",0,
+  "Rough ER is studded with <b>ribosomes</b> (that is what makes it rough) and handles <b>protein</b> synthesis for export. Smooth ER has no ribosomes and handles <b>lipid</b> synthesis, steroid production, calcium storage and detoxification.",
+  "Memory hook: rough → ribosomes → proteins. Smooth → no ribosomes → fats. Liver cells, which detoxify drugs and alcohol, are packed with smooth ER.",
+  ""],
+
+ ["What does the Golgi actually do?","organelles",0,
+  "It receives proteins from the ER, chemically modifies them (adding sugar groups, for instance), then sorts, packages and addresses them into vesicles bound for their destination.",
+  "Nothing new is manufactured there — it is finishing and dispatch. Proteins arrive on one face and leave, modified and labelled, from the other.",
+  "Analogy that lands: ER is the factory floor, Golgi is packing and dispatch."],
+
+ ["Is a ribosome an organelle?","organelles",1,
+  "Yes — a <b>non-membrane-bound</b> organelle. The confusion comes from textbooks that define organelle as 'membrane-bound compartment', which excludes it by definition.",
+  "This distinction is exactly what makes “prokaryotes have no organelles” wrong. Prokaryotes have ribosomes; they just have no membrane-bound organelles.",
+  ""],
+
+ ["Why does the nucleus need pores?","organelles",0,
+  "Because DNA never leaves the nucleus, but the information has to. mRNA copies made from the DNA must get out to the ribosomes, and proteins made in the cytoplasm must get in.",
+  "The nuclear envelope is a <b>double</b> membrane, and the pores are large protein complexes that control traffic in both directions. A sealed nucleus would be an archive nobody could read.",
+  "Students often assume it is a single membrane. It is two."],
+
+ ["What is the fluid mosaic model?","organelles",0,
+  "The current description of the cell membrane: a <b>fluid</b> double layer of phospholipids in which proteins are embedded like a <b>mosaic</b>, with both lipids and proteins free to drift sideways.",
+  "'Fluid' because it is not a rigid sheet — components move within the plane. 'Mosaic' because of the scattered, varied proteins. Those proteins are what do the transport, signalling and recognition.",
+  ""],
+
+ ["Why is the membrane 'selectively permeable'?","organelles",0,
+  "Because what crosses depends on chemistry, not just size. Small non-polar molecules (O₂, CO₂) pass straight through the lipid layer. Ions and large polar molecules cannot, and need a specific protein channel or pump.",
+  "So the membrane is not a sieve sorting by size — a small charged ion may be blocked while a larger neutral molecule passes freely. That selectivity is what lets a cell hold conditions inside different from outside.",
+  ""],
+
+ ["How do we even see cells and organelles?","basics",0,
+  "Light microscopes resolve down to about <b>200 nm</b>, which is enough for cells, nuclei and chloroplasts but not for most organelle detail.",
+  "Ribosomes (~25 nm) and membrane structure need an <b>electron microscope</b>, which is why almost every detailed organelle diagram in a textbook comes from electron micrographs. This is also why cells were described in 1665 but organelles only properly in the 20th century.",
+  "Explains the historical gap neatly if a student asks why it took so long."],
+
+ ["What are the smallest and largest cells?","size",0,
+  "Smallest: <b>Mycoplasma</b>, about 0.1–0.3 µm. Largest single cell: an <b>ostrich egg yolk</b>, around 8 cm. Longest: a <b>neuron</b>, up to about a metre in a human.",
+  "In humans specifically, the largest cell is the <b>ovum</b> at around 120 µm — just at the edge of being visible without a microscope. The smallest human cell is usually given as the sperm cell.",
+  "Note the difference between largest and longest — exam questions exploit it."],
+
+ ["Do all cells have DNA?","body",1,
+  "Almost all, but not quite. Mature <b>red blood cells</b> and <b>platelets</b> in humans have none — the RBC ejects its nucleus as it matures.",
+  "This is why an RBC cannot divide or repair itself and lives only about 120 days. It also has practical consequences: DNA from a blood sample comes from the white blood cells, not the red ones.",
+  ""],
+
+ ["Do prokaryotes have a cytoskeleton?","proeu",1,
+  "Yes — this is a relatively recent correction to the older textbook picture. Bacteria have <b>FtsZ</b> (a tubulin relative, which forms the ring that divides the cell) and <b>MreB</b> (an actin relative, which maintains rod shape).",
+  "Older textbooks say the cytoskeleton is a eukaryotic feature. If your slides say that, it is a simplification rather than an outright error, but it is worth knowing the real answer.",
+  "Only likely from a student who reads ahead. Nice to have rather than essential."],
+
+ ["Gram positive vs Gram negative — what's the difference?","proeu",1,
+  "Both are bacterial cell wall types, distinguished by a stain. <b>Gram-positive</b> bacteria have a thick peptidoglycan layer and stain purple. <b>Gram-negative</b> have a thin peptidoglycan layer plus an extra outer membrane, and stain pink.",
+  "That outer membrane is why Gram-negative bacteria are generally harder to treat — it blocks many antibiotics from reaching their target.",
+  "Beyond this tutorial's scope, but likely from a student who has seen it in school. A two-sentence answer is plenty."]
+];
+
+var TAGS = [["all","All"],["basics","Basics & theory"],["size","Size & scale"],
+            ["proeu","Prokaryote / Eukaryote"],["plantanimal","Plant / Animal"],
+            ["organelles","Organelles"],["body","Cells in our body"]];
+var activeTag = "all", query = "";
+
+var chips = document.getElementById("qChips");
+TAGS.forEach(function(t){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = t[1];
+  b.setAttribute("aria-pressed", t[0]==="all" ? "true":"false");
+  b.dataset.t = t[0];
+  b.addEventListener("click", function(){
+    activeTag = t[0];
+    Array.prototype.forEach.call(chips.children, function(c){
+      c.setAttribute("aria-pressed", c.dataset.t === activeTag ? "true":"false");
+    });
+    filter();
+  });
+  chips.appendChild(b);
+});
+
+var qList = document.getElementById("qList");
+DOUBTS.forEach(function(d, i){
+  var wrap = document.createElement("article");
+  wrap.className = "q"; wrap.dataset.tag = d[1];
+  wrap.dataset.text = (d[0]+" "+d[3]+" "+d[4]+" "+d[5]).replace(/<[^>]+>/g,"").toLowerCase();
+
+  var head = document.createElement("button");
+  head.type = "button"; head.className = "q-head";
+  head.setAttribute("aria-expanded","false"); head.setAttribute("aria-controls","qb-"+i);
+  head.innerHTML = '<span class="qm">Q'+(i+1)+'</span><span class="qt">'+d[0]+'</span><span class="qc">+</span>';
+
+  var body = document.createElement("div");
+  body.className = "q-body"; body.id = "qb-"+i; body.hidden = true;
+  var html = '<p>'+d[3]+'</p><p>'+d[4]+'</p>';
+  if(d[5]) html += '<span class="line"><b>Teaching note —</b> '+d[5]+'</span>';
+  var tagName = (TAGS.filter(function(t){ return t[0]===d[1]; })[0]||["","—"])[1];
+  html += '<div class="q-tags"><span class="q-tag">'+tagName+'</span>'+
+          (d[2] ? '<span class="q-tag hard">likely follow-up</span>' : '')+'</div>';
+  body.innerHTML = html;
+
+  head.addEventListener("click", function(){
+    var open = head.getAttribute("aria-expanded")==="true";
+    head.setAttribute("aria-expanded", open?"false":"true");
+    body.hidden = open;
+  });
+
+  wrap.appendChild(head); wrap.appendChild(body);
+  qList.appendChild(wrap);
+});
+
+document.getElementById("qSearch").addEventListener("input", function(){
+  query = this.value.trim().toLowerCase(); filter();
+});
+function filter(){
+  var n = 0;
+  Array.prototype.forEach.call(qList.children, function(w){
+    var ok = (activeTag==="all" || w.dataset.tag===activeTag) &&
+             (!query || w.dataset.text.indexOf(query) > -1);
+    w.hidden = !ok; if(ok) n++;
+  });
+  document.getElementById("qCount").textContent =
+    n + " of " + DOUBTS.length + " question" + (n===1?"":"s") + " shown";
+}
+filter();
+
+/* -------------------------------------------------------------- quiz */
+var QUIZ = [
+ ["Which statement about prokaryotes is precisely correct?",
+  ["They contain no organelles of any kind",
+   "They contain no membrane-bound organelles, but do have ribosomes",
+   "They contain a nucleus but no mitochondria",
+   "They are all bacteria"],
+  1,
+  "Ribosomes are organelles — just non-membrane-bound ones. And prokaryotes include Archaea as well as Bacteria."],
+
+ ["A cell doubles in width. What happens to its surface-area-to-volume ratio?",
+  ["It doubles","It stays the same","It halves","It quadruples"],
+  2,
+  "Surface goes up 4×, volume 8×. The ratio is 4/8 of what it was — halved. It is also 6/L for a cube, so doubling L halves the ratio directly."],
+
+ ["Which is true of plant cells?",
+  ["They have chloroplasts, so they don't need mitochondria",
+   "They have both chloroplasts and mitochondria",
+   "They have mitochondria only in the roots",
+   "They have chloroplasts in every cell"],
+  1,
+  "Chloroplasts make glucose; mitochondria spend it for ATP. Plants respire day and night, and root cells have no chloroplasts at all."],
+
+ ["Why is 50S + 30S = 70S rather than 80S?",
+  ["A measurement convention agreed for ribosomes",
+   "10S is lost when the subunits bind",
+   "S is a sedimentation coefficient depending on shape and density, so it isn't additive",
+   "The 30S subunit shrinks on binding"],
+  2,
+  "Svedberg units measure how fast a particle sediments in a centrifuge — a function of mass, shape and density. Coefficients don't add."],
+
+ ["Evidence for the endosymbiotic origin of mitochondria includes:",
+  ["A single membrane and linear DNA",
+   "Circular DNA, 70S ribosomes, a double membrane, and division by binary fission",
+   "80S ribosomes matching the rest of the cell",
+   "Their absence from plant cells"],
+  1,
+  "Every item points back to a free-living bacterium that was engulfed and kept. Chloroplasts show the same pattern."],
+
+ ["Which is NOT a standard exception to cell theory?",
+  ["Viruses","Mature red blood cells","Skeletal muscle fibres","Liver cells"],
+  3,
+  "Liver cells are ordinary nucleated cells. Viruses aren't cellular; RBCs lack a nucleus; muscle fibres are multinucleate syncytia."],
+
+ ["A wilted plant recovers after watering because:",
+  ["The cell walls regrow",
+   "The vacuoles refill, restoring turgor pressure against the intact walls",
+   "New cells are made rapidly",
+   "The chloroplasts restart photosynthesis"],
+  1,
+  "Turgor is the vacuole's outward push on the wall. The wall held the shape throughout, so refilling the vacuole restores firmness."],
+
+ ["Why is a red blood cell biconcave with no nucleus?",
+  ["To move faster through the heart",
+   "To raise surface area for gas exchange, stay flexible in capillaries, and make room for more haemoglobin",
+   "So it can divide more quickly",
+   "To store oxygen inside the nucleus"],
+  1,
+  "Structure follows function: more surface, more flexibility, more haemoglobin. The cost is that it cannot divide or repair, so it lasts ~120 days."],
+
+ ["Two cells in your body have identical DNA but look completely different. Why?",
+  ["They have mutated differently",
+   "One has lost some chromosomes",
+   "They express different subsets of the same genes",
+   "One is prokaryotic"],
+  2,
+  "Differential gene expression. Every cell keeps the whole genome; each switches on only what it needs."],
+
+ ["Which statement about cell walls is correct?",
+  ["Only plants have cell walls",
+   "Plant and fungal walls are both cellulose",
+   "Plant walls are cellulose, fungal are chitin, bacterial are peptidoglycan",
+   "Animal cells have a thin cell wall"],
+  2,
+  "The wall is widespread; the composition is what differs. Animal cells have none at all."]
+];
+
+var quizEl = document.getElementById("quiz");
+var answered = {}, correct = 0;
+
+function renderQuiz(){
+  quizEl.innerHTML = ""; answered = {}; correct = 0; updateScore();
+  QUIZ.forEach(function(q, i){
+    var d = document.createElement("div");
+    d.className = "quiz-q";
+    var stem = document.createElement("div");
+    stem.className = "stem"; stem.textContent = (i+1)+". "+q[0];
+    var opts = document.createElement("div"); opts.className = "opts";
+
+    q[1].forEach(function(text, j){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "opt"; b.textContent = text;
+      b.addEventListener("click", function(){
+        if(answered[i]) return;
+        answered[i] = true;
+        var all = opts.querySelectorAll(".opt");
+        Array.prototype.forEach.call(all, function(o, k){
+          o.disabled = true;
+          if(k === q[2]) o.classList.add("right");
+        });
+        if(j !== q[2]) b.classList.add("wrong"); else correct++;
+        expl.hidden = false;
+        updateScore();
+      });
+      opts.appendChild(b);
+    });
+
+    var expl = document.createElement("div");
+    expl.className = "expl"; expl.hidden = true; expl.textContent = q[3];
+
+    d.appendChild(stem); d.appendChild(opts); d.appendChild(expl);
+    quizEl.appendChild(d);
+  });
+}
+function updateScore(){
+  var n = Object.keys(answered).length;
+  document.getElementById("score").textContent =
+    n === 0 ? "Not started — 10 questions"
+            : "Answered " + n + " of " + QUIZ.length + " · correct: " + correct;
+}
+document.getElementById("resetQuiz").addEventListener("click", renderQuiz);
+renderQuiz();
+
+})();
+</script>
