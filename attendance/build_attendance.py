@@ -51,23 +51,21 @@ ws["A2"] = "Tutorial Batch T1        Room: LT 206        TA: Aritra"
 ws["A2"].font = Font(name=FONT, size=11, bold=True)
 ws["A2"].alignment = Alignment(horizontal="center", vertical="center")
 
-ws.merge_cells(f"A3:{last_letter}3")
-ws["A3"] = "Mark  P = Present  /  A = Absent"
-ws["A3"].font = Font(name=FONT, size=9, italic=True, color="595959")
-ws["A3"].alignment = Alignment(horizontal="center", vertical="center")
-
-# Header rows 4-5: Sr/Roll/Name span both, date band on top of blank date cells
-HDR_TOP, HDR_BOT = 4, 5
+# Header rows 3-4: Sr/Roll/Name span both, date band on top of blank date cells
+HDR_TOP, HDR_BOT = 3, 4
 for col, label in ((1, "Sr."), (2, "Roll No."), (3, "Name of Student")):
     ws.merge_cells(start_row=HDR_TOP, start_column=col, end_row=HDR_BOT, end_column=col)
     c = ws.cell(row=HDR_TOP, column=col, value=label)
     c.font = Font(name=FONT, size=10, bold=True)
     c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-ws.merge_cells(start_row=HDR_TOP, start_column=4, end_row=HDR_TOP, end_column=last_col)
-band = ws.cell(row=HDR_TOP, column=4, value="DATE  (write below)")
-band.font = Font(name=FONT, size=10, bold=True)
-band.alignment = Alignment(horizontal="center", vertical="center")
+# Left unmerged (only "centerContinuous" across the date cells) so the
+# vertical dividers between date columns still show through the header,
+# matching the printed PDF.
+for col in range(4, last_col + 1):
+    c = ws.cell(row=HDR_TOP, column=col, value="DATE" if col == 4 else None)
+    c.font = Font(name=FONT, size=10, bold=True)
+    c.alignment = Alignment(horizontal="centerContinuous", vertical="center")
 
 for col in range(4, last_col + 1):
     c = ws.cell(row=HDR_BOT, column=col, value=None)
@@ -113,10 +111,10 @@ for col in range(1, last_col + 1):
     ws.cell(row=total_row, column=col).fill = header_fill
 ws.row_dimensions[total_row].height = 20
 
-# Signature line
+# Footer
 sig_row = total_row + 2
 ws.merge_cells(start_row=sig_row, start_column=1, end_row=sig_row, end_column=last_col)
-s = ws.cell(row=sig_row, column=1, value=f"Total students on roll: {len(roster)}          TA Signature: ______________________")
+s = ws.cell(row=sig_row, column=1, value=f"Total students on roll: {len(roster)}")
 s.font = Font(name=FONT, size=9, color="404040")
 s.alignment = Alignment(horizontal="left", vertical="center")
 
@@ -145,7 +143,6 @@ for col in range(4, last_col + 1):
 
 ws.row_dimensions[1].height = 22
 ws.row_dimensions[2].height = 18
-ws.row_dimensions[3].height = 14
 ws.row_dimensions[HDR_TOP].height = 17
 ws.row_dimensions[HDR_BOT].height = 30
 

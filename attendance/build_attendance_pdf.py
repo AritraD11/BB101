@@ -59,12 +59,7 @@ c.drawCentredString(PAGE_W / 2, y, "BB 101  —  BIOLOGY   |   ATTENDANCE SHEET"
 y -= 6.0 * mm
 c.setFont("Helvetica-Bold", 10.5)
 c.drawCentredString(PAGE_W / 2, y, "Tutorial Batch T1        Room: LT 206        TA: Aritra")
-y -= 4.6 * mm
-c.setFont("Helvetica-Oblique", 8)
-c.setFillColor(colors.HexColor("#555555"))
-c.drawCentredString(PAGE_W / 2, y, "Mark  P = Present   /   A = Absent")
-c.setFillColor(INK)
-y -= 4.0 * mm
+y -= 7.5 * mm
 
 grid_top = y
 
@@ -88,7 +83,7 @@ c.drawString(COL_X[2] + 2.5 * mm, mid_y, "Name of Student")
 c.drawCentredString(
     COL_X[3] + N_DATE_COLS * W_DATE / 2,
     grid_top - HDR_TOP_H + 1.7 * mm,
-    "DATE   (write below)",
+    "DATE",
 )
 
 # ------------------------------------------------------------------ students
@@ -127,9 +122,13 @@ c.setLineWidth(0.4)
 for i in range(len(roster) + 1):
     yy = row_top - i * ROW_H
     c.line(M_L, yy, PAGE_W - M_R, yy)
-# vertical — stop at the header split so the DATE band and the label block stay clean
-for x in COL_X[1:] + [PAGE_W - M_R]:
+# vertical: Sr/Roll/Name dividers stay within the student rows (that header
+# is one grouped label); the date columns run full height, through both
+# header rows, so each date column is traceable up to the DATE band.
+for x in (COL_X[1], COL_X[2]):
     c.line(x, tot_bot, x, hdr_bot)
+for x in COL_X[3:] + [PAGE_W - M_R]:
+    c.line(x, tot_bot, x, grid_top)
 
 # outer frame + heavier separators
 c.setStrokeColor(INK)
@@ -150,7 +149,6 @@ fy = tot_bot - 7 * mm
 c.setFont("Helvetica", 8.5)
 c.setFillColor(colors.HexColor("#404040"))
 c.drawString(M_L, fy, f"Total students on roll: {len(roster)}")
-c.drawRightString(PAGE_W - M_R, fy, "TA Signature: __________________________")
 c.setFillColor(INK)
 
 c.showPage()
