@@ -1,0 +1,162 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  html,body{ margin:0; background:#FFFFFF; }
+  #canvas{ width:640px; height:920px; }
+  text{ font-family: Arial, Helvetica, sans-serif; }
+</style>
+</head>
+<body>
+<svg id="canvas" viewBox="0 0 640 920" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+var svg = document.getElementById("canvas");
+var W = 640, H = 920;
+var cx = 320, topY = 135, botY = 795, amp = 78;
+var turns = 2.15;
+var phaseOffset = 2.35; // radians; not pi, so the two backbones are NOT diametrically
+                         // opposite -- this is what makes the two grooves genuinely
+                         // different widths instead of two identical gaps.
+
+function theta(y){ return ((y - topY) / (botY - topY)) * turns * Math.PI * 2; }
+function xA(y){ return cx + amp * Math.sin(theta(y)); }
+function xB(y){ return cx + amp * Math.sin(theta(y) + phaseOffset); }
+
+function pathFor(fn){
+  var d = "", steps = 140;
+  for(var i=0;i<=steps;i++){
+    var y = topY + (botY-topY)*(i/steps);
+    var x = fn(y);
+    d += (i===0?"M":"L") + x.toFixed(1) + "," + y.toFixed(1) + " ";
+  }
+  return d;
+}
+
+var NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs){
+  var e = document.createElementNS(NS, tag);
+  for(var k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+function text(x,y,s,attrs){
+  var t = el("text", Object.assign({x:x,y:y}, attrs||{}));
+  t.textContent = s;
+  svg.appendChild(t);
+  return t;
+}
+
+// ---------------------------------------------------------------- colors
+var COL = { A:"#2E9E5B", T:"#D6455B", G:"#C9791E", C:"#3454D1" };
+var BACKBONE = "#3B4A78";
+
+// ------------------------------------------------------------ base pairs
+// Reading strand A 5'->3' topY to bottom. Strand B is automatically the
+// Watson-Crick complement, read 3'->5' topY to bottom (antiparallel).
+var seqA = ["G","A","T","C","A","G","C","T"];
+var comp = { A:"T", T:"A", G:"C", C:"G" };
+
+var n = seqA.length;
+var rungY = [];
+for(var i=0;i<n;i++){
+  rungY.push(topY + (botY-topY) * ((i+0.5)/n));
+}
+
+// ---------------------------------------------------- backbone ribbons
+svg.appendChild(el("path", { d:pathFor(xB), fill:"none", stroke:BACKBONE, "stroke-width":10, "stroke-linecap":"round", opacity:.32 }));
+svg.appendChild(el("path", { d:pathFor(xA), fill:"none", stroke:BACKBONE, "stroke-width":10, "stroke-linecap":"round" }));
+
+// -------------------------------------------------------------- rungs
+for(var i=0;i<n;i++){
+  var y = rungY[i];
+  var xa = xA(y), xb = xB(y);
+  var baseLeft = xa <= xb ? seqA[i] : comp[seqA[i]];
+  var baseRight = xa <= xb ? comp[seqA[i]] : seqA[i];
+  var xL = Math.min(xa,xb), xR = Math.max(xa,xb);
+
+  // H-bond dashes: 2 for A-T pair, 3 for G-C pair
+  var isGC = (seqA[i]==="G" || seqA[i]==="C");
+  svg.appendChild(el("line", { x1:xL+18, y1:y, x2:xR-18, y2:y, stroke:"#9098B8", "stroke-width":2.4, "stroke-dasharray": (isGC ? "3 5" : "5 6") }));
+
+  // base pills
+  [[xL, baseLeft],[xR, baseRight]].forEach(function(pair){
+    var bx = pair[0], letter = pair[1];
+    svg.appendChild(el("circle", { cx:bx, cy:y, r:17, fill:COL[letter], stroke:"#FFFFFF", "stroke-width":2.5 }));
+    var t = text(bx, y+6, letter, { "text-anchor":"middle", "font-size":16, "font-weight":"700", fill:"#FFFFFF" });
+  });
+}
+
+// ------------------------------------------------------------ groove labels
+// find the widest inter-rung backbone gap (major) and narrowest (minor)
+// by sampling the distance between the two backbones at the midpoints
+// between successive rungs.
+var gaps = [];
+for(var i=0;i<n-1;i++){
+  var ymid = (rungY[i]+rungY[i+1])/2;
+  var d = Math.abs(xA(ymid) - xB(ymid));
+  gaps.push({ y:ymid, d:d, idx:i });
+}
+gaps.sort(function(a,b){ return b.d - a.d; });
+var majorGap = gaps[0];
+gaps.sort(function(a,b){ return a.d - b.d; });
+var minorGap = gaps[0];
+
+function grooveBracket(gap, label, color, side){
+  var y = gap.y;
+  var xa = xA(y), xb = xB(y);
+  var xL = Math.min(xa,xb) , xR = Math.max(xa,xb);
+  var edgeX = side==="right" ? xR : xL;
+  var sign = side==="right" ? 1 : -1;
+  svg.appendChild(el("path", {
+    d: "M "+(edgeX - sign*6)+" "+(y-30)+" Q "+(edgeX + sign*14)+" "+y+" "+(edgeX - sign*6)+" "+(y+30),
+    fill:"none", stroke:color, "stroke-width":2.5
+  }));
+  var lx = side==="left" ? xL - 70 : xR + 70;
+  text(lx, y-4, label, { "text-anchor":"middle", "font-size":15, "font-weight":"700", fill:color });
+  svg.appendChild(el("line", { x1: side==="left"? lx+40 : lx-40, y1:y, x2: edgeX + sign*16, y2:y, stroke:color, "stroke-width":1.4, "stroke-dasharray":"3 3" }));
+}
+grooveBracket(majorGap, "Major groove", "#8A5A12", "right");
+grooveBracket(minorGap, "Minor groove", "#1D7A5F", "left");
+
+// --------------------------------------------------------- 5'/3' end labels
+// Determine which physical backbone (A or B) is on the left at the very
+// topY vs the very bottom, so the labels are guaranteed self-consistent.
+var topLeftIsA = xA(topY) <= xB(topY);
+var botLeftIsA = xA(botY) <= xB(botY);
+
+function endLabel(x, y, s, dy){
+  text(x, y+dy, s, { "text-anchor":"middle", "font-size":15, "font-weight":"700", fill:"#1A1726" });
+}
+// Strand A runs 5' (topY) -> 3' (bottom). Strand B runs 3' (topY) -> 5' (bottom).
+endLabel(topLeftIsA ? xA(topY) : xB(topY), topY, "5' end", -34);
+endLabel(topLeftIsA ? xB(topY) : xA(topY), topY, "3' end", -34);
+endLabel(botLeftIsA ? xA(botY) : xB(botY), botY, "3' end", 46);
+endLabel(botLeftIsA ? xB(botY) : xA(botY), botY, "5' end", 46);
+
+// ------------------------------------------------------------- backbone label
+var bbY = topY + (botY-topY)*0.18;
+text(cx - 205, bbY-4, "Sugar-phosphate", { "text-anchor":"middle", "font-size":14.5, "font-weight":"700", fill:BACKBONE });
+text(cx - 205, bbY+16, "backbone", { "text-anchor":"middle", "font-size":14.5, "font-weight":"700", fill:BACKBONE });
+svg.appendChild(el("line", {x1:cx-140, y1:bbY+4, x2: Math.min(xA(bbY),xB(bbY))-16, y2:bbY+4, stroke:BACKBONE, "stroke-width":1.4, "stroke-dasharray":"3 3"}));
+
+// ------------------------------------------------------------- H-bond label
+var hbY = rungY[3];
+text(cx+215, hbY-8, "Hydrogen", { "text-anchor":"middle", "font-size":14.5, "font-weight":"700", fill:"#6E76A0" });
+text(cx+215, hbY+12, "bonds", { "text-anchor":"middle", "font-size":14.5, "font-weight":"700", fill:"#6E76A0" });
+svg.appendChild(el("line", {x1:cx+150, y1:hbY+2, x2:cx+22, y2:hbY, stroke:"#6E76A0", "stroke-width":1.4, "stroke-dasharray":"3 3"}));
+
+// ------------------------------------------------------------- base name key
+var keyY = 885;
+var keyItems = [["A","Adenine"],["T","Thymine"],["G","Guanine"],["C","Cytosine"]];
+var kx = 120;
+keyItems.forEach(function(it, i){
+  var x = kx + i*110;
+  svg.appendChild(el("circle", {cx:x, cy:keyY, r:11, fill:COL[it[0]]}));
+  text(x+18, keyY+5, it[1], {"font-size":13, fill:"#1A1726"});
+});
+
+// title
+text(cx, 32, "DNA Double Helix", {"text-anchor":"middle","font-size":22,"font-weight":"700",fill:"#1A1726"});
+text(cx, 52, "B-form, antiparallel strands, Watson-Crick base pairing", {"text-anchor":"middle","font-size":12.5,fill:"#6E76A0"});
+
+window.__ready = true;
+</script>
+</body></html>
