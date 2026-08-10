@@ -1,0 +1,1757 @@
+<title>BB 101 · Tutorial 2 — DNA as Code (TA Handbook)</title>
+
+<style>
+/* ============================================================
+   BB 101 — Tutorial 2 TA Handbook: DNA as Code
+   Palette: "terminal meets molecule" — a code-editor blue paired
+   with the base-letter colors genome browsers actually use
+   (A green, T red, G amber, C blue, U violet).
+   ============================================================ */
+
+:root{
+  --ground:      #F6F7FB;
+  --surface:     #FFFFFF;
+  --surface-2:   #EEF0F8;
+  --line:        #DFE3EF;
+  --line-strong: #C7CDE3;
+
+  --ink:         #161B2E;
+  --ink-2:       #40456A;
+  --ink-3:       #6A6F94;
+
+  --code:        #3454D1;   /* primary accent — "source" */
+  --code-soft:   #E7EBFB;
+  --amino:       #B9791A;   /* secondary accent — "output" */
+  --amino-soft:  #FBF0DC;
+
+  --baseA: #2E9E5B;
+  --baseT: #D6455B;
+  --baseG: #C9791E;
+  --baseC: #3454D1;
+  --baseU: #8C4FD1;
+
+  --good:        #1D7A5F;
+  --good-soft:   #E2F2EC;
+  --warn:        #9A6510;
+  --warn-soft:   #FBF0DC;
+
+  --shadow: 0 1px 2px rgba(22,27,46,.05), 0 8px 24px -12px rgba(22,27,46,.18);
+
+  --serif: "Iowan Old Style", "Charter", "Bitstream Charter", Georgia, "Times New Roman", serif;
+  --sans:  "Avenir Next", "Avenir", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --mono:  "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --r: 10px;
+  --maxw: 78ch;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --ground:      #0F1320;
+    --surface:     #171C2E;
+    --surface-2:   #212840;
+    --line:        #2C3350;
+    --line-strong: #3B4468;
+
+    --ink:         #EAECF6;
+    --ink-2:       #B7BEDB;
+    --ink-3:       #8890B3;
+
+    --code:        #7C93FF;
+    --code-soft:   #232B4A;
+    --amino:       #E3B255;
+    --amino-soft:  #3A2E14;
+
+    --baseA: #4CC585;
+    --baseT: #F17086;
+    --baseG: #E3A34D;
+    --baseC: #7C93FF;
+    --baseU: #B487F0;
+
+    --good:        #5FD3AC;
+    --good-soft:   #16332A;
+    --warn:        #E5B45F;
+    --warn-soft:   #35290F;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1320; --surface:#171C2E; --surface-2:#212840;
+  --line:#2C3350; --line-strong:#3B4468;
+  --ink:#EAECF6; --ink-2:#B7BEDB; --ink-3:#8890B3;
+  --code:#7C93FF; --code-soft:#232B4A; --amino:#E3B255; --amino-soft:#3A2E14;
+  --baseA:#4CC585; --baseT:#F17086; --baseG:#E3A34D; --baseC:#7C93FF; --baseU:#B487F0;
+  --good:#5FD3AC; --good-soft:#16332A; --warn:#E5B45F; --warn-soft:#35290F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+:root[data-theme="light"]{
+  --ground:#F6F7FB; --surface:#FFFFFF; --surface-2:#EEF0F8;
+  --line:#DFE3EF; --line-strong:#C7CDE3;
+  --ink:#161B2E; --ink-2:#40456A; --ink-3:#6A6F94;
+  --code:#3454D1; --code-soft:#E7EBFB; --amino:#B9791A; --amino-soft:#FBF0DC;
+  --baseA:#2E9E5B; --baseT:#D6455B; --baseG:#C9791E; --baseC:#3454D1; --baseU:#8C4FD1;
+  --good:#1D7A5F; --good-soft:#E2F2EC; --warn:#9A6510; --warn-soft:#FBF0DC;
+  --shadow:0 1px 2px rgba(22,27,46,.05), 0 8px 24px -12px rgba(22,27,46,.18);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:17px;
+  line-height:1.62;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ---------------------------------------------------- masthead + nav */
+.mast{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.mast-in{
+  max-width:1180px; margin:0 auto; padding:12px 20px 0;
+  display:flex; flex-direction:column; gap:10px;
+}
+.mast-top{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.mast-title{
+  font-family:var(--serif); font-size:1.32rem; font-weight:600;
+  letter-spacing:-.01em; margin:0;
+}
+.mast-sub{
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.mast-actions{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+.nav{
+  display:flex; gap:4px; overflow-x:auto; padding-bottom:2px;
+  scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{ display:none; }
+.nav button{
+  flex:0 0 auto;
+  appearance:none; background:none; border:0;
+  border-bottom:2px solid transparent;
+  padding:9px 13px 11px; margin:0;
+  font-family:var(--sans); font-size:.92rem; font-weight:500;
+  color:var(--ink-3); cursor:pointer; white-space:nowrap;
+  border-radius:6px 6px 0 0; transition:color .15s, background .15s;
+}
+.nav button:hover{ color:var(--ink); background:var(--surface-2); }
+.nav button[aria-selected="true"]{
+  color:var(--code); border-bottom-color:var(--code); font-weight:600;
+}
+.nav .num{
+  font-family:var(--mono); font-size:.74em; opacity:.6; margin-right:6px;
+}
+
+/* ---------------------------------------------------------- buttons */
+.btn{
+  appearance:none; font-family:var(--sans); font-size:.85rem; font-weight:500;
+  padding:7px 13px; border-radius:7px; cursor:pointer;
+  background:var(--surface); color:var(--ink-2);
+  border:1px solid var(--line-strong);
+  transition:background .15s, color .15s, border-color .15s;
+}
+.btn:hover{ background:var(--surface-2); color:var(--ink); }
+.btn-accent{ background:var(--code); border-color:var(--code); color:#fff; }
+.btn-accent:hover{ filter:brightness(1.08); background:var(--code); color:#fff; }
+
+:focus-visible{ outline:2.5px solid var(--amino); outline-offset:2px; border-radius:4px; }
+
+/* ------------------------------------------------------------ layout */
+main{ max-width:1180px; margin:0 auto; padding:26px 20px 100px; }
+.panel[hidden]{ display:none; }
+.panel{ animation:rise .28s ease both; }
+@keyframes rise{ from{ opacity:0; transform:translateY(6px);} to{opacity:1;transform:none;} }
+@media (prefers-reduced-motion: reduce){
+  .panel{ animation:none; }
+  *{ transition-duration:.01ms !important; }
+}
+
+h2.sec{
+  font-family:var(--serif); font-size:2.05rem; font-weight:600;
+  letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance; line-height:1.18;
+}
+.sec-lede{
+  font-size:1.05rem; color:var(--ink-2); max-width:var(--maxw);
+  margin:0 0 26px;
+}
+h3{
+  font-family:var(--serif); font-size:1.3rem; font-weight:600;
+  letter-spacing:-.01em; margin:32px 0 10px; text-wrap:balance;
+}
+h4{
+  font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); margin:24px 0 8px; font-family:var(--sans);
+}
+p{ max-width:var(--maxw); margin:0 0 14px; }
+ul,ol{ max-width:var(--maxw); margin:0 0 14px; padding-left:1.25em; }
+li{ margin-bottom:7px; }
+b,strong{ font-weight:650; color:var(--ink); }
+code, .seq{
+  font-family:var(--mono); font-size:.86em;
+  background:var(--surface-2); padding:1px 6px; border-radius:4px;
+  border:1px solid var(--line); white-space:nowrap;
+}
+
+/* ------------------------------------------------------------- cards */
+.card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow);
+}
+.grid{ display:grid; gap:16px; }
+.g2{ grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
+.g3{ grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); }
+.g4{ grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+
+.callout{
+  border-radius:var(--r); padding:15px 18px; margin:18px 0;
+  border:1px solid var(--line); background:var(--surface-2);
+  max-width:var(--maxw);
+}
+.callout .tag{
+  display:block; font-family:var(--mono); font-size:.68rem;
+  letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; font-weight:600;
+}
+.callout p:last-child, .callout ul:last-child{ margin-bottom:0; }
+.c-ask{ background:var(--amino-soft); border-color:color-mix(in srgb,var(--amino) 34%, transparent); }
+.c-ask .tag{ color:var(--amino); }
+.c-key{ background:var(--code-soft); border-color:color-mix(in srgb,var(--code) 30%, transparent); }
+.c-key .tag{ color:var(--code); }
+.c-warn{ background:var(--warn-soft); border-color:color-mix(in srgb,var(--warn) 34%, transparent); }
+.c-warn .tag{ color:var(--warn); }
+.c-say{ background:var(--good-soft); border-color:color-mix(in srgb,var(--good) 30%, transparent); }
+.c-say .tag{ color:var(--good); }
+
+/* ------------------------------------------------------------ tables */
+.tw{ overflow-x:auto; margin:16px 0 22px; border:1px solid var(--line);
+     border-radius:var(--r); background:var(--surface); }
+table{ border-collapse:collapse; width:100%; min-width:520px; font-size:.94rem; }
+th,td{ text-align:left; padding:11px 15px; border-bottom:1px solid var(--line); vertical-align:top; }
+thead th{
+  background:var(--surface-2); font-size:.72rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:700; white-space:nowrap;
+}
+tbody tr:last-child td{ border-bottom:0; }
+td:first-child{ font-weight:600; color:var(--ink); }
+.num-cell{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
+.seq-cell{ font-family:var(--mono); font-variant-numeric:tabular-nums; letter-spacing:.02em; }
+
+/* --------------------------------------------------------- base letters */
+.base-tag{
+  display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-weight:700; font-size:.85em;
+  width:1.7em; height:1.7em; border-radius:5px; color:#fff;
+}
+.bA{ background:var(--baseA); } .bT{ background:var(--baseT); }
+.bG{ background:var(--baseG); } .bC{ background:var(--baseC); } .bU{ background:var(--baseU); }
+
+/* ------------------------------------------------------- script tab */
+.plan-row{
+  display:grid; grid-template-columns:minmax(70px,84px) minmax(140px,1fr) 2fr;
+  gap:12px; align-items:baseline; padding:8px 0; border-bottom:1px solid var(--line);
+}
+.plan-row:last-child{ border-bottom:0; }
+.plan-row .t{ font-family:var(--mono); font-size:.85rem; color:var(--ink-3); font-variant-numeric:tabular-nums; }
+.plan-row .n{ font-weight:650; }
+.plan-row .d{ color:var(--ink-2); font-size:.94rem; }
+
+.slide-card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); box-shadow:var(--shadow); margin-bottom:22px; overflow:hidden;
+}
+.slide-head{
+  display:flex; align-items:center; gap:14px; padding:16px 22px;
+  background:var(--surface-2); border-bottom:1px solid var(--line); flex-wrap:wrap;
+}
+.slide-num{
+  font-family:var(--mono); font-weight:700; font-size:.8rem;
+  background:var(--code); color:#fff; padding:4px 10px; border-radius:6px;
+  flex:0 0 auto;
+}
+.slide-head h3{ margin:0; flex:1; min-width:200px; }
+.slide-onscreen{
+  font-family:var(--mono); font-size:.76rem; color:var(--ink-3);
+  flex:0 0 100%;
+}
+.slide-body{ padding:20px 22px 22px; }
+.slide-body .callout{ margin:14px 0; }
+.slide-body p{ margin:0 0 12px; }
+.slide-body p:last-child{ margin-bottom:0; }
+
+/* --------------------------------------------------- translate table */
+.xlate{ display:flex; flex-direction:column; gap:2px; margin:18px 0; }
+.xrow{
+  display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:center;
+  padding:10px 14px; border-radius:8px; background:var(--surface); border:1px solid var(--line);
+}
+.xrow .bio{ font-weight:600; }
+.xrow .arrow{ color:var(--ink-3); font-family:var(--mono); }
+.xrow .code{ color:var(--code); font-weight:600; font-family:var(--mono); font-size:.88em; }
+
+/* --------------------------------------------------------- assembler */
+.assembler{ display:grid; grid-template-columns:minmax(0,1.3fr) minmax(240px,1fr); gap:18px; margin:18px 0; align-items:start; }
+@media (max-width:820px){ .assembler{ grid-template-columns:1fr; } }
+.stage{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px; box-shadow:var(--shadow); }
+.stage svg{ width:100%; height:auto; display:block; }
+.hot{ cursor:pointer; }
+.hot .shape{ transition:opacity .15s, stroke-width .15s; }
+.hot:hover .shape{ opacity:.82; }
+.hot.on .shape{ stroke:var(--amino); stroke-width:3.5; }
+.hot:focus{ outline:none; }
+.hot:focus-visible .shape{ stroke:var(--amino); stroke-width:3.5; }
+.svg-lbl{ font-family:var(--sans); font-size:12px; fill:var(--ink-2); font-weight:600; }
+.svg-lbl.on-light{ fill:#1E2233; }
+
+.info{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:18px 20px; box-shadow:var(--shadow);
+  position:sticky; top:132px; min-height:190px;
+}
+.info h5{ font-family:var(--serif); font-size:1.2rem; margin:0 0 4px; font-weight:600; }
+.info .role{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--amino); font-weight:600; margin-bottom:10px;
+}
+.info p{ font-size:.94rem; margin-bottom:10px; color:var(--ink-2); }
+.info .ana{
+  font-size:.9rem; background:var(--code-soft); padding:10px 13px;
+  border-radius:8px; color:var(--ink-2);
+}
+.info .ana b{ color:var(--code); }
+
+.seg{
+  display:inline-flex; background:var(--surface-2); border:1px solid var(--line);
+  border-radius:9px; padding:3px; gap:3px; margin-bottom:16px;
+}
+.seg button{
+  appearance:none; border:0; background:none; font:inherit; font-size:.9rem;
+  padding:7px 16px; border-radius:6px; cursor:pointer; color:var(--ink-3); font-weight:500;
+}
+.seg button[aria-pressed="true"]{ background:var(--code); color:#fff; font-weight:600; }
+
+/* -------------------------------------------------------------- ladder/rungs */
+.ladder{ display:flex; flex-direction:column; gap:8px; margin:20px 0; }
+.rung{
+  display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center;
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:13px 16px; cursor:pointer; text-align:left;
+  font:inherit; color:inherit; width:100%; transition:border-color .15s, background .15s;
+}
+.rung:hover{ border-color:var(--code); background:var(--surface-2); }
+.rung[aria-expanded="true"]{ border-color:var(--code); }
+.rung .lv{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.06em;
+  color:#fff; background:var(--code); padding:4px 8px; border-radius:5px;
+  min-width:34px; text-align:center; font-weight:600;
+}
+.rung .nm{ font-family:var(--serif); font-size:1.08rem; font-weight:600; }
+.rung .eg{ color:var(--ink-3); font-size:.9rem; }
+.rung-body{
+  padding:2px 16px 16px 66px; margin-top:-6px; margin-bottom:4px;
+  color:var(--ink-2); font-size:.95rem; max-width:var(--maxw);
+}
+.rung-body[hidden]{ display:none; }
+
+/* --------------------------------------------------------- PCR module */
+.sav{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow); margin:18px 0;
+}
+.sav-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin:16px 0; }
+.stat{ background:var(--surface-2); border-radius:9px; padding:12px 14px; border:1px solid var(--line); }
+.stat .k{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:600;
+}
+.stat .v{
+  font-family:var(--mono); font-size:1.42rem; font-weight:600; color:var(--ink);
+  font-variant-numeric:tabular-nums; line-height:1.3;
+}
+.stat .v small{ font-size:.6em; color:var(--ink-3); font-weight:500; }
+.stat.hero .v{ color:var(--amino); font-size:1.62rem; }
+input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30px; }
+.slabel{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+.slabel .cur{ font-family:var(--mono); font-weight:600; color:var(--code); font-variant-numeric:tabular-nums; }
+
+/* --------------------------------------------------------- cycle steps */
+.cycle-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin:18px 0; }
+.cycle-card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px 18px; box-shadow:var(--shadow); position:relative;
+}
+.cycle-card .cn{
+  font-family:var(--mono); font-weight:700; font-size:.75rem; color:#fff;
+  background:var(--code); width:24px; height:24px; border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center; margin-bottom:8px;
+}
+.cycle-card h5{ font-family:var(--serif); font-size:1.1rem; margin:0 0 4px; }
+.cycle-card .temp{
+  font-family:var(--mono); font-weight:700; color:var(--amino); font-size:1rem; margin-bottom:8px;
+}
+.cycle-card p{ font-size:.92rem; color:var(--ink-2); margin:0; }
+
+/* -------------------------------------------------------- codon ladder */
+.codon-demo{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  padding:22px; box-shadow:var(--shadow); margin:18px 0;
+}
+.codon-row{ display:flex; gap:10px; justify-content:center; margin:10px 0; }
+.codon-box{
+  width:56px; height:56px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-weight:700; font-size:1.3rem; color:#fff;
+  transition:box-shadow .2s;
+}
+.pair-line{ display:flex; gap:10px; justify-content:center; margin:2px 0; }
+.pair-line span{ width:56px; text-align:center; font-family:var(--mono); font-size:.85rem; color:var(--ink-3); }
+.pair-line span.wobble{ color:var(--amino); font-weight:700; }
+.codon-labels{ display:flex; gap:10px; justify-content:center; margin-top:4px; }
+.codon-labels span{ width:56px; text-align:center; font-size:.7rem; color:var(--ink-3); text-transform:uppercase; letter-spacing:.06em; }
+
+/* ------------------------------------------------------- doubt bank */
+.tools{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  margin:0 0 16px; position:sticky; top:126px; z-index:20;
+  background:color-mix(in srgb, var(--ground) 92%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  padding:10px 0;
+}
+.search{
+  flex:1 1 250px; min-width:0;
+  font:inherit; font-size:.95rem; padding:10px 14px;
+  border-radius:9px; border:1px solid var(--line-strong);
+  background:var(--surface); color:var(--ink);
+}
+.search::placeholder{ color:var(--ink-3); }
+.chips{ display:flex; gap:6px; flex-wrap:wrap; }
+.chip{
+  appearance:none; font:inherit; font-size:.82rem; font-weight:500;
+  padding:7px 12px; border-radius:20px; cursor:pointer;
+  background:var(--surface); border:1px solid var(--line-strong); color:var(--ink-3);
+}
+.chip[aria-pressed="true"]{ background:var(--code); border-color:var(--code); color:#fff; font-weight:600; }
+
+.q{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); margin-bottom:10px; overflow:hidden;
+}
+.q[hidden]{ display:none; }
+.q-head{
+  display:flex; gap:13px; align-items:flex-start; width:100%;
+  padding:15px 18px; background:none; border:0; font:inherit; color:inherit;
+  text-align:left; cursor:pointer;
+}
+.q-head:hover{ background:var(--surface-2); }
+.q-head .qm{
+  font-family:var(--mono); font-size:.9rem; font-weight:700; color:var(--amino);
+  flex:0 0 auto; margin-top:1px;
+}
+.q-head .qt{ flex:1; font-weight:550; font-size:1rem; line-height:1.45; }
+.q-head .qc{ flex:0 0 auto; color:var(--ink-3); font-size:1.1rem; transition:transform .2s; }
+.q-head[aria-expanded="true"] .qc{ transform:rotate(45deg); }
+.q-body{ padding:0 18px 18px 49px; }
+.q-body[hidden]{ display:none; }
+.q-body p{ font-size:.96rem; margin-bottom:11px; }
+.q-body p:last-child{ margin-bottom:0; }
+.q-tags{ display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+.q-tag{
+  font-family:var(--mono); font-size:.64rem; letter-spacing:.07em; text-transform:uppercase;
+  padding:3px 8px; border-radius:5px; background:var(--surface-2);
+  color:var(--ink-3); border:1px solid var(--line); font-weight:600;
+}
+.q-tag.hard{ background:var(--amino-soft); color:var(--amino); border-color:transparent; }
+.line{ display:block; font-size:.93rem; padding:10px 13px; border-radius:8px;
+  background:var(--good-soft); margin-top:4px; }
+.line b{ color:var(--good); }
+
+/* ------------------------------------------------------------- quiz */
+.quiz-q{ background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); padding:18px 20px; margin-bottom:14px; box-shadow:var(--shadow); }
+.quiz-q .stem{ font-weight:600; margin-bottom:12px; font-size:1rem; }
+.opts{ display:flex; flex-direction:column; gap:8px; }
+.opt{
+  appearance:none; text-align:left; font:inherit; font-size:.94rem;
+  padding:11px 15px; border-radius:8px; cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--line); color:var(--ink);
+  transition:border-color .15s, background .15s;
+}
+.opt:hover:not(:disabled){ border-color:var(--code); }
+.opt:disabled{ cursor:default; }
+.opt.right{ background:var(--good-soft); border-color:var(--good); font-weight:600; }
+.opt.wrong{ background:var(--warn-soft); border-color:var(--warn); }
+.expl{ margin-top:12px; font-size:.93rem; color:var(--ink-2);
+  padding:11px 14px; background:var(--code-soft); border-radius:8px; }
+.expl[hidden]{ display:none; }
+.score{
+  font-family:var(--mono); font-size:.95rem; font-weight:600; color:var(--code);
+  padding:10px 0;
+}
+
+.mini{ font-size:.86rem; color:var(--ink-3); max-width:var(--maxw); }
+.foot{
+  margin-top:44px; padding-top:20px; border-top:1px solid var(--line);
+  font-size:.84rem; color:var(--ink-3); max-width:var(--maxw);
+}
+</style>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="mast-top">
+      <h1 class="mast-title">DNA as Code — TA Handbook</h1>
+      <span class="mast-sub">BB 101 · Tutorial 2 · Batch T1 · LT 206</span>
+      <span class="mast-actions">
+        <button class="btn" id="themeBtn" type="button">Theme</button>
+      </span>
+    </div>
+    <nav class="nav" id="nav" role="tablist" aria-label="Sections"></nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================ SCRIPT -->
+<section class="panel" id="p-script" role="tabpanel" hidden>
+  <h2 class="sec">The script</h2>
+  <p class="sec-lede">Most of this room does not want to be here for biology. That's fine — don't sell it as biology. Sell it as a storage-and-processing system built out of molecules instead of silicon, because that's literally what it is, and it's the framing that runs through every slide below. Read the "Say this" blocks near-verbatim the first time you teach it, then make them your own.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The one framing to hold onto</span>
+    <p><b>DNA is a read-only archive. RNA is a disposable working copy. Protein is the compiled, running program.</b> Every slide in this deck is a different piece of that pipeline — how the archive is physically built, how it gets copied, how a working copy gets decoded, and how scientists learned to hijack the copier. If a student is lost, drag them back to this one sentence.</p>
+  </div>
+
+  <h3>A 50-minute shape</h3>
+  <div class="card">
+    <div class="plan-row"><span class="t">0–3</span><span class="n">Slide 1</span><span class="d">Hook: "you've all taken this test." Set the DNA = code framing.</span></div>
+    <div class="plan-row"><span class="t">3–9</span><span class="n">Slide 2</span><span class="d">Nucleotides: phosphate / sugar / base. Nucleoside vs nucleotide.</span></div>
+    <div class="plan-row"><span class="t">9–15</span><span class="n">Slide 3</span><span class="d">Purines vs pyrimidines, pairing rules, H-bond counts (set up PCR).</span></div>
+    <div class="plan-row"><span class="t">15–22</span><span class="n">Slide 4</span><span class="d">DNA vs RNA as a deliberate trade-off, not two random variants.</span></div>
+    <div class="plan-row"><span class="t">22–32</span><span class="n">Slide 5</span><span class="d">Replication (semiconservative, leading/lagging) + transcription. Dense — don't rush.</span></div>
+    <div class="plan-row"><span class="t">32–42</span><span class="n">Slide 6</span><span class="d">Central dogma worked example, degeneracy, wobble. The payoff slide.</span></div>
+    <div class="plan-row"><span class="t">42–50</span><span class="n">Slide 7</span><span class="d">PCR — the exponential loop, then land on the COVID-test callback.</span></div>
+  </div>
+
+  <!-- SLIDE 1 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-num">Slide 1</span>
+      <h3>How Nature Stores Information — DNA as Code</h3>
+      <span class="slide-onscreen">ON SCREEN: title + 5 topic tiles (DNA as Code · DNA &amp; RNA Structure · Replication &amp; Transcription · The Genetic Code &amp; Wobble · PCR Amplification)</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say">
+        <span class="tag">Say this</span>
+        <p>"Forget 'biology' for a second. What we're actually looking at today is a storage-and-processing system — nature's version of a hard drive, a compiler, and a photocopier, except it's built out of molecules instead of silicon. Every cell in your body is running the same four-letter code: A, T, G, C. That's it — no more symbols than that. And out of just four letters, that code builds everything about you.</p>
+        <p>Today we'll go through it exactly like you'd learn a new file format: what the data actually looks like at the byte level (structure), how the system copies itself without corrupting the original (replication) and exports a working copy to actually use (transcription), how that working copy gets decoded into a finished product — including a neat trick called 'wobble' that makes the decoding error-tolerant — and finally, how scientists hijacked this copying machinery to build the most powerful copy-paste command that exists: PCR, the same reaction behind every COVID test you've taken."</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Ask the room</span>
+        <p>"Quick show of hands — who's taken a COVID PCR test?" (Most hands go up.) "Good — by the end of this hour you'll know exactly what that machine was doing to your swab."</p>
+      </div>
+      <p class="mini">Keep this slide under 3 minutes. It's a hook, not content — the temptation is to over-explain the roadmap before anyone has context for it.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-num">Slide 2</span>
+      <h3>Structure of Nucleotides</h3>
+      <span class="slide-onscreen">ON SCREEN: nucleotide = phosphate + sugar + base; nucleoside = sugar + base; phosphate types NMP / NDP / NTP</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say">
+        <span class="tag">Say this</span>
+        <p>"If DNA is a long string of code, a nucleotide is one character in that string — except each 'character' is built from three physical pieces bolted together. There's the base, the actual letter, A/T/G/C — the informational part. There's a sugar ring, the physical scaffold holding the letter in place. And there's a phosphate group, the connector that links one sugar-base unit to the next — the same way a linked-list node has a pointer to the next node. Chain enough of these through their phosphate connectors and you get a strand of DNA.</p>
+        <p>One term worth locking in: sugar plus base, with no phosphate connector yet, is a <b>nucleoside</b> — a letter that hasn't been wired into the chain. Add the phosphate and it becomes a <b>nucleotide</b>, ready to link in. Notice phosphates come in mono-, di-, and triphosphate flavours — NMP, NDP, NTP. That triphosphate form matters later: it's not just a connector, it's carrying spare energy. Snapping off two of the three phosphates is literally what powers the 'write' step when a new letter gets added to a growing strand — you'll see this again in replication and PCR."</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Ask the room</span>
+        <p>"If a nucleoside has no phosphate, can it link into a chain on its own?" (No — it needs the phosphate connector first.)</p>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">If they ask</span>
+        <p>"Isn't ATP the energy molecule — is that the same A as in DNA?" → Yes, literally the same base, Adenine. Nucleotides moonlight as the cell's energy currency and as signalling molecules too. Full answer in the Doubt Bank.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-num">Slide 3</span>
+      <h3>Structure of Nitrogenous Bases</h3>
+      <span class="slide-onscreen">ON SCREEN: purines A, G (double-ring) vs pyrimidines C, T, U (single-ring); pairing rules; U replaces T in RNA</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say">
+        <span class="tag">Say this</span>
+        <p>"Four letters (five, counting RNA's swap), and they come in two physical sizes. Adenine and Guanine are <b>purines</b> — two fused rings, the 'big' letters. Cytosine, Thymine and Uracil are <b>pyrimidines</b> — one ring, the 'small' letters. Here's the rule that makes the whole double helix possible: a big letter always pairs with a small letter, never big-with-big or small-with-small. That's not arbitrary — it's what keeps the ladder's rungs exactly the same width all the way up, the same way a connector has to be a fixed size regardless of which two devices you're plugging together.</p>
+        <p>It's not just size-matching either — it's a specific lock-and-key: Adenine only pairs with Thymine (or Uracil in RNA), Cytosine only pairs with Guanine. Small hydrogen bonds — think of them as clips — hold each pair together: <b>two clips for A-T, three clips for G-C</b>. Remember that number. It comes back directly when we get to PCR's temperatures."</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Ask the room</span>
+        <p>"Which pair do you think is harder to pull apart — A-T or G-C, and why?" (G-C — three hydrogen bonds vs two.)</p>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">If they ask</span>
+        <p>"Why does RNA swap Thymine for Uracil at all?" → Short answer: Thymine acts partly as a DNA damage-detection tag, which a disposable molecule like RNA doesn't need. Full answer in the Doubt Bank.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-num">Slide 4</span>
+      <h3>DNA &amp; RNA: Structure of the Code</h3>
+      <span class="slide-onscreen">ON SCREEN: comparison table — strandedness, length, sugar, bases, pairing, stability, location/function</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say">
+        <span class="tag">Say this</span>
+        <p>"Put the two molecules side by side — every difference here is a deliberate trade-off for the job each one does, not a random variation. DNA is the master copy: double-stranded, extremely stable, kept in the nucleus, not meant to move. Think of it as a read-only archive — the main branch nobody commits to directly. RNA is the working copy: single-stranded, less stable, made on demand and sent wherever it's needed — the temp file you generate from the archive so you can actually use the data without risking the original.</p>
+        <p>The chemistry backs this up: DNA's sugar is deoxyribose — 'ribose minus an oxygen' — and that missing -OH group removes a weak point in the backbone, making DNA chemically inert, exactly what you want for decades of storage. RNA's ribose keeps that -OH, which makes it more reactive and shorter-lived — fine, even useful, for something meant to be temporary."</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Ask the room</span>
+        <p>"If DNA is so much more stable, why doesn't the cell just skip RNA and build proteins directly off DNA?" (Because that constantly exposes the one master copy to the busy machinery of the cell. RNA is a disposable proxy so the original is never directly at risk — full answer in the Doubt Bank.)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-num">Slide 5</span>
+      <h3>Replication &amp; Transcription: Two Ways to Copy</h3>
+      <span class="slide-onscreen">ON SCREEN: DNA→DNA (semiconservative, leading/lagging strand, Okazaki fragments + ligase); DNA→RNA (transcription → mRNA transcript)</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say">
+        <span class="tag">Say this</span>
+        <p>"Two completely different copy operations, worth keeping straight before the terms blur. DNA→DNA is <b>replication</b>: a full, faithful duplicate of the whole genome before a cell divides, so each daughter cell gets its own complete archive. DNA→RNA is <b>transcription</b>: copying out just one gene — one file — into a disposable working copy, without touching the rest of the archive.</p>
+        <p>Replication is called <b>semiconservative</b>, because every new double helix is a hybrid — one strand old, one strand new. Nothing is built entirely from scratch; you always keep half the original as scaffold. Here's the wrinkle: the enzyme building the new strand, DNA polymerase, can only extend in one direction — 5' to 3' — and can only read a template running the opposite way. Since the two original strands run opposite directions to each other, one new strand builds smoothly in one long pass — the <b>leading strand</b> — but the other has to be built backwards in short bursts, because the polymerase keeps jumping back to the fork and restarting — those bursts are <b>Okazaki fragments</b>, and <b>ligase</b> staples them into one continuous strand afterwards. Like a printer that can only feed paper one way: printing with the grain is one clean pass, printing against it means short strips taped together.</p>
+        <p>Then transcription: instead of duplicating everything, the cell zooms in on one gene, unzips just that stretch, and RNA polymerase reads the template and builds a matching RNA strand — same pairing rules, except A now pairs with Uracil. That RNA copy, the mRNA transcript, physically leaves for the ribosome, where it actually gets used."</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Ask the room</span>
+        <p>"Which strand finishes faster — leading or lagging, and why?" (Leading — one continuous pass; lagging is start-stop fragments that then need stitching.)</p>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">If they ask</span>
+        <p>"How does DNA polymerase even start — doesn't it need something already there to extend?" → Yes. Flag it now and park it: this exact requirement is why PCR needs primers too, and you'll return to it in the PCR section.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-num">Slide 6</span>
+      <h3>Codons, the Central Dogma &amp; the Wobble Position</h3>
+      <span class="slide-onscreen">ON SCREEN: DNA template → mRNA codon → tRNA anticodon → protein (worked example TAC → AUG → UAC → Met); degeneracy table; wobble (G·U) example</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say">
+        <span class="tag">Say this</span>
+        <p>"This is the payoff slide — where 'code' stops being a metaphor and becomes literal. Follow one three-letter chunk of DNA all the way to a finished protein. The DNA template reads 3'-TAC-5'. Transcription copies that to an mRNA codon, 5'-AUG-3'. That three-letter codon is the actual unit the cell reads — not letter by letter, three at a time, like a fixed-width instruction. AUG means two things at once: 'start reading here' and 'the first amino acid is Methionine.' A matching tRNA shows up carrying the complementary three letters — the anticodon, 3'-UAC-5' — and delivered on its back is the actual building block, Methionine. The ribosome bonds it onto the growing chain, moves to the next codon, repeats. A few hundred times later: a folded, functional protein.</p>
+        <p>Now the interesting part: 64 possible three-letter codons, only 20 amino acids to encode — so most amino acids are named by more than one codon. Leucine has six. That's not sloppy design, that's redundancy on purpose — the same idea as a parity bit: if a mutation flips the third letter of a codon, there's a decent chance it still spells the same amino acid, so the mutation does nothing at all. And here's why the third letter specifically is the forgiving one: codon-anticodon pairing is strict at positions 1 and 2, but position 3 tolerates a looser match — including pairings that break the normal rule, like a G on the tRNA pairing with a U on the mRNA. That's the <b>wobble position</b>. Payoff: because that match doesn't have to be exact, one tRNA can read more than one codon, so the cell gets away with noticeably fewer than 61 tRNA types."</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Ask the room</span>
+        <p>"If a mutation changes the third letter of a codon and the amino acid stays exactly the same, does that count as a mutation?" (Technically yes — a <b>silent mutation</b>: the DNA changed, but the protein produced didn't.)</p>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">If they ask</span>
+        <p>"What if a mutation DOES change the amino acid, or inserts an extra letter?" → Bridge to the Doubt Bank: missense (one amino acid changes), nonsense (an early stop codon truncates the protein), frameshift (an insertion/deletion not a multiple of three corrupts every codon downstream — like deleting one character from a script written in fixed-width instructions).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-num">Slide 7</span>
+      <h3>PCR: The Polymerase Chain Reaction</h3>
+      <span class="slide-onscreen">ON SCREEN: 3-step cycle (Denaturation ~95°C, Annealing 50–65°C, Extension ~72°C) × 25–35 cycles; copies ≈ 2ⁿ; 35 cycles ≈ 3.4×10¹⁰ copies</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say">
+        <span class="tag">Say this</span>
+        <p>"Last stop, and this one you've personally lived through. PCR is scientists taking the cell's own copying machinery, pulling it out of the cell, and running it in a test tube entirely under their control, fast, over and over. Three steps, one cycle: <b>Denaturation</b> — heat to about 95°C, hot enough to snap every hydrogen bond from slide 3, splitting the double strand into two singles. <b>Annealing</b> — cool to 50–65°C, and short synthetic primers find and stick to the specific stretch you want copied, marking exactly where to start. <b>Extension</b> — heat back to 72°C, and Taq polymerase extends new strands from those primers, same 5'-to-3' addition as replication.</p>
+        <p>Then — the entire trick — you don't do that once. You loop it. Repeat 25 to 35 times, and because every molecule made in one cycle becomes a template for the next, the copy count doesn't add, it <b>doubles</b>: after n cycles, roughly two-to-the-n copies. Run it 35 times and one molecule becomes about thirty-four billion. That's a for-loop that doubles its output every iteration — same curve as compound interest, same curve as Moore's Law, just applied to molecules.</p>
+        <p>One detail that makes this actually work: Taq polymerase comes from a bacterium, <i>Thermus aquaticus</i>, discovered living in geothermal hot springs. A normal enzyme would cook and fall apart the moment you hit 95°C — Taq doesn't, so it survives all 35 denaturation steps without needing to be topped up. Before Taq, this meant manually adding fresh enzyme after every single heating cycle. And the payoff you've actually lived: your COVID nasal-swab test worked exactly this way. There usually isn't nearly enough viral genetic material in a swab to detect directly — so the test doubles it, and doubles it again, thirty-something times, until a handful of starting molecules becomes billions, enough to light up a detector. You weren't testing for the virus directly — you were testing whether this doubling loop found anything worth doubling."</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Ask the room</span>
+        <p>"If PCR starts from one molecule and doubles every cycle, how many cycles to beat a million copies?" (2²⁰ ≈ 1.05 million — so 20 cycles.)</p>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">If they ask</span>
+        <p>"COVID's genome is RNA though — how does a DNA-copying reaction work on that?" → An extra enzyme, reverse transcriptase, first back-copies the RNA into DNA (the "RT" in RT-PCR), and standard PCR takes over from there. Full answer in the Doubt Bank.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ CODE FRAME -->
+<section class="panel" id="p-code" role="tabpanel" hidden>
+  <h2 class="sec">DNA as code</h2>
+  <p class="sec-lede">The framing that makes everything else click for a room that thinks in systems, not organisms. Every biology term in this tutorial has a direct computing equivalent — not a loose metaphor, a genuinely structural one.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The pipeline</span>
+    <p><b>DNA (archive) → RNA (working copy) → Protein (running program).</b> Three stages, three physical molecules, one direction of information flow — Francis Crick named this the <b>Central Dogma</b> in 1958. Nearly everything in this tutorial is detail on one of these three arrows.</p>
+  </div>
+
+  <h3>Term translator</h3>
+  <div class="xlate">
+    <div class="xrow"><span class="bio">DNA</span><span class="arrow">→</span><span class="code">source repository / archival hard drive</span></div>
+    <div class="xrow"><span class="bio">A single gene</span><span class="arrow">→</span><span class="code">one file / one function</span></div>
+    <div class="xrow"><span class="bio">RNA polymerase (transcription)</span><span class="arrow">→</span><span class="code">export / copy command</span></div>
+    <div class="xrow"><span class="bio">mRNA</span><span class="arrow">→</span><span class="code">compiled bytecode, sent off to run</span></div>
+    <div class="xrow"><span class="bio">Ribosome</span><span class="arrow">→</span><span class="code">processor / interpreter</span></div>
+    <div class="xrow"><span class="bio">tRNA</span><span class="arrow">→</span><span class="code">lookup-table adapter</span></div>
+    <div class="xrow"><span class="bio">Codon (3 letters)</span><span class="arrow">→</span><span class="code">fixed-width instruction word</span></div>
+    <div class="xrow"><span class="bio">Protein</span><span class="arrow">→</span><span class="code">compiled, running executable</span></div>
+    <div class="xrow"><span class="bio">Mutation</span><span class="arrow">→</span><span class="code">bit flip</span></div>
+    <div class="xrow"><span class="bio">Codon degeneracy</span><span class="arrow">→</span><span class="code">redundant encoding / parity bit</span></div>
+    <div class="xrow"><span class="bio">Frameshift mutation</span><span class="arrow">→</span><span class="code">a deleted byte corrupting every instruction after it</span></div>
+    <div class="xrow"><span class="bio">PCR primer</span><span class="arrow">→</span><span class="code">search anchor / seek pointer</span></div>
+    <div class="xrow"><span class="bio">PCR cycle</span><span class="arrow">→</span><span class="code">one loop iteration, output doubles</span></div>
+  </div>
+  <p class="mini">Reuse this table shamelessly. Every time a student's eyes glaze at a biology term, point at its row.</p>
+
+  <h3>Why this analogy actually holds up</h3>
+  <p>It's not just a teaching trick — DNA genuinely is a digital storage medium in the strict sense: a sequence built from a small, discrete alphabet (A/T/G/C — effectively 2 bits per letter), read by machinery that doesn't care what the sequence "means," only what it says. Researchers are actively building real archival data-storage systems out of synthetic DNA today, because the information density is extraordinary — current lab demonstrations pack on the order of hundreds of petabytes into a single gram, several orders of magnitude denser than any silicon medium. When you tell this room "DNA is a storage format," you are not simplifying for effect. You are stating it plainly.</p>
+
+  <div class="callout c-warn">
+    <span class="tag">Don't overclaim</span>
+    <p>The Central Dogma describes the dominant flow of information, not an absolute law. Retroviruses like HIV run it backwards — RNA back into DNA, via an enzyme called reverse transcriptase — which is exactly the borrowed trick behind RT-PCR (see the PCR tab). Mention this once, in passing; it's a good "even the rule has a well-understood exception" moment for a skeptical room, and it sets up the COVID-test callback perfectly.</p>
+  </div>
+</section>
+
+<!-- ========================================================= BLOCKS -->
+<section class="panel" id="p-blocks" role="tabpanel" hidden>
+  <h2 class="sec">Building blocks: nucleotides</h2>
+  <p class="sec-lede">Slide 2. The single character in the code, and what it's physically made of. Tap each part.</p>
+
+  <div class="seg" role="group" aria-label="Nucleotide view">
+    <button type="button" id="btnNucleotide" aria-pressed="true">Nucleotide</button>
+    <button type="button" id="btnNucleoside" aria-pressed="false">Nucleoside</button>
+  </div>
+
+  <div class="assembler">
+    <div class="stage" id="nucStage"></div>
+    <aside class="info" id="nucInfo" aria-live="polite">
+      <h5>Tap a part</h5>
+      <div class="role">interactive diagram</div>
+      <p>Each piece of the nucleotide is tappable — what it is, and how it maps onto the "code" framing.</p>
+      <div class="ana">Toggle to <b>Nucleoside</b> above to see exactly what's missing without the phosphate — that's the whole definition, made physical.</div>
+    </aside>
+  </div>
+
+  <h3>Phosphate group flavours</h3>
+  <p>Phosphates don't just show up once — they come in mono-, di-, and triphosphate forms, and the difference matters:</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Form</th><th>Short for</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td>Monophosphate (NMP)</td><td class="seq-cell">e.g. AMP</td><td>One phosphate — the minimum needed to link into a chain.</td></tr>
+        <tr><td>Diphosphate (NDP)</td><td class="seq-cell">e.g. ADP</td><td>Two phosphates — an intermediate energy state.</td></tr>
+        <tr><td>Triphosphate (NTP)</td><td class="seq-cell">e.g. ATP, dNTPs</td><td>Three phosphates — the form DNA/RNA polymerase actually uses as raw material. Breaking off two phosphates releases the energy that pays for adding the letter to the chain.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">Say it like this</span>
+    <p>"Every single letter added to a growing DNA or RNA strand arrives as a triphosphate — a dNTP. The cell isn't just fetching a letter, it's fetching a pre-paid letter: two of its three phosphates get sacrificed on the spot to power the bond that welds it into the chain. That's not a coincidence — it's the same molecule family as ATP, the cell's general-purpose energy currency, doing double duty as both a genetic letter and a battery."</p>
+  </div>
+</section>
+
+<!-- ============================================================ BASES -->
+<section class="panel" id="p-bases" role="tabpanel" hidden>
+  <h2 class="sec">The bases &amp; pairing rules</h2>
+  <p class="sec-lede">Slide 3. Two ring sizes, one strict pairing rule, and a hydrogen-bond count that quietly resurfaces in PCR.</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>Purines — double ring, "big"</h4>
+      <p style="margin-bottom:10px"><span class="base-tag bA">A</span> Adenine &nbsp;&nbsp; <span class="base-tag bG">G</span> Guanine</p>
+      <p class="mini">Two fused rings. Structurally larger — this is a real size difference, not a diagram convention.</p>
+    </div>
+    <div class="card">
+      <h4>Pyrimidines — single ring, "small"</h4>
+      <p style="margin-bottom:10px"><span class="base-tag bC">C</span> Cytosine &nbsp;&nbsp; <span class="base-tag bT">T</span> Thymine &nbsp;&nbsp; <span class="base-tag bU">U</span> Uracil</p>
+      <p class="mini">One ring. Uracil replaces Thymine in RNA only — same shape, one fewer methyl group.</p>
+    </div>
+  </div>
+
+  <h3>Pairing rules</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Pair</th><th>Where</th><th>Hydrogen bonds</th><th>Grip strength</th></tr></thead>
+      <tbody>
+        <tr><td><span class="base-tag bA">A</span> – <span class="base-tag bT">T</span></td><td>DNA</td><td class="num-cell">2</td><td>Weaker</td></tr>
+        <tr><td><span class="base-tag bA">A</span> – <span class="base-tag bU">U</span></td><td>RNA</td><td class="num-cell">2</td><td>Weaker</td></tr>
+        <tr><td><span class="base-tag bG">G</span> – <span class="base-tag bC">C</span></td><td>DNA &amp; RNA</td><td class="num-cell">3</td><td>Stronger</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">Why purine-pyrimidine is mandatory</span>
+    <p>Pair two purines and the rung is too wide; pair two pyrimidines and it's too narrow. Obligate purine-with-pyrimidine pairing is what keeps the helix's diameter perfectly constant along its entire length — the molecular equivalent of a connector that has to be a fixed size no matter which two devices are on either end.</p>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">Plant this now, pay it off in PCR</span>
+    <p>G-C pairs grip harder (3 bonds) than A-T pairs (2 bonds). That means <b>GC-rich DNA needs more heat to melt apart than AT-rich DNA</b> — which is exactly why PCR's denaturation and annealing temperatures aren't arbitrary numbers. Flag it here; the payoff lands in the PCR tab.</p>
+  </div>
+</section>
+
+<!-- ============================================================ DNA vs RNA -->
+<section class="panel" id="p-dnarna" role="tabpanel" hidden>
+  <h2 class="sec">DNA vs RNA</h2>
+  <p class="sec-lede">Slide 4. Not two random variants — every difference is a trade-off for the job each molecule does. Toggle and tap.</p>
+
+  <div class="seg" role="group" aria-label="Molecule">
+    <button type="button" id="btnDNA" aria-pressed="true">DNA</button>
+    <button type="button" id="btnRNA" aria-pressed="false">RNA</button>
+  </div>
+
+  <div class="assembler">
+    <div class="stage" id="drStage"></div>
+    <aside class="info" id="drInfo" aria-live="polite">
+      <h5>Tap a structure</h5>
+      <div class="role">interactive diagram</div>
+      <p>Every labelled part is tappable — what it is, and why it differs between the two molecules.</p>
+      <div class="ana">Toggle DNA / RNA above and re-tap the same spot to feel the contrast directly.</div>
+    </aside>
+  </div>
+
+  <h3>Side by side</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Feature</th><th>DNA</th><th>RNA</th></tr></thead>
+      <tbody>
+        <tr><td>Strands</td><td>Double, helical</td><td>Single — may fold into secondary structure</td></tr>
+        <tr><td>Length</td><td>Millions of bases</td><td>Typically a few thousand bases</td></tr>
+        <tr><td>Sugar</td><td>Deoxyribose (no 2'-OH)</td><td>Ribose (has 2'-OH)</td></tr>
+        <tr><td>Bases</td><td>A, T, G, C</td><td>A, U, G, C</td></tr>
+        <tr><td>Pairing</td><td>A-T, G-C</td><td>A-U, G-C</td></tr>
+        <tr><td>Stability</td><td>Very stable</td><td>Less stable, more reactive</td></tr>
+        <tr><td>Location</td><td>Stays in the nucleus</td><td>Made in the nucleus, migrates to where it's used</td></tr>
+        <tr><td>Job</td><td>Long-term storage of genetic information</td><td>Converts that information into a usable, working format</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">Say it like this</span>
+    <p>"The missing -OH on DNA's sugar isn't a minor detail — it removes a chemically reactive site that would otherwise let the backbone slowly attack and cut itself. DNA is boring on purpose. RNA keeps that -OH, so it's more reactive and shorter-lived — a trade-off, not a flaw, for something that's only ever meant to be a temporary working copy."</p>
+  </div>
+</section>
+
+<!-- ======================================================= COPYING -->
+<section class="panel" id="p-copying" role="tabpanel" hidden>
+  <h2 class="sec">Copying the code</h2>
+  <p class="sec-lede">Slide 5. Two different copy operations that get confused constantly: replication duplicates the whole archive; transcription exports one file. Step through each.</p>
+
+  <h3>Replication: DNA → DNA</h3>
+  <p class="mini">Semiconservative — every new duplex keeps exactly one original strand. Six stages, tap through them.</p>
+  <div class="ladder" id="repLadder"></div>
+
+  <div class="callout c-warn">
+    <span class="tag">The directionality problem</span>
+    <p>DNA polymerase can only extend an existing strand 5'→3', reading the template 3'→5'. Since the two template strands run in opposite directions, one new strand is built in one continuous pass (<b>leading</b>), and the other has to be built backwards in short bursts, restarted repeatedly from the fork (<b>lagging</b> — <b>Okazaki fragments</b>), later sealed into one strand by <b>ligase</b>.</p>
+  </div>
+
+  <h3>Transcription: DNA → RNA</h3>
+  <p class="mini">Copies out one gene only, not the whole genome. Four stages.</p>
+  <div class="ladder" id="transLadder"></div>
+
+  <div class="callout c-key">
+    <span class="tag">Say it like this</span>
+    <p>"Replication is a full backup before the system forks into two. Transcription is grep-ing one function out of a huge codebase into a small working file, without ever touching the original repository. Different scale, different purpose, same underlying base-pairing rules doing the copying."</p>
+  </div>
+</section>
+
+<!-- ======================================================== READING -->
+<section class="panel" id="p-reading" role="tabpanel" hidden>
+  <h2 class="sec">Reading the code</h2>
+  <p class="sec-lede">Slide 6. The central dogma made concrete with one worked example, why the code is deliberately redundant, and the wobble trick that makes decoding error-tolerant.</p>
+
+  <h3>One codon, start to finish</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Stage</th><th>Sequence</th><th>Direction</th></tr></thead>
+      <tbody>
+        <tr><td>DNA template</td><td class="seq-cell"><span class="base-tag bT">T</span><span class="base-tag bA">A</span><span class="base-tag bC">C</span></td><td class="num-cell">3'→5'</td></tr>
+        <tr><td>mRNA codon <span class="mini">(transcription)</span></td><td class="seq-cell"><span class="base-tag bA">A</span><span class="base-tag bU">U</span><span class="base-tag bG">G</span></td><td class="num-cell">5'→3'</td></tr>
+        <tr><td>tRNA anticodon <span class="mini">(translation)</span></td><td class="seq-cell"><span class="base-tag bU">U</span><span class="base-tag bA">A</span><span class="base-tag bC">C</span></td><td class="num-cell">3'→5'</td></tr>
+        <tr><td>Delivers</td><td colspan="2">Methionine (Met) — also doubles as the <b>start</b> signal</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="mini">Read down each column: T pairs with A, A pairs with U, C pairs with G — the same rules from the Bases tab, just run twice (DNA→RNA, then RNA codon↔anticodon).</p>
+
+  <h3>The code is degenerate — on purpose</h3>
+  <p>64 possible codons (4³), only 20 amino acids to name. Most get more than one codon:</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Amino acid</th><th>Codons (mRNA)</th></tr></thead>
+      <tbody>
+        <tr><td>Leucine (Leu)</td><td class="seq-cell">UUA · UUG · CUU · CUC · CUA · CUG</td></tr>
+        <tr><td>Serine (Ser)</td><td class="seq-cell">UCU · UCC · UCA · UCG · AGU · AGC</td></tr>
+        <tr><td>Methionine (Met)</td><td class="seq-cell">AUG <span class="mini">(also the start codon)</span></td></tr>
+        <tr><td>Tryptophan (Trp)</td><td class="seq-cell">UGG <span class="mini">(only one codon)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout c-key">
+    <span class="tag">Say it like this</span>
+    <p>"This is a parity bit, not sloppiness. If a random mutation flips one letter and the codon still names the same amino acid, the mutation is invisible — the protein comes out identical. Redundancy in the encoding buys tolerance against noise, exactly like adding a checksum."</p>
+  </div>
+
+  <h3>The wobble position</h3>
+  <p>Strict Watson-Crick pairing governs codon positions 1 and 2. Position 3 — the "wobble" position — tolerates a non-standard match. Tap to see it:</p>
+
+  <div class="codon-demo">
+    <div class="codon-labels"><span>pos 1</span><span>pos 2</span><span>pos 3</span></div>
+    <div class="codon-row">
+      <div class="codon-box" style="background:var(--baseC)">C</div>
+      <div class="codon-box" style="background:var(--baseU)">U</div>
+      <div class="codon-box" style="background:var(--baseU)">U</div>
+    </div>
+    <div class="pair-line"><span>‖</span><span>‖</span><span class="wobble" id="wobbleMark">‖</span></div>
+    <div class="codon-row">
+      <div class="codon-box" style="background:var(--baseG)">G</div>
+      <div class="codon-box" style="background:var(--baseA)">A</div>
+      <div class="codon-box" style="background:var(--baseG)">G</div>
+    </div>
+    <p class="mini" style="text-align:center; margin-top:6px">mRNA codon <span class="seq-cell">5'-CUU-3'</span> (Leucine) over tRNA anticodon <span class="seq-cell">3'-GAG-5'</span></p>
+    <p style="text-align:center; margin-top:10px">
+      <button class="btn btn-accent" id="wobbleBtn" type="button">Show the wobble pairing</button>
+    </p>
+    <p class="mini" id="wobbleExplain" style="text-align:center; min-height:1.4em; margin-top:10px"></p>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">Say it like this</span>
+    <p>"Positions 1 and 2 are an exact match, no exceptions. Position 3 is where the system relaxes — a G on the tRNA can pair with either a C or a U on the mRNA. That means this one tRNA reads both CUU and CUC, which both happen to mean Leucine anyway. It's the biological equivalent of a wildcard in the last character of a lookup key — fewer distinct entries needed to cover the same address space, which is exactly why a cell gets away with noticeably fewer than 61 tRNA types."</p>
+  </div>
+</section>
+
+<!-- ============================================================== PCR -->
+<section class="panel" id="p-pcr" role="tabpanel" hidden>
+  <h2 class="sec">PCR: the exponential copy-paste</h2>
+  <p class="sec-lede">Slide 7. The reaction behind every COVID nasal swab, forensic DNA match, and sequencing prep step — and it's really just a for-loop that doubles.</p>
+
+  <h3>Three steps, one cycle</h3>
+  <div class="cycle-row">
+    <div class="cycle-card">
+      <span class="cn">1</span>
+      <h5>Denaturation</h5>
+      <div class="temp">~95 °C</div>
+      <p>Heat breaks the hydrogen bonds from the Bases tab. Double-stranded DNA splits into two single strands.</p>
+    </div>
+    <div class="cycle-card">
+      <span class="cn">2</span>
+      <h5>Annealing</h5>
+      <div class="temp">50–65 °C</div>
+      <p>Short synthetic primers bind their exact complementary sequences, flanking the target region — marking the start and end points.</p>
+    </div>
+    <div class="cycle-card">
+      <span class="cn">3</span>
+      <h5>Extension</h5>
+      <div class="temp">~72 °C</div>
+      <p>Taq polymerase extends new strands from the primers, adding dNTPs 5'→3' — same chemistry as replication.</p>
+    </div>
+  </div>
+  <p class="mini">Repeat 25–35 times. Every molecule made in one cycle becomes a template in the next — that's the whole trick.</p>
+
+  <h3>Run the loop yourself</h3>
+  <div class="sav">
+    <div class="slabel">
+      <label for="cycleSlider"><b>Cycles run</b></label>
+      <span class="cur" id="cycleOut">0</span>
+    </div>
+    <input type="range" id="cycleSlider" min="0" max="35" value="0" step="1" aria-label="Number of PCR cycles">
+    <div class="sav-row">
+      <div class="stat"><div class="k">Copies (2ⁿ)</div><div class="v" id="copyOut">1</div></div>
+      <div class="stat hero"><div class="k">vs. starting molecule</div><div class="v" id="factorOut">1×</div></div>
+    </div>
+    <p class="mini" id="cycleNote"></p>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">Say it like this</span>
+    <p>"This is <code>copies = 1; for i in range(n): copies *= 2</code>. Nothing more exotic than that. Run it 35 times and one molecule becomes about thirty-four billion — same exponential curve as compound interest, same curve as Moore's Law, just running on molecules instead of money or transistors."</p>
+  </div>
+
+  <h3>What's actually in the tube</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Reagent</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td>Template DNA</td><td>The sample containing the target sequence — even a trace amount is enough to start.</td></tr>
+        <tr><td>Forward &amp; reverse primers</td><td>Mark the two boundaries of exactly the stretch to be copied.</td></tr>
+        <tr><td>Taq DNA polymerase</td><td>Heat-stable enzyme from <i>Thermus aquaticus</i>, a bacterium native to geothermal hot springs. Survives 95°C, cycle after cycle.</td></tr>
+        <tr><td>dNTPs</td><td>The four raw nucleotide letters, in triphosphate form — the same energy-carrying building blocks from the Building Blocks tab.</td></tr>
+        <tr><td>Mg²⁺ buffer</td><td>Required cofactor — Taq polymerase doesn't function without it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">Why Taq mattered</span>
+    <p>Before Taq was discovered (isolated 1976), PCR used an enzyme that died at 95°C — meaning a scientist had to manually pipette in fresh enzyme after every single heating cycle, all night, for every sample. Taq's heat tolerance is the single fact that turned PCR from a manual lab chore into something you load into a machine (a thermocycler) and walk away from.</p>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">The callback — land the tutorial here</span>
+    <p>Your COVID nasal-swab test was RT-PCR. SARS-CoV-2's genome is RNA, not DNA, so an extra enzyme — reverse transcriptase — first back-copies it into DNA (the "RT"). Standard PCR then doubles that DNA copy 30-plus times, because a swab usually doesn't contain nearly enough viral material to detect directly. A "positive" result means the doubling loop found something worth doubling — not that anyone looked at an actual virus. This is the single most relatable fact in the whole tutorial. Use it to close.</p>
+  </div>
+</section>
+
+<!-- ======================================================= DOUBT BANK -->
+<section class="panel" id="p-doubts" role="tabpanel" hidden>
+  <h2 class="sec">Doubt bank</h2>
+  <p class="sec-lede">Everything a coursework-not-curiosity engineering student is realistically going to ask. Searchable live during the tutorial.</p>
+
+  <div class="tools">
+    <input class="search" id="qSearch" type="search" placeholder="Search — try 'primer', 'wobble', 'mutation'…" aria-label="Search doubts">
+    <div class="chips" id="qChips"></div>
+  </div>
+
+  <div id="qList"></div>
+  <p class="mini" id="qCount"></p>
+</section>
+
+<!-- ============================================================= QUIZ -->
+<section class="panel" id="p-quiz" role="tabpanel" hidden>
+  <h2 class="sec">Check the room</h2>
+  <p class="sec-lede">Ten questions built around the misconceptions above, not recall. Use as a closer, or drop one in mid-tutorial when energy dips.</p>
+  <div class="score" id="score">Not started</div>
+  <div id="quiz"></div>
+  <p><button class="btn btn-accent" id="resetQuiz" type="button">Reset quiz</button></p>
+</section>
+
+<!-- ========================================================== NUMBERS -->
+<section class="panel" id="p-nums" role="tabpanel" hidden>
+  <h2 class="sec">Numbers &amp; names</h2>
+  <p class="sec-lede">Facts you want on tap without thinking. Skim this on the walk to LT 206.</p>
+
+  <h4>Key numbers</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Thing</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Bases in the code</td><td class="num-cell">4 (DNA) / 4 (RNA, U replaces T)</td></tr>
+        <tr><td>Purines : Pyrimidines</td><td class="num-cell">2 : 3</td></tr>
+        <tr><td>H-bonds, A-T / A-U</td><td class="num-cell">2</td></tr>
+        <tr><td>H-bonds, G-C</td><td class="num-cell">3</td></tr>
+        <tr><td>Total possible codons</td><td class="num-cell">64 (4³)</td></tr>
+        <tr><td>Sense codons</td><td class="num-cell">61</td></tr>
+        <tr><td>Stop codons</td><td class="num-cell">3 — UAA, UAG, UGA</td></tr>
+        <tr><td>Standard amino acids</td><td class="num-cell">20</td></tr>
+        <tr><td>Human tRNA species</td><td class="num-cell">~40–50 (fewer than 61, thanks to wobble)</td></tr>
+        <tr><td>Human genome size</td><td class="num-cell">~3.1 billion base pairs</td></tr>
+        <tr><td>Human protein-coding genes</td><td class="num-cell">~20,000</td></tr>
+        <tr><td>PCR temps (denature / anneal / extend)</td><td class="num-cell">~95°C / 50–65°C / ~72°C</td></tr>
+        <tr><td>Typical PCR cycles</td><td class="num-cell">25–35</td></tr>
+        <tr><td>Copies after n cycles</td><td class="num-cell">≈ 2ⁿ</td></tr>
+        <tr><td>Copies after 35 cycles</td><td class="num-cell">≈ 3.4 × 10¹⁰</td></tr>
+        <tr><td>DNA data-storage density (research)</td><td class="num-cell">~hundreds of petabytes / gram</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Names worth knowing</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Who</th><th>Contribution</th><th>Year</th></tr></thead>
+      <tbody>
+        <tr><td>Erwin Chargaff</td><td>%A ≈ %T and %G ≈ %C in DNA — evidence for pairing, before the structure was known</td><td class="num-cell">1949–50</td></tr>
+        <tr><td>Rosalind Franklin &amp; Raymond Gosling</td><td>X-ray diffraction image ("Photo 51") that revealed the helical structure</td><td class="num-cell">1952</td></tr>
+        <tr><td>Watson, Crick, with Franklin &amp; Wilkins' data</td><td>Double-helix structure of DNA, published in <i>Nature</i></td><td class="num-cell">1953</td></tr>
+        <tr><td>Meselson &amp; Stahl</td><td>Proved replication is semiconservative, using density-gradient centrifugation with isotope-labelled DNA</td><td class="num-cell">1958</td></tr>
+        <tr><td>Francis Crick</td><td>Proposed the Central Dogma; later the wobble hypothesis</td><td class="num-cell">1958 / 1966</td></tr>
+        <tr><td>Nirenberg, Khorana, and others</td><td>Cracked the genetic code — matched codons to amino acids</td><td class="num-cell">1961–66</td></tr>
+        <tr><td>Kary Mullis (Cetus Corporation)</td><td>Invented PCR; Nobel Prize in Chemistry</td><td class="num-cell">1983 / 1993</td></tr>
+        <tr><td>Thomas Brock</td><td>Discovered <i>Thermus aquaticus</i> in Yellowstone hot springs, the eventual source of Taq polymerase</td><td class="num-cell">1966</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="mini">Note on Franklin: she died in 1958, before the 1962 Nobel Prize (awarded to Watson, Crick and Wilkins) — the Nobel committee does not award posthumously. Her X-ray data was central to the discovery; say so plainly if it comes up.</p>
+
+  <div class="foot">
+    <p>Built from the Tutorial 2 slide deck ("How Nature Stores Information: DNA as Code") for Tutorial Batch T1, LT 206. Diagrams here are schematic, drawn for tapping and teaching rather than to scale — the deck's own images stay the reference for real molecular structure.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ------------------------------------------------------------- theme */
+var root = document.documentElement;
+document.getElementById("themeBtn").addEventListener("click", function(){
+  var now = root.getAttribute("data-theme");
+  if(!now){
+    now = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  root.setAttribute("data-theme", now === "dark" ? "light" : "dark");
+});
+
+/* --------------------------------------------------------- nav / tabs */
+var SECTIONS = [
+  ["script",  "Script"],
+  ["code",    "DNA as Code"],
+  ["blocks",  "Building Blocks"],
+  ["bases",   "Bases & Pairing"],
+  ["dnarna",  "DNA vs RNA"],
+  ["copying", "Copying the Code"],
+  ["reading", "Reading the Code"],
+  ["pcr",     "PCR"],
+  ["doubts",  "Doubt Bank"],
+  ["quiz",    "Quiz"],
+  ["nums",    "Numbers"]
+];
+var nav = document.getElementById("nav");
+SECTIONS.forEach(function(s, i){
+  var b = document.createElement("button");
+  b.type = "button";
+  b.setAttribute("role","tab");
+  b.setAttribute("aria-selected", i===0 ? "true":"false");
+  b.setAttribute("aria-controls","p-"+s[0]);
+  b.dataset.k = s[0];
+  b.innerHTML = '<span class="num">'+(i+1)+'</span>'+s[1];
+  b.addEventListener("click", function(){ show(s[0]); });
+  nav.appendChild(b);
+});
+function show(k){
+  SECTIONS.forEach(function(s){
+    document.getElementById("p-"+s[0]).hidden = (s[0] !== k);
+  });
+  Array.prototype.forEach.call(nav.children, function(b){
+    b.setAttribute("aria-selected", b.dataset.k === k ? "true" : "false");
+  });
+  window.scrollTo({ top:0 });
+}
+show("script");
+
+/* ------------------------------------------------------ generic accordion */
+function buildAccordion(container, items){
+  items.forEach(function(it, i){
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "rung";
+    btn.setAttribute("aria-expanded","false");
+    btn.innerHTML = '<span class="lv">'+(i+1)+'</span><span><span class="nm">'+it[0]+'</span> '+
+                    '<span class="eg">— '+it[1]+'</span></span>';
+    var body = document.createElement("div");
+    body.className = "rung-body"; body.hidden = true; body.textContent = it[2];
+    btn.setAttribute("aria-controls", container.id+"-"+i); body.id = container.id+"-"+i;
+    btn.addEventListener("click", function(){
+      var open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", open ? "false":"true");
+      body.hidden = open;
+    });
+    container.appendChild(btn); container.appendChild(body);
+  });
+}
+
+buildAccordion(document.getElementById("repLadder"), [
+  ["Origin","the fork opens","A specific site on the DNA is recognized and the double helix unwinds, exposing two single-stranded templates running in opposite directions."],
+  ["Primase lays a primer","RNA primer, not DNA","DNA polymerase cannot start a strand from nothing — it can only extend an existing 3'-OH end. Primase builds a short RNA primer first, purely to create that starting point."],
+  ["Polymerase extends","leading strand, continuous","Reading the template 3'→5', DNA polymerase (Pol δ/ε) builds the new strand 5'→3' in one smooth, continuous pass on the leading strand."],
+  ["The lagging strand, in bursts","Okazaki fragments","On the other template, synthesis has to run away from the fork. The polymerase keeps restarting a short distance back, producing a series of short fragments rather than one continuous strand."],
+  ["Primer removal","Pol I swaps RNA for DNA","A different enzyme (Pol I) removes each RNA primer and fills the resulting gap with proper DNA nucleotides."],
+  ["Ligase seals the nicks","one continuous strand","DNA ligase joins the remaining breaks between fragments, leaving two complete double helices — each one strand old, one strand new."]
+]);
+
+buildAccordion(document.getElementById("transLadder"), [
+  ["Initiation","RNA polymerase finds the start","RNA polymerase recognizes and binds a specific DNA sequence upstream of the gene — the promoter — and the local double helix unwinds."],
+  ["Elongation","reading the template","RNA polymerase moves along the template strand 3'→5', synthesizing a complementary RNA strand 5'→3' — same pairing rules, A now pairs with Uracil."],
+  ["Termination","release","At a specific termination signal, RNA polymerase detaches, releasing the finished RNA transcript."],
+  ["The transcript moves on","mRNA leaves for the ribosome","In eukaryotes the transcript is processed and exits the nucleus as mature mRNA, headed for translation — the subject of the next tab."]
+]);
+
+/* -------------------------------------------------- nucleotide assembler */
+var NUC_PARTS = {
+  phosphate:{n:"Phosphate group", r:"the connector",
+    d:"Links this nucleotide's sugar to the next one in the chain, forming the strand's backbone. Also the part that carries spare energy in its di- and triphosphate forms.",
+    a:"Like a linked-list node's <b>next pointer</b> — it's what makes a chain out of otherwise separate letters."},
+  sugar:{n:"Sugar (pentose)", r:"the scaffold",
+    d:"A five-carbon ring that holds the base in a fixed position and provides the two attachment points — 5' for the phosphate, 3' for the next sugar — that give the strand its direction.",
+    a:"The physical housing the letter sits in. In DNA this is <b>deoxyribose</b>; in RNA, <b>ribose</b> — the one structural difference that changes how stable the whole molecule is."},
+  base:{n:"Nitrogenous base", r:"the letter",
+    d:"The actual information-carrying part — one of A, T, G, C (or U in RNA). Everything the code 'says' is encoded purely in which base sits here.",
+    a:"The character itself. Sugar and phosphate are identical from letter to letter — the base is the only part that varies, which is exactly what makes it the data."}
+};
+var NUC_SVG_FULL =
+'<svg viewBox="0 0 420 200" role="img" aria-label="Nucleotide, phosphate, sugar and base">'+
+ '<line x1="95" y1="100" x2="150" y2="100" stroke="var(--line-strong)" stroke-width="4"/>'+
+ '<line x1="220" y1="100" x2="275" y2="100" stroke="var(--line-strong)" stroke-width="4"/>'+
+ '<g class="hot" data-k="phosphate"><circle class="shape" cx="60" cy="100" r="42" fill="var(--code-soft)" stroke="var(--code)" stroke-width="3"/>'+
+   '<text class="svg-lbl on-light" x="60" y="105" text-anchor="middle" font-weight="700">P</text>'+
+   '<text class="svg-lbl" x="60" y="158" text-anchor="middle">Phosphate</text></g>'+
+ '<g class="hot" data-k="sugar"><polygon class="shape" points="185,58 220,80 207,120 163,120 150,80" fill="var(--good-soft)" stroke="var(--good)" stroke-width="3"/>'+
+   '<text class="svg-lbl on-light" x="185" y="95" text-anchor="middle" font-weight="700">S</text>'+
+   '<text class="svg-lbl" x="185" y="158" text-anchor="middle">Sugar</text></g>'+
+ '<g class="hot" data-k="base"><rect class="shape" x="290" y="65" width="90" height="70" rx="10" fill="var(--amino-soft)" stroke="var(--amino)" stroke-width="3"/>'+
+   '<text class="svg-lbl on-light" x="335" y="106" text-anchor="middle" font-weight="700">Base</text>'+
+   '<text class="svg-lbl" x="335" y="158" text-anchor="middle">Nitrogenous base</text></g>'+
+'</svg>';
+var NUC_SVG_SIDE =
+'<svg viewBox="0 0 420 200" role="img" aria-label="Nucleoside, sugar and base only">'+
+ '<line x1="220" y1="100" x2="275" y2="100" stroke="var(--line-strong)" stroke-width="4"/>'+
+ '<g opacity=".28"><circle cx="60" cy="100" r="42" fill="none" stroke="var(--line-strong)" stroke-width="3" stroke-dasharray="6 6"/>'+
+   '<text class="svg-lbl" x="60" y="158" text-anchor="middle">(no phosphate)</text></g>'+
+ '<g class="hot" data-k="sugar"><polygon class="shape" points="185,58 220,80 207,120 163,120 150,80" fill="var(--good-soft)" stroke="var(--good)" stroke-width="3"/>'+
+   '<text class="svg-lbl on-light" x="185" y="95" text-anchor="middle" font-weight="700">S</text>'+
+   '<text class="svg-lbl" x="185" y="158" text-anchor="middle">Sugar</text></g>'+
+ '<g class="hot" data-k="base"><rect class="shape" x="290" y="65" width="90" height="70" rx="10" fill="var(--amino-soft)" stroke="var(--amino)" stroke-width="3"/>'+
+   '<text class="svg-lbl on-light" x="335" y="106" text-anchor="middle" font-weight="700">Base</text>'+
+   '<text class="svg-lbl" x="335" y="158" text-anchor="middle">Nitrogenous base</text></g>'+
+'</svg>';
+
+var nucStage = document.getElementById("nucStage");
+var nucInfo = document.getElementById("nucInfo");
+var nucCurrent = null;
+function renderNuc(which){
+  nucStage.innerHTML = (which === "nucleoside") ? NUC_SVG_SIDE : NUC_SVG_FULL;
+  nucCurrent = null;
+  Array.prototype.forEach.call(nucStage.querySelectorAll(".hot"), function(g){
+    g.setAttribute("tabindex","0"); g.setAttribute("role","button");
+    var p = NUC_PARTS[g.dataset.k];
+    if(p) g.setAttribute("aria-label", p.n);
+    function pick(){ selectNuc(g); }
+    g.addEventListener("click", pick);
+    g.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(); } });
+  });
+}
+function selectNuc(g){
+  var p = NUC_PARTS[g.dataset.k]; if(!p) return;
+  if(nucCurrent) nucCurrent.classList.remove("on");
+  g.classList.add("on"); nucCurrent = g;
+  nucInfo.innerHTML = '<h5>'+p.n+'</h5><div class="role">'+p.r+'</div><p>'+p.d+'</p><div class="ana">'+p.a+'</div>';
+}
+document.getElementById("btnNucleotide").addEventListener("click", function(){
+  this.setAttribute("aria-pressed","true");
+  document.getElementById("btnNucleoside").setAttribute("aria-pressed","false");
+  renderNuc("nucleotide");
+});
+document.getElementById("btnNucleoside").addEventListener("click", function(){
+  this.setAttribute("aria-pressed","true");
+  document.getElementById("btnNucleotide").setAttribute("aria-pressed","false");
+  renderNuc("nucleoside");
+});
+renderNuc("nucleotide");
+
+/* -------------------------------------------------------- DNA vs RNA stage */
+var DR_PARTS = {
+  backbone:{n:"Sugar-phosphate backbone", r:"the rails",
+    d:"The repeating chain of alternating sugar and phosphate that runs the length of the strand — the structural rail everything else hangs off.",
+    a:"DNA's rail uses deoxyribose (no 2'-OH); RNA's uses ribose (has 2'-OH) — that one missing oxygen is the whole stability difference."},
+  rung:{n:"Base pair", r:"one rung of the ladder",
+    d:"Two bases held together by hydrogen bonds, one from each strand — A with T, G with C. Only present in double-stranded DNA; RNA has no partner strand to pair with internally across its whole length.",
+    a:"This is DNA's built-in backup: the second strand isn't extra storage, it's a live mirror used to detect damage and to serve as a copying template — the same logic as RAID 1 mirroring, not compression."},
+  hbond:{n:"Hydrogen bonds", r:"the clips",
+    d:"The bonds holding each base pair together — 2 for A-T, 3 for G-C. Weak individually, but thousands of them together make the double helix mechanically very stable.",
+    a:"Easy to break on purpose (that's exactly what PCR's 95°C denaturation step does), but stable at normal body temperature — a deliberately tunable lock."},
+  strand:{n:"Single strand", r:"RNA's whole structure",
+    d:"RNA has no permanent partner strand. Instead it can fold back and pair with itself in short stretches, forming loops and hairpins — secondary structure — rather than one continuous double helix.",
+    a:"Trades durability for flexibility — a single strand can fold into functional 3D shapes DNA's rigid double helix never could, useful for a molecule that's built to do a job and then be discarded."},
+  base:{n:"Base", r:"the letter",
+    d:"The information-carrying part sticking off the backbone at each position — A, T, G, C in DNA; A, U, G, C in RNA.",
+    a:"Same four-letter logic either way, just one letter swapped — U for T — because RNA is disposable and doesn't need Thymine's damage-detection role."}
+};
+var DR_SVG_DNA =
+'<svg viewBox="0 0 340 340" role="img" aria-label="Schematic DNA double helix, interactive">'+
+ '<g class="hot" data-k="backbone"><path class="shape" d="M60 20 C 20 80, 20 120, 60 180 C 100 240, 100 280, 60 320" fill="none" stroke="var(--code)" stroke-width="8" stroke-linecap="round"/></g>'+
+ '<g class="hot" data-k="backbone"><path class="shape" d="M280 20 C 320 80, 320 120, 280 180 C 240 240, 240 280, 280 320" fill="none" stroke="var(--code)" stroke-width="8" stroke-linecap="round"/></g>'+
+ '<g class="hot" data-k="rung">'+
+   '<line class="shape" x1="66" y1="55" x2="274" y2="55" stroke="var(--baseA)" stroke-width="10" stroke-linecap="round"/>'+
+   '<line class="shape" x1="55" y1="105" x2="264" y2="105" stroke="var(--baseG)" stroke-width="10" stroke-linecap="round"/>'+
+   '<line class="shape" x1="60" y1="155" x2="269" y2="155" stroke="var(--baseC)" stroke-width="10" stroke-linecap="round"/>'+
+   '<line class="shape" x1="72" y1="205" x2="257" y2="205" stroke="var(--baseT)" stroke-width="10" stroke-linecap="round"/>'+
+   '<line class="shape" x1="60" y1="255" x2="269" y2="255" stroke="var(--baseA)" stroke-width="10" stroke-linecap="round"/>'+
+   '<line class="shape" x1="66" y1="295" x2="274" y2="295" stroke="var(--baseG)" stroke-width="10" stroke-linecap="round"/>'+
+   '<text class="svg-lbl" x="170" y="42" text-anchor="middle">Base pairs (rungs)</text></g>'+
+ '<g class="hot" data-k="hbond" transform="translate(0,0)"><circle class="shape" cx="170" cy="155" r="16" fill="none" stroke="var(--amino)" stroke-width="3" stroke-dasharray="3 3"/>'+
+   '<text class="svg-lbl" x="205" y="150" text-anchor="start">H-bonds</text></g>'+
+'</svg>';
+var DR_SVG_RNA =
+'<svg viewBox="0 0 340 340" role="img" aria-label="Schematic single-stranded RNA, interactive">'+
+ '<g class="hot" data-k="strand"><path class="shape" d="M60 30 C 220 30, 60 110, 220 130 C 380 150, 60 190, 220 230 C 340 260, 100 290, 180 320" fill="none" stroke="var(--code)" stroke-width="8" stroke-linecap="round"/></g>'+
+ '<g class="hot" data-k="base"><circle class="shape" cx="118" cy="60" r="15" fill="var(--baseA)"/><text class="svg-lbl on-light" x="118" y="65" text-anchor="middle" font-weight="700" fill="#fff">A</text></g>'+
+ '<g class="hot" data-k="base"><circle class="shape" cx="150" cy="120" r="15" fill="var(--baseU)"/><text class="svg-lbl on-light" x="150" y="125" text-anchor="middle" font-weight="700" fill="#fff">U</text></g>'+
+ '<g class="hot" data-k="base"><circle class="shape" cx="270" cy="145" r="15" fill="var(--baseG)"/><text class="svg-lbl on-light" x="270" y="150" text-anchor="middle" font-weight="700" fill="#fff">G</text></g>'+
+ '<g class="hot" data-k="base"><circle class="shape" cx="130" cy="205" r="15" fill="var(--baseC)"/><text class="svg-lbl on-light" x="130" y="210" text-anchor="middle" font-weight="700" fill="#fff">C</text></g>'+
+ '<g class="hot" data-k="base"><circle class="shape" cx="300" cy="248" r="15" fill="var(--baseA)"/><text class="svg-lbl on-light" x="300" y="253" text-anchor="middle" font-weight="700" fill="#fff">A</text></g>'+
+ '<g class="hot" data-k="backbone"><circle cx="14" cy="14" r="0" fill="none"/></g>'+
+ '<text class="svg-lbl" x="170" y="20" text-anchor="middle">Single strand — no partner</text>'+
+'</svg>';
+
+var drStage = document.getElementById("drStage");
+var drInfo = document.getElementById("drInfo");
+var drCurrent = null;
+function renderDR(which){
+  drStage.innerHTML = (which === "rna") ? DR_SVG_RNA : DR_SVG_DNA;
+  drCurrent = null;
+  Array.prototype.forEach.call(drStage.querySelectorAll(".hot"), function(g){
+    g.setAttribute("tabindex","0"); g.setAttribute("role","button");
+    var p = DR_PARTS[g.dataset.k];
+    if(p) g.setAttribute("aria-label", p.n);
+    function pick(){ selectDR(g); }
+    g.addEventListener("click", pick);
+    g.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(); } });
+  });
+}
+function selectDR(g){
+  var p = DR_PARTS[g.dataset.k]; if(!p) return;
+  if(drCurrent) drCurrent.classList.remove("on");
+  g.classList.add("on"); drCurrent = g;
+  drInfo.innerHTML = '<h5>'+p.n+'</h5><div class="role">'+p.r+'</div><p>'+p.d+'</p><div class="ana">'+p.a+'</div>';
+}
+document.getElementById("btnDNA").addEventListener("click", function(){
+  this.setAttribute("aria-pressed","true");
+  document.getElementById("btnRNA").setAttribute("aria-pressed","false");
+  renderDR("dna");
+});
+document.getElementById("btnRNA").addEventListener("click", function(){
+  this.setAttribute("aria-pressed","true");
+  document.getElementById("btnDNA").setAttribute("aria-pressed","false");
+  renderDR("rna");
+});
+renderDR("dna");
+
+/* ------------------------------------------------------------ wobble demo */
+var wobbleShown = false;
+document.getElementById("wobbleBtn").addEventListener("click", function(){
+  wobbleShown = !wobbleShown;
+  var mark = document.getElementById("wobbleMark");
+  var expl = document.getElementById("wobbleExplain");
+  if(wobbleShown){
+    mark.textContent = "×";
+    mark.style.fontWeight = "700";
+    expl.textContent = "Position 3: mRNA has U, tRNA has G — not a standard Watson-Crick pair, but tolerated. This same tRNA can also read CUC (Leucine), because U or C both satisfy this wobble position.";
+    this.textContent = "Hide the wobble pairing";
+  } else {
+    mark.textContent = "‖";
+    mark.style.fontWeight = "400";
+    expl.textContent = "";
+    this.textContent = "Show the wobble pairing";
+  }
+});
+
+/* --------------------------------------------------------------- PCR slider */
+var cSlider = document.getElementById("cycleSlider");
+function updatePCR(){
+  var n = +cSlider.value;
+  var copies = Math.pow(2, n);
+  document.getElementById("cycleOut").textContent = n;
+  document.getElementById("copyOut").textContent = copies < 1e6 ? copies.toLocaleString() : copies.toExponential(2).replace("e+","×10");
+  document.getElementById("factorOut").textContent = (copies < 1e6 ? copies.toLocaleString() : copies.toExponential(2).replace("e+","×10")) + "×";
+  var note;
+  if(n === 0) note = "Nothing run yet — one template molecule, no amplification.";
+  else if(n <= 10) note = "Still just a few thousand copies — nowhere near enough to detect on a standard gel yet.";
+  else if(n <= 20) note = "Now in the millions — this is roughly where a target becomes visible on a gel or detectable by a fluorescent probe.";
+  else if(n <= 30) note = "Into the billions. For scale: 2^30 ≈ 1.07 billion, comparable to a country's population, generated from one molecule.";
+  else note = "Tens of billions of copies from a single starting molecule — this is the regime a PCR test actually runs in, 25–35 cycles.";
+  document.getElementById("cycleNote").textContent = note;
+}
+cSlider.addEventListener("input", updatePCR);
+updatePCR();
+
+/* --------------------------------------------------------- doubt bank data */
+var DOUBTS = [
+["Why does DNA use exactly 4 letters and not more?","code",0,
+ "Two structural reasons. First, the purine-pyrimidine pairing rule that keeps the helix a constant width requires a balanced, complementary alphabet — 4 lets that work cleanly. Second, 4 letters read 3 at a time already gives 64 possible codons, comfortably more than the 20 amino acids that need naming, so there was never evolutionary pressure to add more.",
+ "It's already efficient: roughly 2 bits of information per letter, which is close to optimal for a 4-symbol alphabet.",
+ ""],
+
+["Isn't storing information in a molecule less efficient than a hard drive?","code",1,
+ "The opposite, dramatically. DNA's information density is extraordinary — research demonstrations of synthetic DNA data storage pack on the order of hundreds of petabytes into a single gram, several orders of magnitude denser than any silicon-based medium.",
+ "Several companies and research labs are actively building real archival DNA-storage systems today, specifically because of this density and DNA's multi-thousand-year stability under the right storage conditions.",
+ ""],
+
+["DNA is double-stranded — isn't that storing the same information twice, wastefully?","dnarna",1,
+ "No — the second strand isn't redundant capacity, it's a live backup used for error-checking and repair, and it's the template that makes copying possible in the first place.",
+ "Same logic as RAID 1 disk mirroring: the mirror isn't there to double your usable storage, it's there so a single point of damage doesn't lose the data, and so recovery has something to rebuild from.",
+ ""],
+
+["Why do we even need RNA — why can't the ribosome just read DNA directly?","dnarna",1,
+ "Two reasons. It keeps the one master copy of the genome safely archived rather than constantly exposed to the busy translation machinery. And doing the extra RNA step gives the cell a control point — it can make many RNA copies of a busy gene and very few of a quiet one, throttling protein output without touching the DNA at all.",
+ "Think of it as a caching layer: RNA lets the cell control how much of something gets produced, using the RNA step as the dial, while the source stays untouched.",
+ ""],
+
+["What do 5' and 3' actually mean, physically?","building",0,
+ "Carbon numbering on the sugar ring. The phosphate group attaches at the sugar's 5' carbon; the free -OH that the next nucleotide attaches to sits at the 3' carbon.",
+ "This asymmetry is why every strand has a direction, like a one-way street — and it's exactly why DNA polymerase can only extend a strand in one direction (5'→3'), which is the root cause of the whole leading/lagging-strand story.",
+ ""],
+
+["Isn't ATP the energy molecule — is that the same A as in DNA?","building",1,
+ "Yes — literally the same base, Adenine, just attached to ribose with three phosphates (ATP) instead of built into a DNA strand.",
+ "Nucleotides moonlight in several roles: genetic letters, the cell's general energy currency (ATP), and signalling molecules (like cAMP). Same molecular parts, reused for different jobs — a nice example of evolution not reinventing a working component.",
+ ""],
+
+["What actually is a nucleoside, in practice — is it just a textbook stepping stone?","building",1,
+ "It's real and medically important. Several major antiviral and anticancer drugs are 'nucleoside analogues' — molecules built to closely resemble a real nucleoside, so the cell's own replication machinery accidentally incorporates them into a growing DNA strand, where they then jam the process.",
+ "AZT, one of the first effective HIV drugs, works exactly this way — it looks enough like a real nucleoside to get built into the growing viral DNA strand, then blocks further extension.",
+ ""],
+
+["Are purines really physically bigger than pyrimidines, or is that just how diagrams draw them?","building",0,
+ "Genuinely, structurally true — purines have two fused rings (bicyclic), pyrimidines have one ring (monocyclic). It's a real size difference, not an artistic convention.",
+ "This size difference is mechanically why purine-pyrimidine pairing is mandatory — pair two purines and the rung is too wide, two pyrimidines and it's too narrow to reach across.",
+ ""],
+
+["Why exactly 2 hydrogen bonds for A-T and 3 for G-C — can that change?","building",1,
+ "It's fixed molecular geometry — determined by which specific chemical groups (hydrogen-bond donors and acceptors) are positioned where on each base's ring. It doesn't vary.",
+ "This fixed count has a direct practical consequence: GC-rich DNA needs more heat to melt apart than AT-rich DNA, which is exactly why PCR's denaturation and primer-annealing temperatures are chosen based on a target sequence's GC content.",
+ ""],
+
+["Why does RNA swap Thymine for Uracil at all?","building",1,
+ "Thymine is chemically Uracil plus one extra methyl group. That extra group gives DNA repair enzymes a way to tell 'this is supposed to be here' (Thymine) apart from 'this appeared by damage' — a common spontaneous DNA lesion is Cytosine degrading into Uracil, and because Uracil is never supposed to appear in DNA, repair enzymes can recognize and excise it on sight.",
+ "RNA doesn't need that signal — it's disposable and short-lived, so it uses the cheaper, simpler letter, Uracil, without a damage-detection role to worry about.",
+ ""],
+
+["What's the difference between a nucleoside and a nucleotide, one more time?","building",0,
+ "Nucleoside = sugar + base, no phosphate — not yet wired into a chain. Nucleotide = sugar + base + phosphate — the phosphate is the connector that lets it link to the next one.",
+ "If a student can explain this distinction unprompted, they've understood the whole slide.",
+ ""],
+
+["Why does DNA polymerase only extend an existing strand instead of starting fresh?","copying",1,
+ "It's a fixed feature of the enzyme's chemistry — its active site is built to attack an existing free 3'-OH group with the next nucleotide. With nothing there to attack, it has no reaction to catalyze.",
+ "This single fact cascades through the whole tutorial: it's why replication needs an RNA primer (built by a different enzyme, primase), and it's exactly why PCR needs synthetic primers too.",
+ ""],
+
+["Then how does transcription start without needing a primer first?","copying",1,
+ "RNA polymerase is a structurally different enzyme with a different active site — it can initiate a new strand at a specific promoter sequence with no primer required.",
+ "DNA polymerase and RNA polymerase follow different rules; don't assume a constraint on one automatically applies to the other.",
+ ""],
+
+["Why does the lagging strand exist at all — why isn't there an enzyme that reads both directions?","copying",1,
+ "Because DNA polymerase's active site is fixed to add nucleotides only 5'→3' — it's baked into the enzyme's chemistry, not a design choice biology could have avoided.",
+ "Instead of an enzyme reading backwards, the cell works around the constraint: build short fragments running the 'wrong' way, then have a second enzyme, ligase, stitch them into one continuous strand afterwards.",
+ ""],
+
+["How do we actually know replication is semiconservative, and not fully conservative or something else?","copying",1,
+ "The Meselson–Stahl experiment, 1958: E. coli was grown in heavy nitrogen so all its DNA was 'heavy', then switched to normal light nitrogen. After one round of replication, density-gradient centrifugation showed every DNA molecule was exactly half heavy, half light — ruling out a fully conservative model (which would show one all-heavy and one all-light molecule) and a fully dispersive one (which would show uniform intermediate density with no fully old strands).",
+ "Often called one of the most elegant experiments in biology — a clean, direct physical measurement settling a question that pure structural reasoning couldn't.",
+ ""],
+
+["What is a promoter, exactly?","copying",1,
+ "A specific DNA sequence positioned just upstream of a gene that RNA polymerase recognizes and binds to in order to begin transcription at the right spot.",
+ "Functions like a fixed entry point a compiler looks for — a known signature the 'copy' operation scans for before it starts reading.",
+ ""],
+
+["Does the entire gene end up in the final protein, or is some of it cut out?","copying",1,
+ "In eukaryotes (including humans), a gene's initial RNA transcript typically contains both coding regions (exons) and non-coding regions (introns). Before the transcript becomes a mature, usable mRNA, the introns are cut out and the exons joined together — a process called splicing.",
+ "This isn't covered on the slides for this tutorial and is a step beyond today's scope, but it's a very natural follow-up question — good to have the one-line answer ready.",
+ ""],
+
+["Who were the Okazaki fragments named after?","copying",1,
+ "Reiji and Tsuneko Okazaki, the molecular biologists who identified them in the late 1960s.",
+ "",
+ ""],
+
+["What's the actual difference between a codon and an anticodon?","reading",0,
+ "A codon is the 3-letter sequence on the mRNA being read. An anticodon is the complementary 3-letter sequence carried by the tRNA that recognizes and binds that specific codon.",
+ "Same relationship as a lock and its one matching key — codon is the lock being read, anticodon is the key that fits it.",
+ ""],
+
+["AUG means both 'start' and 'Methionine' — isn't that ambiguous?","reading",1,
+ "Context resolves it. The translation machinery specifically scans for the first properly-positioned AUG (using nearby sequence context and, in eukaryotes, the 5' end of the mRNA) to mean 'start here.' Every AUG encountered afterward, mid-sequence, is read simply as 'insert a Methionine.'",
+ "",
+ ""],
+
+["How many stop codons are there, and what do they actually do?","reading",0,
+ "Three: UAA, UAG, UGA. None of them code for an amino acid — instead they signal the ribosome to release the finished protein chain and detach.",
+ "Functions exactly like a return statement with no value — it ends the process without adding anything further to the output.",
+ ""],
+
+["Where does the number 64 for total codons come from?","reading",0,
+ "Combinatorics: 4 possible letters at each of 3 positions in a codon = 4 × 4 × 4 = 64 distinct three-letter combinations.",
+ "",
+ ""],
+
+["Why are codons specifically 3 letters, not 2 or 4?","reading",1,
+ "It's the minimum word length with enough addressable combinations. 4¹ = 4 possible 'words' — nowhere near enough to name 20 amino acids. 4² = 16 — still short. 4³ = 64 — comfortably enough, with plenty of redundancy to spare.",
+ "Same logic as choosing a minimum bit-width for an instruction set: you pick the smallest word size that can address everything you need to name.",
+ ""],
+
+["Is the genetic code identical in every living thing?","reading",1,
+ "Overwhelmingly yes — it's called (near-)universal, and it's one of the strongest single pieces of evidence that all life shares a common ancestor. A small number of known exceptions exist (some mitochondria and a handful of microorganisms reassign a few specific codons), but the vast majority of the code is shared from bacteria to humans.",
+ "",
+ ""],
+
+["What actually happens if a mutation changes one amino acid?","reading",0,
+ "Called a missense mutation. The outcome ranges from unnoticeable (if the substituted amino acid behaves similarly) to a completely broken protein (if it disrupts folding or an active site).",
+ "Sickle cell anaemia is caused by exactly one missense mutation in the haemoglobin gene — a single amino acid swap with a dramatic physical consequence.",
+ ""],
+
+["What if a mutation turns a normal codon into a stop codon early?","reading",1,
+ "Called a nonsense mutation. The ribosome releases the protein early, producing a truncated fragment — almost always non-functional.",
+ "Like an early return or exit() call cutting a function off before it's finished running.",
+ ""],
+
+["What's a frameshift mutation, and why is it worse than the others?","reading",1,
+ "Inserting or deleting a number of bases that isn't a multiple of three shifts every codon boundary downstream of that point, garbling the entire rest of the message.",
+ "Like deleting one character out of a script written in fixed-width 3-character instructions — every instruction after that point gets misread, not just the one that was touched.",
+ ""],
+
+["Does wobble pairing mean the base-pairing rules from earlier are wrong?","reading",1,
+ "No. Standard Watson-Crick pairing (A-T/U, G-C) still governs codon positions 1 and 2 exactly as taught. Wobble is a narrow, specific exception that applies only at position 3 of the codon, and only for a small set of non-standard pairs like G·U.",
+ "",
+ ""],
+
+["How many tRNA types does a human cell actually have?","reading",1,
+ "Noticeably fewer than 61 — commonly cited around 40–50 distinct tRNA species in humans — precisely because wobble lets several of them each cover more than one codon.",
+ "",
+ ""],
+
+["Who figured out the wobble hypothesis?","reading",1,
+ "Francis Crick, in 1966 — the same Crick from the 1953 double-helix structure paper, working on a different problem more than a decade later.",
+ "",
+ ""],
+
+["Is the Central Dogma an unbreakable law?","reading",1,
+ "Not absolute — it describes the dominant, most common direction of information flow, not a physical law with no exceptions. Retroviruses like HIV reverse it: an enzyme called reverse transcriptase copies their RNA genome back into DNA. Some other viruses replicate RNA directly from RNA, skipping DNA entirely.",
+ "This is exactly the borrowed trick behind RT-PCR — see the PCR tab.",
+ ""],
+
+["Why does PCR need two primers instead of one?","pcr",0,
+ "One primer (forward) marks the start on one template strand; the other (reverse) marks the start on the complementary strand — since both original strands get copied every cycle, both boundaries need to be defined.",
+ "Together, the two primers precisely bracket the exact stretch of DNA you want amplified, and nothing else.",
+ ""],
+
+["How does a primer know where to bind — is it random?","pcr",0,
+ "Not at all. Primers are designed and chemically synthesized in advance to be perfectly complementary to two specific, known flanking sequences.",
+ "Functions exactly like a precise search string locking onto one specific location in a much larger text, rather than matching anywhere loosely.",
+ ""],
+
+["Why does annealing temperature matter so much?","pcr",1,
+ "It ties directly back to the hydrogen-bond count from the Bases tab. A primer richer in G-C (3 bonds each) grips more tightly and can anneal correctly at a higher temperature; a primer richer in A-T (2 bonds each) needs a cooler temperature or it simply won't stick.",
+ "Get it wrong and the primer either fails to bind at all (too hot) or binds loosely to a similar-but-not-exact sequence elsewhere in the genome (too cold), amplifying the wrong region.",
+ ""],
+
+["Why 95°C specifically for denaturation, not something lower?","pcr",0,
+ "It needs to reliably melt even the toughest, most G-C-rich stretches of the template, every single cycle — so it's set close to water's boiling point as a dependable margin rather than fine-tuned per sample.",
+ "",
+ ""],
+
+["Do the DNA and enzymes get used up over so many heating cycles?","pcr",1,
+ "Primers and dNTPs are genuinely consumed and are supplied in excess up front to last the full run. Taq polymerase's heat tolerance is what makes repeated 95°C cycling survivable at all, though its activity does gradually decline over very many cycles — part of why cycle counts are capped around 25–35 rather than run indefinitely.",
+ "",
+ ""],
+
+["If copies double every cycle, why not just run 100 cycles for way more DNA?","pcr",1,
+ "The reaction runs out of primers and dNTPs, which are consumed each cycle, and non-specific amplification and enzyme fatigue increase over very many cycles. In practice, the exponential phase levels off into a 'plateau phase' well before 100 cycles, so extra cycles beyond ~35 stop paying off.",
+ "",
+ ""],
+
+["Is a COVID PCR test looking directly at the virus?","pcr",0,
+ "No — it's testing whether a tiny, otherwise undetectable amount of the virus's genetic material, after being doubled repeatedly, produces enough signal to detect.",
+ "A 'positive' result means the doubling loop found something worth doubling — not that anyone visually inspected an actual virus particle.",
+ ""],
+
+["What does 'Ct value' mean — that term got thrown around a lot during COVID?","pcr",1,
+ "Cycle threshold — the cycle number at which the amplified signal first becomes detectable. A low Ct means fewer cycles were needed, implying more starting viral material; a high Ct means many more doublings were needed, implying very little.",
+ "",
+ ""],
+
+["RNA can't be copied by a DNA-copying enzyme — so how does an RNA virus get PCR-tested?","pcr",0,
+ "An extra enzyme, reverse transcriptase, first converts the RNA into a complementary DNA copy (cDNA). Standard PCR then proceeds on that DNA copy exactly as normal. The combined process is called RT-PCR — the technique behind essentially every COVID nasal-swab test.",
+ "",
+ ""],
+
+["Who actually invented PCR, and how?","pcr",1,
+ "Kary Mullis, working at Cetus Corporation, devised it in 1983, and was awarded the Nobel Prize in Chemistry in 1993 for it — one of the fastest bench-to-Nobel turnarounds in the prize's history, reflecting how immediately transformative it was across nearly every field of biology.",
+ "",
+ ""],
+
+["Why was finding Taq polymerase such a big deal, technically?","pcr",0,
+ "Before it, the enzyme available (from E. coli) fell apart at 95°C, so a researcher had to manually pipette in a fresh batch of enzyme after every single denaturation step, all night, for every sample. Taq — sourced from Thermus aquaticus, a bacterium living in near-boiling hot springs — survives repeated heating, which is what let PCR be automated into a simple heat-cycling machine you load once and walk away from.",
+ "",
+ ""]
+];
+
+var TAGS = [["all","All"],["code","DNA as Code"],["building","Building Blocks"],
+            ["dnarna","DNA vs RNA"],["copying","Copying"],["reading","Reading"],["pcr","PCR"]];
+var activeTag = "all", query = "";
+
+var chips = document.getElementById("qChips");
+TAGS.forEach(function(t){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = t[1];
+  b.setAttribute("aria-pressed", t[0]==="all" ? "true":"false");
+  b.dataset.t = t[0];
+  b.addEventListener("click", function(){
+    activeTag = t[0];
+    Array.prototype.forEach.call(chips.children, function(c){
+      c.setAttribute("aria-pressed", c.dataset.t === activeTag ? "true":"false");
+    });
+    filter();
+  });
+  chips.appendChild(b);
+});
+
+var qList = document.getElementById("qList");
+DOUBTS.forEach(function(d, i){
+  var wrap = document.createElement("article");
+  wrap.className = "q"; wrap.dataset.tag = d[1];
+  wrap.dataset.text = (d[0]+" "+d[3]+" "+d[4]).replace(/<[^>]+>/g,"").toLowerCase();
+
+  var head = document.createElement("button");
+  head.type = "button"; head.className = "q-head";
+  head.setAttribute("aria-expanded","false"); head.setAttribute("aria-controls","qb-"+i);
+  head.innerHTML = '<span class="qm">Q'+(i+1)+'</span><span class="qt">'+d[0]+'</span><span class="qc">+</span>';
+
+  var body = document.createElement("div");
+  body.className = "q-body"; body.id = "qb-"+i; body.hidden = true;
+  var html = '<p>'+d[3]+'</p>';
+  if(d[4]) html += '<p>'+d[4]+'</p>';
+  var tagName = (TAGS.filter(function(t){ return t[0]===d[1]; })[0]||["","—"])[1];
+  html += '<div class="q-tags"><span class="q-tag">'+tagName+'</span>'+
+          (d[2] ? '<span class="q-tag hard">likely follow-up</span>' : '')+'</div>';
+  body.innerHTML = html;
+
+  head.addEventListener("click", function(){
+    var open = head.getAttribute("aria-expanded")==="true";
+    head.setAttribute("aria-expanded", open?"false":"true");
+    body.hidden = open;
+  });
+
+  wrap.appendChild(head); wrap.appendChild(body);
+  qList.appendChild(wrap);
+});
+
+document.getElementById("qSearch").addEventListener("input", function(){
+  query = this.value.trim().toLowerCase(); filter();
+});
+function filter(){
+  var n = 0;
+  Array.prototype.forEach.call(qList.children, function(w){
+    var ok = (activeTag==="all" || w.dataset.tag===activeTag) &&
+             (!query || w.dataset.text.indexOf(query) > -1);
+    w.hidden = !ok; if(ok) n++;
+  });
+  document.getElementById("qCount").textContent =
+    n + " of " + DOUBTS.length + " question" + (n===1?"":"s") + " shown";
+}
+filter();
+
+/* -------------------------------------------------------------- quiz */
+var QUIZ = [
+["What physically connects one nucleotide to the next in a DNA strand?",
+ ["Hydrogen bonds between bases","The phosphate-sugar backbone (a phosphodiester bond)","Peptide bonds","The base bonding directly to the next base"],
+ 1,
+ "Hydrogen bonds hold the two strands together sideways. The backbone links nucleotides lengthwise along one strand — a phosphodiester bond, not a peptide bond (that's for amino acids)."],
+
+["Why must a purine always pair with a pyrimidine?",
+ ["It's a naming convention with no physical basis","Purine-purine pairs would be too wide and pyrimidine-pyrimidine too narrow for a uniform helix","Enzymes physically block same-type pairing","It only matters in RNA, not DNA"],
+ 1,
+ "Purines (2 rings) are physically bigger than pyrimidines (1 ring). Pairing big-with-small keeps the ladder's rungs a constant width all the way up the helix."],
+
+["DNA polymerase can only:",
+ ["Start a brand-new strand from scratch","Extend an existing strand from a free 3'-OH end","Read and write in either direction as needed","Synthesize RNA as well as DNA"],
+ 1,
+ "This is exactly why both replication and PCR require primers — something with a free 3'-OH already in place for the enzyme to extend."],
+
+["In semiconservative replication, each new DNA molecule contains:",
+ ["Two entirely new strands","Two entirely original strands","One original strand and one newly made strand","A random mix of fragments from both original strands"],
+ 2,
+ "'Semi' = half. Every new duplex keeps exactly one parental strand as a template — confirmed experimentally by Meselson and Stahl."],
+
+["The lagging strand is built in short Okazaki fragments because:",
+ ["It's simply a slower enzyme on that strand","That strand runs backwards relative to the fork, and polymerase only extends 5'→3'","Ligase makes polymerase move in reverse","It's a copying error that gets fixed afterwards"],
+ 1,
+ "Polymerase's fixed 5'→3' direction means one strand (leading) builds continuously, while the other must restart repeatedly and get stitched together by ligase."],
+
+["Which correctly orders the Central Dogma's flow for a typical gene?",
+ ["Protein → RNA → DNA","RNA → Protein → DNA","DNA → RNA → Protein","DNA → Protein → RNA"],
+ 2,
+ "DNA is transcribed into RNA, which is translated into protein — the dominant direction of information flow, with known exceptions like reverse transcription."],
+
+["A single tRNA can recognize more than one mRNA codon because:",
+ ["tRNA molecules are interchangeable","Codon-anticodon pairing at the 3rd codon position (wobble) tolerates non-standard pairs","The ribosome corrects mismatches automatically","All codons for the same amino acid are identical"],
+ 1,
+ "Strict pairing governs positions 1 and 2; position 3, the wobble position, allows some flexibility (e.g. G pairing with U) — reducing how many distinct tRNAs a cell needs."],
+
+["The genetic code is called 'degenerate' because:",
+ ["It frequently makes translation errors","Most amino acids are specified by more than one codon","It only works in damaged cells","Stop codons don't actually stop translation"],
+ 1,
+ "61 sense codons cover only 20 amino acids, so most amino acids have several codons — redundancy that provides tolerance against certain mutations (silent mutations)."],
+
+["During PCR's annealing step, what actually happens?",
+ ["The double helix melts into single strands","Primers bind to their complementary sequences flanking the target region","Taq polymerase extends new strands","The reaction is permanently stopped"],
+ 1,
+ "Annealing is the 'find and mark the start point' step, sitting between denaturation (melting) and extension (building)."],
+
+["Starting from one DNA molecule, roughly how many copies exist after 30 PCR cycles?",
+ ["About 30","About 900","About 1 billion (2^30)","About 34 billion"],
+ 2,
+ "Copy number is ≈2ⁿ; 2^30 ≈ 1.07 billion. (2^35 ≈ 34 billion is the deck's own 35-cycle example — worth holding both numbers side by side.)"]
+];
+
+var quizEl = document.getElementById("quiz");
+var answered = {}, correct = 0;
+
+function renderQuiz(){
+  quizEl.innerHTML = ""; answered = {}; correct = 0; updateScore();
+  QUIZ.forEach(function(q, i){
+    var d = document.createElement("div");
+    d.className = "quiz-q";
+    var stem = document.createElement("div");
+    stem.className = "stem"; stem.textContent = (i+1)+". "+q[0];
+    var opts = document.createElement("div"); opts.className = "opts";
+
+    q[1].forEach(function(text, j){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "opt"; b.textContent = text;
+      b.addEventListener("click", function(){
+        if(answered[i]) return;
+        answered[i] = true;
+        var all = opts.querySelectorAll(".opt");
+        Array.prototype.forEach.call(all, function(o, k){
+          o.disabled = true;
+          if(k === q[2]) o.classList.add("right");
+        });
+        if(j !== q[2]) b.classList.add("wrong"); else correct++;
+        expl.hidden = false;
+        updateScore();
+      });
+      opts.appendChild(b);
+    });
+
+    var expl = document.createElement("div");
+    expl.className = "expl"; expl.hidden = true; expl.textContent = q[3];
+
+    d.appendChild(stem); d.appendChild(opts); d.appendChild(expl);
+    quizEl.appendChild(d);
+  });
+}
+function updateScore(){
+  var n = Object.keys(answered).length;
+  document.getElementById("score").textContent =
+    n === 0 ? "Not started — 10 questions"
+            : "Answered " + n + " of " + QUIZ.length + " · correct: " + correct;
+}
+document.getElementById("resetQuiz").addEventListener("click", renderQuiz);
+renderQuiz();
+
+})();
+</script>
