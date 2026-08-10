@@ -1,0 +1,290 @@
+<title>DNA — Click to Open</title>
+
+<style>
+/* ============================================================
+   A single, focused interactive: click the double helix, it
+   unzips and opens into a close-up nucleotide structure.
+   Not a reference tool — just the idea, in one screen.
+   ============================================================ */
+
+:root{
+  --bg:      #070A14;
+  --bg2:     #0D1220;
+  --panel:   #121729;
+  --line:    #232A45;
+
+  --ink:     #F0F3FF;
+  --ink-2:   #A9B2D6;
+  --ink-3:   #6E76A0;
+
+  --backbone: #4FD8E8;
+  --backbone-glow: rgba(79,216,232,.55);
+  --accent:  #B487F0;
+
+  --baseA: #4CC585;
+  --baseT: #F17086;
+  --baseG: #E3A34D;
+  --baseC: #6FA0FF;
+
+  --sans: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --serif: "Iowan Old Style", Charter, Georgia, serif;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); overflow:hidden;
+  -webkit-text-size-adjust:100%;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 20%, rgba(79,216,232,.08), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(180,135,240,.07), transparent 60%);
+}
+
+.wrap{ position:relative; z-index:1; height:100vh; display:flex; flex-direction:column; }
+
+header{ padding:22px 28px 8px; text-align:center; flex:0 0 auto; }
+h1{
+  font-family:var(--serif); font-weight:600; font-size:1.5rem; margin:0 0 4px;
+  letter-spacing:-.01em;
+}
+p.hint{
+  margin:0; color:var(--ink-3); font-family:var(--mono); font-size:.75rem;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+
+.stage{
+  position:relative; flex:1 1 auto; min-height:0; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* --------------------------------------------------------- helix view */
+.helix-view{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:18px;
+  transition:opacity .5s ease, transform .5s ease;
+  cursor:pointer;
+}
+.helix-view.hidden{ opacity:0; transform:scale(.85); pointer-events:none; }
+
+.helix-btn{
+  appearance:none; background:none; border:0; padding:0; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:16px;
+}
+#helixSvg{ width:min(340px, 60vw); height:auto; filter:drop-shadow(0 0 22px var(--backbone-glow)); animation:breathe 3.6s ease-in-out infinite; }
+@keyframes breathe{ 0%,100%{ filter:drop-shadow(0 0 16px var(--backbone-glow)); } 50%{ filter:drop-shadow(0 0 32px var(--backbone-glow)); } }
+
+.rung{ transition:stroke-width .2s, opacity .2s; }
+.helix-btn:hover .rung{ opacity:1; }
+.helix-btn:hover #helixSvg{ filter:drop-shadow(0 0 34px var(--backbone-glow)); }
+
+.tap-label{
+  font-family:var(--mono); font-size:.85rem; letter-spacing:.05em; color:var(--ink-2);
+  display:flex; align-items:center; gap:8px;
+}
+.tap-label .pulse{
+  width:8px; height:8px; border-radius:50%; background:var(--backbone);
+  box-shadow:0 0 0 0 var(--backbone-glow); animation:pulse 1.8s ease-out infinite;
+}
+@keyframes pulse{
+  0%{ box-shadow:0 0 0 0 rgba(79,216,232,.55); }
+  70%{ box-shadow:0 0 0 12px rgba(79,216,232,0); }
+  100%{ box-shadow:0 0 0 0 rgba(79,216,232,0); }
+}
+
+/* ------------------------------------------------------- nucleotide view */
+.detail-view{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:scale(1.08); pointer-events:none;
+  transition:opacity .5s ease .15s, transform .5s ease .15s;
+}
+.detail-view.shown{ opacity:1; transform:scale(1); pointer-events:auto; }
+
+.detail-inner{
+  width:min(880px, 92vw); display:grid; grid-template-columns:minmax(0,1.2fr) minmax(220px,1fr);
+  gap:20px; align-items:center;
+}
+@media (max-width:720px){ .detail-inner{ grid-template-columns:1fr; } }
+
+.nuc-stage{
+  background:var(--panel); border:1px solid var(--line); border-radius:16px;
+  padding:18px; box-shadow:0 20px 60px -20px rgba(0,0,0,.6);
+}
+.nuc-stage svg{ width:100%; height:auto; display:block; }
+
+.hot{ cursor:pointer; }
+.hot .shape{ transition:filter .15s, stroke-width .15s; }
+.hot:hover .shape{ filter:brightness(1.25); }
+.hot.on .shape{ stroke:var(--accent); stroke-width:4; }
+.hot:focus{ outline:none; }
+.hot:focus-visible .shape{ stroke:var(--accent); stroke-width:4; }
+.plbl{ font-family:var(--sans); font-size:13px; font-weight:600; fill:var(--ink); }
+
+.info{
+  background:var(--panel); border:1px solid var(--line); border-radius:16px;
+  padding:20px 22px; min-height:170px;
+}
+.info h3{ font-family:var(--serif); font-size:1.3rem; margin:0 0 8px; font-weight:600; }
+.info p{ font-size:.92rem; color:var(--ink-2); line-height:1.55; margin:0; }
+.info .ph{ color:var(--ink-3); font-style:italic; }
+
+.closeBtn{
+  position:absolute; top:16px; right:16px;
+  appearance:none; background:var(--panel); border:1px solid var(--line); color:var(--ink-2);
+  font-family:var(--mono); font-size:.78rem; letter-spacing:.05em;
+  padding:9px 16px; border-radius:20px; cursor:pointer;
+}
+.closeBtn:hover{ color:var(--ink); border-color:var(--accent); }
+
+:focus-visible{ outline:2.5px solid var(--accent); outline-offset:2px; }
+
+.foot{
+  flex:0 0 auto; text-align:center; padding:10px 20px 18px;
+  font-family:var(--mono); font-size:.68rem; color:var(--ink-3); letter-spacing:.04em;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition-duration:.01ms !important; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>DNA — click to open it</h1>
+    <p class="hint">A quick look at what's actually inside the double helix</p>
+  </header>
+
+  <div class="stage" id="stage">
+    <div class="helix-view" id="helixView">
+      <button class="helix-btn" id="openBtn" type="button" aria-label="Open the DNA strand">
+        <svg id="helixSvg" viewBox="0 0 300 420" role="img" aria-hidden="true"></svg>
+        <span class="tap-label"><span class="pulse"></span> tap the helix to open it</span>
+      </button>
+    </div>
+
+    <div class="detail-view" id="detailView">
+      <div class="detail-inner">
+        <div class="nuc-stage" id="nucStage"></div>
+        <div class="info" id="info">
+          <h3>One nucleotide</h3>
+          <p class="ph">Tap a part of the diagram — phosphate, sugar, or base.</p>
+        </div>
+      </div>
+      <button class="closeBtn" id="closeBtn" type="button">Zip it back up</button>
+    </div>
+  </div>
+
+  <p class="foot">BB 101 · Tutorial 2 — click demo, not a full reference</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ------------------------------------------------------- build the helix */
+var svgNS = "http://www.w3.org/2000/svg";
+var helixSvg = document.getElementById("helixSvg");
+var W = 300, H = 420, turns = 2.4, rungCount = 11, amp = 78, cx = W/2;
+
+function yAt(i){ return 24 + (H-48) * (i/(rungCount-1)); }
+function phase(y){ return (y/H) * turns * Math.PI * 2; }
+
+var pathA = "", pathB = "";
+var steps = 60;
+for(var s=0; s<=steps; s++){
+  var y = 24 + (H-48) * (s/steps);
+  var ph = phase(y);
+  var xa = cx + amp * Math.sin(ph);
+  var xb = cx + amp * Math.sin(ph + Math.PI);
+  pathA += (s===0 ? "M" : "L") + xa.toFixed(1) + "," + y.toFixed(1) + " ";
+  pathB += (s===0 ? "M" : "L") + xb.toFixed(1) + "," + y.toFixed(1) + " ";
+}
+
+var baseColors = ["baseA","baseT","baseG","baseC"];
+var rungsSvg = "";
+for(var i=0; i<rungCount; i++){
+  var y = yAt(i);
+  var ph = phase(y);
+  var xa = cx + amp * Math.sin(ph);
+  var xb = cx + amp * Math.sin(ph + Math.PI);
+  var depth = Math.sin(ph); // -1..1, front vs back
+  var opacity = 0.45 + 0.55 * ((depth+1)/2);
+  var sw = 4 + 3 * ((depth+1)/2);
+  var color = "var(--" + baseColors[i % baseColors.length] + ")";
+  rungsSvg += '<line class="rung" x1="'+xa.toFixed(1)+'" y1="'+y.toFixed(1)+'" x2="'+xb.toFixed(1)+'" y2="'+y.toFixed(1)+
+    '" stroke="'+color+'" stroke-width="'+sw.toFixed(1)+'" stroke-linecap="round" opacity="'+opacity.toFixed(2)+'"/>';
+}
+
+helixSvg.innerHTML =
+  '<path d="'+pathB+'" fill="none" stroke="var(--backbone)" stroke-width="7" stroke-linecap="round" opacity=".55"/>' +
+  rungsSvg +
+  '<path d="'+pathA+'" fill="none" stroke="var(--backbone)" stroke-width="7" stroke-linecap="round"/>';
+
+/* ------------------------------------------------------ nucleotide stage */
+var PARTS = {
+  phosphate:{ n:"Phosphate group", d:"Links this nucleotide to the next one in the chain — the connector in the backbone." },
+  sugar:{ n:"Sugar (pentose)", d:"The scaffold. Deoxyribose in DNA, ribose in RNA — holds the base in place." },
+  base:{ n:"Nitrogenous base", d:"The actual letter — A, T, G, C, or U. This is where the information lives." }
+};
+var NUC_SVG =
+'<svg viewBox="0 0 420 220" role="img" aria-label="Nucleotide structure">'+
+ '<line x1="95" y1="110" x2="150" y2="110" stroke="var(--line)" stroke-width="4"/>'+
+ '<line x1="220" y1="110" x2="275" y2="110" stroke="var(--line)" stroke-width="4"/>'+
+ '<g class="hot" data-k="phosphate" tabindex="0" role="button" aria-label="Phosphate group">'+
+   '<circle class="shape" cx="60" cy="110" r="44" fill="none" stroke="var(--backbone)" stroke-width="4"/>'+
+   '<text class="plbl" x="60" y="116" text-anchor="middle">P</text>'+
+   '<text class="plbl" x="60" y="172" text-anchor="middle" font-size="11" fill="var(--ink-3)">Phosphate</text>'+
+ '</g>'+
+ '<g class="hot" data-k="sugar" tabindex="0" role="button" aria-label="Sugar">'+
+   '<polygon class="shape" points="185,66 222,90 208,132 162,132 148,90" fill="none" stroke="var(--baseA)" stroke-width="4"/>'+
+   '<text class="plbl" x="185" y="105" text-anchor="middle">S</text>'+
+   '<text class="plbl" x="185" y="172" text-anchor="middle" font-size="11" fill="var(--ink-3)">Sugar</text>'+
+ '</g>'+
+ '<g class="hot" data-k="base" tabindex="0" role="button" aria-label="Nitrogenous base">'+
+   '<rect class="shape" x="290" y="75" width="90" height="70" rx="12" fill="none" stroke="var(--baseG)" stroke-width="4"/>'+
+   '<text class="plbl" x="335" y="116" text-anchor="middle">Base</text>'+
+   '<text class="plbl" x="335" y="172" text-anchor="middle" font-size="11" fill="var(--ink-3)">Base</text>'+
+ '</g>'+
+'</svg>';
+document.getElementById("nucStage").innerHTML = NUC_SVG;
+
+var current = null;
+function selectPart(el){
+  var p = PARTS[el.dataset.k]; if(!p) return;
+  if(current) current.classList.remove("on");
+  el.classList.add("on"); current = el;
+  document.getElementById("info").innerHTML =
+    '<h3>'+p.n+'</h3><p>'+p.d+'</p>';
+}
+Array.prototype.forEach.call(document.querySelectorAll("#nucStage .hot"), function(el){
+  el.addEventListener("click", function(){ selectPart(el); });
+  el.addEventListener("keydown", function(e){
+    if(e.key==="Enter"||e.key===" "){ e.preventDefault(); selectPart(el); }
+  });
+});
+
+/* --------------------------------------------------------------- toggle */
+var helixView = document.getElementById("helixView");
+var detailView = document.getElementById("detailView");
+
+function openDetail(){
+  helixView.classList.add("hidden");
+  detailView.classList.add("shown");
+}
+function closeDetail(){
+  detailView.classList.remove("shown");
+  helixView.classList.remove("hidden");
+  if(current){ current.classList.remove("on"); current = null; }
+  document.getElementById("info").innerHTML = '<h3>One nucleotide</h3><p class="ph">Tap a part of the diagram — phosphate, sugar, or base.</p>';
+}
+document.getElementById("openBtn").addEventListener("click", openDetail);
+document.getElementById("closeBtn").addEventListener("click", closeDetail);
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape" && detailView.classList.contains("shown")) closeDetail();
+});
+})();
+</script>
