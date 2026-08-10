@@ -519,25 +519,26 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
 <!-- ============================================================ SCRIPT -->
 <section class="panel" id="p-script" role="tabpanel" hidden>
   <h2 class="sec">The script</h2>
-  <p class="sec-lede">Most of this room does not want to be here for biology. That's fine — don't sell it as biology. Sell it as a storage-and-processing system built out of molecules instead of silicon, because that's literally what it is, and it's the framing that runs through every slide below. Read the "Say this" blocks near-verbatim the first time you teach it, then make them your own.</p>
+  <p class="sec-lede">This is a 15–20 minute <b>introduction only</b> — not the full lecture. Your job today is to make first-year mechanical-branch students, who haven't touched biology in two years and are quietly wondering why they need to, feel like this is worth their attention. Not to make them experts. The professor covers the real depth later; you're just opening the door. Every slide below has a line to <b>read aloud</b> (simple, plain, say it close to word-for-word) and, next to it, the <b>understanding for you</b> — plain-English, no jargon, so you genuinely know what you're saying instead of just reciting it. If a student asks something past what's here, "great question — that's exactly what the next few lectures are for" is a completely fine answer. That's the actual job.</p>
 
   <div class="callout c-key">
-    <span class="tag">The one framing to hold onto</span>
-    <p><b>DNA is a read-only archive. RNA is a disposable working copy. Protein is the compiled, running program.</b> Every slide in this deck is a different piece of that pipeline — how the archive is physically built, how it gets copied, how a working copy gets decoded, and how scientists learned to hijack the copier. If a student is lost, drag them back to this one sentence.</p>
+    <span class="tag">The one sentence to hold onto</span>
+    <p><b>DNA stores the instructions. RNA carries a working copy of them. Protein is what actually gets built.</b> Every slide today is one piece of that chain. If you go blank mid-sentence, just say this line — it's never wrong, and it buys you a second to find your place.</p>
   </div>
 
-  <h3>A 50-minute shape</h3>
+  <h3>A 20-minute shape</h3>
   <div class="card">
-    <div class="plan-row"><span class="t">0–3</span><span class="n">Slide 1</span><span class="d">Hook: "you've all taken this test." Set the DNA = code framing.</span></div>
-    <div class="plan-row"><span class="t">3–9</span><span class="n">Slide 2</span><span class="d">Nucleotides: phosphate / sugar / base. Nucleoside vs nucleotide.</span></div>
-    <div class="plan-row"><span class="t">9–15</span><span class="n">Slide 3</span><span class="d">Purines vs pyrimidines, pairing rules, H-bond counts (set up PCR).</span></div>
-    <div class="plan-row"><span class="t">15–22</span><span class="n">Slide 4</span><span class="d">DNA vs RNA as a deliberate trade-off, not two random variants.</span></div>
-    <div class="plan-row"><span class="t">22–32</span><span class="n">Slide 5</span><span class="d">Replication (semiconservative, leading/lagging) + transcription. Dense — don't rush.</span></div>
-    <div class="plan-row"><span class="t">32–42</span><span class="n">Slide 6</span><span class="d">Central dogma worked example, degeneracy, wobble. The payoff slide.</span></div>
-    <div class="plan-row"><span class="t">42–50</span><span class="n">Slide 7</span><span class="d">PCR — the exponential loop, then land on the COVID-test callback.</span></div>
+    <div class="plan-row"><span class="t">0–1.5</span><span class="n">Hook</span><span class="d">Why a mechanical engineer should care. The COVID-test show of hands.</span></div>
+    <div class="plan-row"><span class="t">1.5–3.5</span><span class="n">Slide 2</span><span class="d">Nucleotides — the three-part "bead" DNA is built from.</span></div>
+    <div class="plan-row"><span class="t">3.5–5.5</span><span class="n">Slide 3</span><span class="d">The 4-letter alphabet and how the letters pair up.</span></div>
+    <div class="plan-row"><span class="t">5.5–8</span><span class="n">Slide 4</span><span class="d">DNA vs RNA — the vault copy vs the working copy.</span></div>
+    <div class="plan-row"><span class="t">8–11.5</span><span class="n">Slide 5</span><span class="d">Copying the code two ways. Keep this light — it's the densest slide.</span></div>
+    <div class="plan-row"><span class="t">11.5–15.5</span><span class="n">Slide 6</span><span class="d">DNA → RNA → protein, worked through once. The payoff slide.</span></div>
+    <div class="plan-row"><span class="t">15.5–18.5</span><span class="n">Slide 7</span><span class="d">PCR — and the COVID test they've all taken.</span></div>
+    <div class="plan-row"><span class="t">18.5–20</span><span class="n">Close</span><span class="d">Bridge into the group reading activity.</span></div>
   </div>
 
-  <!-- SLIDE 1 -->
+  <!-- HOOK -->
   <div class="slide-card">
     <div class="slide-head">
       <span class="slide-num">Slide 1</span>
@@ -546,15 +547,13 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </div>
     <div class="slide-body">
       <div class="callout c-say">
-        <span class="tag">Say this</span>
-        <p>"Forget 'biology' for a second. What we're actually looking at today is a storage-and-processing system — nature's version of a hard drive, a compiler, and a photocopier, except it's built out of molecules instead of silicon. Every cell in your body is running the same four-letter code: A, T, G, C. That's it — no more symbols than that. And out of just four letters, that code builds everything about you.</p>
-        <p>Today we'll go through it exactly like you'd learn a new file format: what the data actually looks like at the byte level (structure), how the system copies itself without corrupting the original (replication) and exports a working copy to actually use (transcription), how that working copy gets decoded into a finished product — including a neat trick called 'wobble' that makes the decoding error-tolerant — and finally, how scientists hijacked this copying machinery to build the most powerful copy-paste command that exists: PCR, the same reaction behind every COVID test you've taken."</p>
+        <span class="tag">Read aloud</span>
+        <p>"I know most of you are wondering why a mechanical engineering course has biology in it. Fair question. Here's the honest answer: your own body is a machine, and the instructions for building and running it are stored in a molecule called DNA — the same way instructions for a machine part are stored in a drawing. Today is just fifteen minutes to get you the vocabulary — DNA, RNA, and how they work together — so the real lectures make sense. Quick show of hands: who here has taken a COVID nose-swab test?" <i>(let hands go up)</i> "By the end of today you'll know exactly what that test was actually doing."</p>
       </div>
-      <div class="callout c-ask">
-        <span class="tag">Ask the room</span>
-        <p>"Quick show of hands — who's taken a COVID PCR test?" (Most hands go up.) "Good — by the end of this hour you'll know exactly what that machine was doing to your swab."</p>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p><b>DNA</b> = Deoxyribonucleic Acid, <b>RNA</b> = Ribonucleic Acid. Don't worry about what those full names mean chemically — nobody in the room needs that today. Just know they're both long molecules that store and use biological "instructions." Your only goal on this slide: make them curious, not lost. Keep it under 90 seconds — it's a hook, not content.</p>
       </div>
-      <p class="mini">Keep this slide under 3 minutes. It's a hook, not content — the temptation is to over-explain the roadmap before anyone has context for it.</p>
     </div>
   </div>
 
@@ -567,17 +566,12 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </div>
     <div class="slide-body">
       <div class="callout c-say">
-        <span class="tag">Say this</span>
-        <p>"If DNA is a long string of code, a nucleotide is one character in that string — except each 'character' is built from three physical pieces bolted together. There's the base, the actual letter, A/T/G/C — the informational part. There's a sugar ring, the physical scaffold holding the letter in place. And there's a phosphate group, the connector that links one sugar-base unit to the next — the same way a linked-list node has a pointer to the next node. Chain enough of these through their phosphate connectors and you get a strand of DNA.</p>
-        <p>One term worth locking in: sugar plus base, with no phosphate connector yet, is a <b>nucleoside</b> — a letter that hasn't been wired into the chain. Add the phosphate and it becomes a <b>nucleotide</b>, ready to link in. Notice phosphates come in mono-, di-, and triphosphate flavours — NMP, NDP, NTP. That triphosphate form matters later: it's not just a connector, it's carrying spare energy. Snapping off two of the three phosphates is literally what powers the 'write' step when a new letter gets added to a growing strand — you'll see this again in replication and PCR."</p>
+        <span class="tag">Read aloud</span>
+        <p>"DNA is built from small repeating units called nucleotides — think of them like beads on a string. Each bead has three parts: a sugar and a phosphate, which form the string itself, and a base, which is the part that actually carries information. Line up millions of these beads and you get a strand of DNA. One extra word you'll see on this slide: if a bead is missing its phosphate, it's called a nucleoside instead — you won't need that word again today, it's just there for completeness. You'll also see NMP, NDP, NTP on the slide — those just mean the phosphate part came with 1, 2, or 3 phosphates attached. Don't worry about the difference — just know the 3-phosphate version is what DNA is actually built from, because breaking off the extra two phosphates is what powers attaching the bead to the string."</p>
       </div>
-      <div class="callout c-ask">
-        <span class="tag">Ask the room</span>
-        <p>"If a nucleoside has no phosphate, can it link into a chain on its own?" (No — it needs the phosphate connector first.)</p>
-      </div>
-      <div class="callout c-warn">
-        <span class="tag">If they ask</span>
-        <p>"Isn't ATP the energy molecule — is that the same A as in DNA?" → Yes, literally the same base, Adenine. Nucleotides moonlight as the cell's energy currency and as signalling molecules too. Full answer in the Doubt Bank.</p>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>Nucleotide = phosphate + sugar + base (3 parts). Nucleoside = sugar + base only (2 parts, no phosphate) — purely a vocabulary word on the slide, don't build anything around it. <b>NMP / NDP / NTP</b> = nucleotide mono-/di-/triphosphate — just counts of how many phosphates are stuck on (1, 2, or 3). The 3-phosphate form is the one actually used to build new DNA; the "extra" two phosphates are like a pre-paid energy deposit that gets spent gluing the bead onto the growing string. That's genuinely all this slide is — three physical parts, and one energy detail. Don't let the abbreviations intimidate you, they're simple once said out loud.</p>
       </div>
     </div>
   </div>
@@ -591,17 +585,12 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </div>
     <div class="slide-body">
       <div class="callout c-say">
-        <span class="tag">Say this</span>
-        <p>"Four letters (five, counting RNA's swap), and they come in two physical sizes. Adenine and Guanine are <b>purines</b> — two fused rings, the 'big' letters. Cytosine, Thymine and Uracil are <b>pyrimidines</b> — one ring, the 'small' letters. Here's the rule that makes the whole double helix possible: a big letter always pairs with a small letter, never big-with-big or small-with-small. That's not arbitrary — it's what keeps the ladder's rungs exactly the same width all the way up, the same way a connector has to be a fixed size regardless of which two devices you're plugging together.</p>
-        <p>It's not just size-matching either — it's a specific lock-and-key: Adenine only pairs with Thymine (or Uracil in RNA), Cytosine only pairs with Guanine. Small hydrogen bonds — think of them as clips — hold each pair together: <b>two clips for A-T, three clips for G-C</b>. Remember that number. It comes back directly when we get to PCR's temperatures."</p>
+        <span class="tag">Read aloud</span>
+        <p>"The 'base' from the last slide only comes in four letters: A, T, G, and C — that's genetically the entire alphabet of life. In RNA, T is swapped out for a very similar letter, U. These letters don't pair randomly — A always pairs with T, and G always pairs with C, like a lock that only accepts one specific key. This pairing is what holds the two strands of DNA together, the same way two sides of a zipper only interlock in one correct way."</p>
       </div>
-      <div class="callout c-ask">
-        <span class="tag">Ask the room</span>
-        <p>"Which pair do you think is harder to pull apart — A-T or G-C, and why?" (G-C — three hydrogen bonds vs two.)</p>
-      </div>
-      <div class="callout c-warn">
-        <span class="tag">If they ask</span>
-        <p>"Why does RNA swap Thymine for Uracil at all?" → Short answer: Thymine acts partly as a DNA damage-detection tag, which a disposable molecule like RNA doesn't need. Full answer in the Doubt Bank.</p>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>A, T, G, C = Adenine, Thymine, Guanine, Cytosine; U = Uracil (RNA's substitute for T). The slide calls A/G "purines" and C/T/U "pyrimidines" — purines are physically bigger (two connected rings), pyrimidines smaller (one ring), which is exactly why big only pairs with small: it keeps the DNA ladder the same width all the way up. You can mention "purine" and "pyrimidine" exist since they're on the slide, but you don't need to explain the ring-size reason unless someone asks. Optional fun fact if you have 10 spare seconds: A-T pairs are held by 2 weak bonds, G-C by 3, so G-C sticks together slightly more tightly — this becomes relevant again on the PCR slide, so it's a nice thing to plant now.</p>
       </div>
     </div>
   </div>
@@ -615,13 +604,12 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </div>
     <div class="slide-body">
       <div class="callout c-say">
-        <span class="tag">Say this</span>
-        <p>"Put the two molecules side by side — every difference here is a deliberate trade-off for the job each one does, not a random variation. DNA is the master copy: double-stranded, extremely stable, kept in the nucleus, not meant to move. Think of it as a read-only archive — the main branch nobody commits to directly. RNA is the working copy: single-stranded, less stable, made on demand and sent wherever it's needed — the temp file you generate from the archive so you can actually use the data without risking the original.</p>
-        <p>The chemistry backs this up: DNA's sugar is deoxyribose — 'ribose minus an oxygen' — and that missing -OH group removes a weak point in the backbone, making DNA chemically inert, exactly what you want for decades of storage. RNA's ribose keeps that -OH, which makes it more reactive and shorter-lived — fine, even useful, for something meant to be temporary."</p>
+        <span class="tag">Read aloud</span>
+        <p>"DNA and RNA are cousins, but they have different jobs. DNA is the permanent master copy — it's kept safely locked away inside the cell's control room, called the nucleus, and it basically never leaves. RNA is a temporary working copy — made whenever it's needed, sent out to be used, then thrown away. Think of DNA as the original blueprint kept in a vault, and RNA as a photocopy you actually hand to someone in the workshop to do the job."</p>
       </div>
-      <div class="callout c-ask">
-        <span class="tag">Ask the room</span>
-        <p>"If DNA is so much more stable, why doesn't the cell just skip RNA and build proteins directly off DNA?" (Because that constantly exposes the one master copy to the busy machinery of the cell. RNA is a disposable proxy so the original is never directly at risk — full answer in the Doubt Bank.)</p>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>The table on this slide lists several differences — double-stranded vs single-stranded, longer vs shorter, more stable vs less stable. You don't need to explain the chemistry behind any of them. The one sentence that covers all of it: DNA is built to last, RNA is built to be disposable, and every difference on that table exists for that one reason. If asked "why not just skip RNA and use DNA directly," the honest, simple answer is: you don't want your only master copy getting handled and worn out every time the cell needs to build something — so it works off a copy instead.</p>
       </div>
     </div>
   </div>
@@ -635,18 +623,12 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </div>
     <div class="slide-body">
       <div class="callout c-say">
-        <span class="tag">Say this</span>
-        <p>"Two completely different copy operations, worth keeping straight before the terms blur. DNA→DNA is <b>replication</b>: a full, faithful duplicate of the whole genome before a cell divides, so each daughter cell gets its own complete archive. DNA→RNA is <b>transcription</b>: copying out just one gene — one file — into a disposable working copy, without touching the rest of the archive.</p>
-        <p>Replication is called <b>semiconservative</b>, because every new double helix is a hybrid — one strand old, one strand new. Nothing is built entirely from scratch; you always keep half the original as scaffold. Here's the wrinkle: the enzyme building the new strand, DNA polymerase, can only extend in one direction — 5' to 3' — and can only read a template running the opposite way. Since the two original strands run opposite directions to each other, one new strand builds smoothly in one long pass — the <b>leading strand</b> — but the other has to be built backwards in short bursts, because the polymerase keeps jumping back to the fork and restarting — those bursts are <b>Okazaki fragments</b>, and <b>ligase</b> staples them into one continuous strand afterwards. Like a printer that can only feed paper one way: printing with the grain is one clean pass, printing against it means short strips taped together.</p>
-        <p>Then transcription: instead of duplicating everything, the cell zooms in on one gene, unzips just that stretch, and RNA polymerase reads the template and builds a matching RNA strand — same pairing rules, except A now pairs with Uracil. That RNA copy, the mRNA transcript, physically leaves for the ribosome, where it actually gets used."</p>
+        <span class="tag">Read aloud</span>
+        <p>"Cells copy DNA in two different situations. First — replication: making a complete copy of ALL the DNA, right before a cell splits into two. It works like unzipping a zipper — the two strands separate, and each side rebuilds the half that's missing, so you end up with two complete zippers where there was one. Second — transcription: copying out just ONE specific instruction, without touching the rest. That short working copy is called messenger RNA, or mRNA, and it's what actually leaves the control room to go get used."</p>
       </div>
-      <div class="callout c-ask">
-        <span class="tag">Ask the room</span>
-        <p>"Which strand finishes faster — leading or lagging, and why?" (Leading — one continuous pass; lagging is start-stop fragments that then need stitching.)</p>
-      </div>
-      <div class="callout c-warn">
-        <span class="tag">If they ask</span>
-        <p>"How does DNA polymerase even start — doesn't it need something already there to extend?" → Yes. Flag it now and park it: this exact requirement is why PCR needs primers too, and you'll return to it in the PCR section.</p>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>This is the densest slide in the original deck — it genuinely covers strand direction, leading/lagging strands, and an enzyme called ligase. None of that is necessary for a 20-minute introduction, and you should not attempt it live. The zipper picture above is the correct level of depth for today — it's not dumbed-down wrong, it's just the first layer of a real explanation. If a sharp student pushes for the mechanical detail: "great question — that's exactly the kind of thing your professor will get into properly. For today, just know: unzip, rebuild both halves." That is a completely legitimate answer from a tutor whose job is to introduce, not to teach the full mechanism.</p>
       </div>
     </div>
   </div>
@@ -660,17 +642,12 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </div>
     <div class="slide-body">
       <div class="callout c-say">
-        <span class="tag">Say this</span>
-        <p>"This is the payoff slide — where 'code' stops being a metaphor and becomes literal. Follow one three-letter chunk of DNA all the way to a finished protein. The DNA template reads 3'-TAC-5'. Transcription copies that to an mRNA codon, 5'-AUG-3'. That three-letter codon is the actual unit the cell reads — not letter by letter, three at a time, like a fixed-width instruction. AUG means two things at once: 'start reading here' and 'the first amino acid is Methionine.' A matching tRNA shows up carrying the complementary three letters — the anticodon, 3'-UAC-5' — and delivered on its back is the actual building block, Methionine. The ribosome bonds it onto the growing chain, moves to the next codon, repeats. A few hundred times later: a folded, functional protein.</p>
-        <p>Now the interesting part: 64 possible three-letter codons, only 20 amino acids to encode — so most amino acids are named by more than one codon. Leucine has six. That's not sloppy design, that's redundancy on purpose — the same idea as a parity bit: if a mutation flips the third letter of a codon, there's a decent chance it still spells the same amino acid, so the mutation does nothing at all. And here's why the third letter specifically is the forgiving one: codon-anticodon pairing is strict at positions 1 and 2, but position 3 tolerates a looser match — including pairings that break the normal rule, like a G on the tRNA pairing with a U on the mRNA. That's the <b>wobble position</b>. Payoff: because that match doesn't have to be exact, one tRNA can read more than one codon, so the cell gets away with noticeably fewer than 61 tRNA types."</p>
+        <span class="tag">Read aloud</span>
+        <p>"Once that RNA working copy exists, the cell has to actually read it and build something — usually a protein. It reads the RNA three letters at a time. Each group of three letters is called a codon, and each codon tells the cell's protein-building machine exactly which building block to add next. Do that a few hundred times in a row and you get a finished protein — which could end up as muscle, an enzyme, a hormone, anything the body needs. This whole flow — DNA makes RNA, RNA makes protein — has an actual name: the Central Dogma of biology. If you remember one phrase from today, make it that one."</p>
       </div>
-      <div class="callout c-ask">
-        <span class="tag">Ask the room</span>
-        <p>"If a mutation changes the third letter of a codon and the amino acid stays exactly the same, does that count as a mutation?" (Technically yes — a <b>silent mutation</b>: the DNA changed, but the protein produced didn't.)</p>
-      </div>
-      <div class="callout c-warn">
-        <span class="tag">If they ask</span>
-        <p>"What if a mutation DOES change the amino acid, or inserts an extra letter?" → Bridge to the Doubt Bank: missense (one amino acid changes), nonsense (an early stop codon truncates the protein), frameshift (an insertion/deletion not a multiple of three corrupts every codon downstream — like deleting one character from a script written in fixed-width instructions).</p>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>"Codon" = a 3-letter chunk of RNA. A carrier molecule called <b>tRNA</b> (transfer RNA) reads each codon and delivers the matching building block. On the slide you'll also see the word "wobble" — this is a small technical detail about how the reading step has a little built-in flexibility, which makes it more tolerant of small errors. You don't need to explain the mechanism — one sentence is enough: "there's a small built-in tolerance in how this reading step works, called wobble — your professor will cover exactly how." Do not attempt to explain codon degeneracy or the wobble pairing rule live; it's genuinely not needed for an introduction, and reaching for it risks losing the room's confidence in you, which matters more than the detail itself.</p>
       </div>
     </div>
   </div>
@@ -684,18 +661,31 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </div>
     <div class="slide-body">
       <div class="callout c-say">
-        <span class="tag">Say this</span>
-        <p>"Last stop, and this one you've personally lived through. PCR is scientists taking the cell's own copying machinery, pulling it out of the cell, and running it in a test tube entirely under their control, fast, over and over. Three steps, one cycle: <b>Denaturation</b> — heat to about 95°C, hot enough to snap every hydrogen bond from slide 3, splitting the double strand into two singles. <b>Annealing</b> — cool to 50–65°C, and short synthetic primers find and stick to the specific stretch you want copied, marking exactly where to start. <b>Extension</b> — heat back to 72°C, and Taq polymerase extends new strands from those primers, same 5'-to-3' addition as replication.</p>
-        <p>Then — the entire trick — you don't do that once. You loop it. Repeat 25 to 35 times, and because every molecule made in one cycle becomes a template for the next, the copy count doesn't add, it <b>doubles</b>: after n cycles, roughly two-to-the-n copies. Run it 35 times and one molecule becomes about thirty-four billion. That's a for-loop that doubles its output every iteration — same curve as compound interest, same curve as Moore's Law, just applied to molecules.</p>
-        <p>One detail that makes this actually work: Taq polymerase comes from a bacterium, <i>Thermus aquaticus</i>, discovered living in geothermal hot springs. A normal enzyme would cook and fall apart the moment you hit 95°C — Taq doesn't, so it survives all 35 denaturation steps without needing to be topped up. Before Taq, this meant manually adding fresh enzyme after every single heating cycle. And the payoff you've actually lived: your COVID nasal-swab test worked exactly this way. There usually isn't nearly enough viral genetic material in a swab to detect directly — so the test doubles it, and doubles it again, thirty-something times, until a handful of starting molecules becomes billions, enough to light up a detector. You weren't testing for the virus directly — you were testing whether this doubling loop found anything worth doubling."</p>
+        <span class="tag">Read aloud</span>
+        <p>"Last one, and this is the one you've actually experienced. PCR stands for Polymerase Chain Reaction — a lab technique, not something your body does on its own. It takes a tiny, undetectable amount of DNA and copies it billions of times over until there's enough to actually detect. It works in three repeating steps: heat it up, which separates the two strands; cool it down, so short marker sequences called primers attach exactly where you want to start copying; then warm it partway back up, so an enzyme extends new strands from those markers. Repeat that 25 to 35 times, and because every copy made becomes a template for the next round, the amount doesn't just add up — it doubles, every single cycle. That's exponential growth, and it's exactly what happened inside the machine that processed your nose swab."</p>
       </div>
-      <div class="callout c-ask">
-        <span class="tag">Ask the room</span>
-        <p>"If PCR starts from one molecule and doubles every cycle, how many cycles to beat a million copies?" (2²⁰ ≈ 1.05 million — so 20 cycles.)</p>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p><b>PCR</b> = Polymerase Chain Reaction. The doubling math is the one thing worth actually landing, because engineers get it instantly: after n cycles you roughly have 2ⁿ copies — 30 cycles from one molecule gets you past a billion copies. One fun, optional detail: the enzyme used, called Taq, comes from bacteria that live in boiling hot springs — that's the only reason it survives being reheated to ~95°C, 30-odd times in a row, without falling apart, which is exactly why this process could be automated into a machine at all. The COVID connection: a nose swab usually doesn't have enough virus material to detect directly, so the test doubles it over and over until there's enough to register — a positive result means the doubling found something to double, not that anyone looked at an actual virus.</p>
       </div>
-      <div class="callout c-warn">
-        <span class="tag">If they ask</span>
-        <p>"COVID's genome is RNA though — how does a DNA-copying reaction work on that?" → An extra enzyme, reverse transcriptase, first back-copies the RNA into DNA (the "RT" in RT-PCR), and standard PCR takes over from there. Full answer in the Doubt Bank.</p>
+    </div>
+  </div>
+
+  <!-- CLOSE -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-num">Close</span>
+      <h3>Bridge into the group activity</h3>
+      <span class="slide-onscreen">No slide needed — speak this directly to the room</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say">
+        <span class="tag">Read aloud</span>
+        <p>"That's the whole picture, in miniature: DNA stores the instructions, RNA carries a working copy, protein is what actually gets built, and PCR is how scientists copy and detect tiny amounts of it. We've only scratched the surface today on purpose — your professor will go into the real depth over the coming lectures. What I want you to take away right now is just this: this isn't 'someone else's subject' you're stuck sitting through. It's an active engineering field, right now, in 2026. So for the next fifteen minutes, get into your groups and go find out what's actually happening at the edge of it."</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>This is the handoff line into the reading activity — form groups of 3–4, hand out or point to the article list (scan the QR code if you've added it to the closing slide of the PPT), start the 15-minute timer, and you're done presenting for today. Everything past this point is you listening and grading, not teaching.</p>
       </div>
     </div>
   </div>
