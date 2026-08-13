@@ -44,9 +44,23 @@ MONDAY_MARKS = {
         for i in range(31)
         if i + 1 not in (1, 2, 8)  # Salvi Aniket Bharat, Murala Vamshi, Ashish Sinha: unmarked on the sheet
     },
-    "10.08.2026": {},  # today — fill by hand once marked
+    "10.08.2026": {
+        i + 1: "P"
+        for i in range(31)
+        if i + 1 not in (1, 2, 3)  # Salvi Aniket Bharat, Murala Vamshi, Kadem Akhil: unmarked on the sheet
+    },
 }
 N_DATE_COLS = 7  # blank trailing columns beyond the marked dates, ready for future Mondays
+
+# Group activity groups (10.08.2026). Group 1 was formed by the students
+# themselves; Groups 2-3 are a random split of the rest of the roster
+# (random.Random(2026), documented so the split is reproducible).
+GROUPS = {
+    "Group 1  (self-formed)": [11, 14, 16, 18, 20, 21, 26, 27, 29, 30],
+    "Group 2  (random)": [1, 2, 3, 5, 6, 7, 13, 15, 22, 24, 28],
+    "Group 3  (random)": [4, 8, 9, 10, 12, 17, 19, 23, 25, 31],
+}
+sr_to_group = {sr: label.split("  ")[0] for label, srs in GROUPS.items() for sr in srs}
 
 # ============================================================== ATTENDANCE
 wb = openpyxl.Workbook()
@@ -215,6 +229,7 @@ for i, (roll, name) in enumerate(roster):
     wg.cell(row=r, column=1, value=i + 1).alignment = Alignment(horizontal="center", vertical="center")
     wg.cell(row=r, column=2, value=roll).alignment = Alignment(horizontal="center", vertical="center")
     wg.cell(row=r, column=3, value=name).alignment = Alignment(horizontal="left", vertical="center", indent=1)
+    wg.cell(row=r, column=4, value=sr_to_group.get(i + 1, ""))
     total_cell = wg.cell(row=r, column=8, value=f'=IF(COUNT(E{r}:G{r})=0,"",SUM(E{r}:G{r}))')
     total_cell.font = Font(name=FONT, size=10, bold=True)
     total_cell.alignment = Alignment(horizontal="center", vertical="center")
@@ -280,5 +295,73 @@ wg.print_options.horizontalCentered = True
 wg.print_title_rows = f"{HDR_ROW}:{HDR_ROW}"
 wg.freeze_panes = wg.cell(row=first_data_g, column=3)
 
+
+# ================================================================== GROUPS
+wgr = wb.create_sheet("Groups")
+last_col_gr = 3
+last_letter_gr = get_column_letter(last_col_gr)
+
+wgr.merge_cells(f"A1:{last_letter_gr}1")
+wgr["A1"] = "BB 101  —  BIOLOGY   |   GROUP ACTIVITY — GROUPS"
+wgr["A1"].font = Font(name=FONT, size=15, bold=True)
+wgr["A1"].alignment = Alignment(horizontal="center", vertical="center")
+
+wgr.merge_cells(f"A2:{last_letter_gr}2")
+wgr["A2"] = "Tutorial Batch T1        Room: LT 206        TA: Aritra        Date: 10.08.2026"
+wgr["A2"].font = Font(name=FONT, size=11, bold=True)
+wgr["A2"].alignment = Alignment(horizontal="center", vertical="center")
+
+wgr.merge_cells(f"A3:{last_letter_gr}3")
+wgr["A3"] = "Group 1 formed by the students themselves; Groups 2-3 assigned at random from the rest of the roster."
+wgr["A3"].font = Font(name=FONT, size=9, italic=True, color="555555")
+wgr["A3"].alignment = Alignment(horizontal="center", vertical="center")
+
+r = 5
+for label, srs in GROUPS.items():
+    wgr.merge_cells(start_row=r, start_column=1, end_row=r, end_column=last_col_gr)
+    gh = wgr.cell(row=r, column=1, value=f"{label} — {len(srs)} members")
+    gh.font = Font(name=FONT, size=11.5, bold=True)
+    gh.alignment = Alignment(horizontal="left", vertical="center", indent=1)
+    gh.fill = header_fill
+    for col in range(1, last_col_gr + 1):
+        wgr.cell(row=r, column=col).border = box
+    r += 1
+
+    for col, htext in enumerate(("Sr.", "Roll No.", "Name of Student"), start=1):
+        c = wgr.cell(row=r, column=col, value=htext)
+        c.font = Font(name=FONT, size=9.5, bold=True)
+        c.alignment = Alignment(horizontal="center", vertical="center")
+        c.border = box
+    r += 1
+
+    for sr in sorted(srs):
+        roll, name = roster[sr - 1]
+        wgr.cell(row=r, column=1, value=sr).alignment = Alignment(horizontal="center", vertical="center")
+        wgr.cell(row=r, column=2, value=roll).alignment = Alignment(horizontal="center", vertical="center")
+        wgr.cell(row=r, column=3, value=name).alignment = Alignment(horizontal="left", vertical="center", indent=1)
+        for col in range(1, last_col_gr + 1):
+            cell = wgr.cell(row=r, column=col)
+            cell.border = box
+            cell.font = Font(name=FONT, size=10)
+        r += 1
+    r += 1  # spacer row between groups
+
+wgr.column_dimensions["A"].width = 6
+wgr.column_dimensions["B"].width = 13
+wgr.column_dimensions["C"].width = 32
+wgr.row_dimensions[1].height = 22
+wgr.row_dimensions[2].height = 18
+wgr.row_dimensions[3].height = 14
+
+wgr.page_setup.orientation = "portrait"
+wgr.page_setup.paperSize = wgr.PAPERSIZE_A4
+wgr.page_setup.fitToWidth = 1
+wgr.page_setup.fitToHeight = 1
+wgr.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
+wgr.page_margins.left = wgr.page_margins.right = 0.4
+wgr.page_margins.top = wgr.page_margins.bottom = 0.4
+wgr.page_margins.header = wgr.page_margins.footer = 0.2
+wgr.print_options.horizontalCentered = True
+
 wb.save(OUTPUT)
-print(f"wrote {OUTPUT}: sheets={wb.sheetnames}, {len(roster)} students, dates={dates}")
+print(f"wrote {OUTPUT}: sheets={wb.sheetnames}, {len(roster)} students, dates={dates}, groups={list(GROUPS)}")
