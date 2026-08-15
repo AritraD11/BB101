@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCR — Study Guide (For You, Not the Class)</title>
+<style>
+/* ============================================================
+   BB 101 — PCR Study Guide (personal, pre-script understanding)
+   Same visual system as the Tutorial 2 handbook, for consistency
+   across the TA's own material set.
+   ============================================================ */
+
+:root{
+  --ground:      #F6F7FB;
+  --surface:     #FFFFFF;
+  --surface-2:   #EEF0F8;
+  --line:        #DFE3EF;
+  --line-strong: #C7CDE3;
+
+  --ink:         #161B2E;
+  --ink-2:       #40456A;
+  --ink-3:       #6A6F94;
+
+  --code:        #3454D1;
+  --code-soft:   #E7EBFB;
+  --amino:       #B9791A;
+  --amino-soft:  #FBF0DC;
+
+  --good:        #1D7A5F;
+  --good-soft:   #E2F2EC;
+  --warn:        #9A6510;
+  --warn-soft:   #FBF0DC;
+
+  --shadow: 0 1px 2px rgba(22,27,46,.05), 0 8px 24px -12px rgba(22,27,46,.18);
+
+  --serif: "Iowan Old Style", "Charter", "Bitstream Charter", Georgia, "Times New Roman", serif;
+  --sans:  "Avenir Next", "Avenir", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --mono:  "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --r: 10px;
+  --maxw: 78ch;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --ground:#0F1320; --surface:#171C2E; --surface-2:#212840;
+    --line:#2C3350; --line-strong:#3B4468;
+    --ink:#EAECF6; --ink-2:#B7BEDB; --ink-3:#8890B3;
+    --code:#7C93FF; --code-soft:#232B4A; --amino:#E3B255; --amino-soft:#3A2E14;
+    --good:#5FD3AC; --good-soft:#16332A; --warn:#E5B45F; --warn-soft:#35290F;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1320; --surface:#171C2E; --surface-2:#212840;
+  --line:#2C3350; --line-strong:#3B4468;
+  --ink:#EAECF6; --ink-2:#B7BEDB; --ink-3:#8890B3;
+  --code:#7C93FF; --code-soft:#232B4A; --amino:#E3B255; --amino-soft:#3A2E14;
+  --good:#5FD3AC; --good-soft:#16332A; --warn:#E5B45F; --warn-soft:#35290F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+:root[data-theme="light"]{
+  --ground:#F6F7FB; --surface:#FFFFFF; --surface-2:#EEF0F8;
+  --line:#DFE3EF; --line-strong:#C7CDE3;
+  --ink:#161B2E; --ink-2:#40456A; --ink-3:#6A6F94;
+  --code:#3454D1; --code-soft:#E7EBFB; --amino:#B9791A; --amino-soft:#FBF0DC;
+  --good:#1D7A5F; --good-soft:#E2F2EC; --warn:#9A6510; --warn-soft:#FBF0DC;
+  --shadow:0 1px 2px rgba(22,27,46,.05), 0 8px 24px -12px rgba(22,27,46,.18);
+}
+
+*{ box-sizing:border-box; }
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:17px; line-height:1.62;
+  -webkit-text-size-adjust:100%;
+}
+
+.mast{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.mast-in{ max-width:1180px; margin:0 auto; padding:12px 20px 0; display:flex; flex-direction:column; gap:10px; }
+.mast-top{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.mast-title{ font-family:var(--serif); font-size:1.32rem; font-weight:600; letter-spacing:-.01em; margin:0; }
+.mast-sub{ font-family:var(--mono); font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); }
+.mast-actions{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+.nav{ display:flex; gap:4px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; }
+.nav::-webkit-scrollbar{ display:none; }
+.nav button{
+  flex:0 0 auto; appearance:none; background:none; border:0; border-bottom:2px solid transparent;
+  padding:9px 13px 11px; margin:0; font-family:var(--sans); font-size:.92rem; font-weight:500;
+  color:var(--ink-3); cursor:pointer; white-space:nowrap; border-radius:6px 6px 0 0;
+  transition:color .15s, background .15s;
+}
+.nav button:hover{ color:var(--ink); background:var(--surface-2); }
+.nav button[aria-selected="true"]{ color:var(--code); border-bottom-color:var(--code); font-weight:600; }
+.nav .num{ font-family:var(--mono); font-size:.74em; opacity:.6; margin-right:6px; }
+
+.btn{
+  appearance:none; font-family:var(--sans); font-size:.85rem; font-weight:500;
+  padding:7px 13px; border-radius:7px; cursor:pointer;
+  background:var(--surface); color:var(--ink-2); border:1px solid var(--line-strong);
+  transition:background .15s, color .15s, border-color .15s;
+}
+.btn:hover{ background:var(--surface-2); color:var(--ink); }
+:focus-visible{ outline:2.5px solid var(--amino); outline-offset:2px; border-radius:4px; }
+
+main{ max-width:1180px; margin:0 auto; padding:26px 20px 100px; }
+.panel[hidden]{ display:none; }
+.panel{ animation:rise .28s ease both; }
+@keyframes rise{ from{ opacity:0; transform:translateY(6px);} to{opacity:1;transform:none;} }
+@media (prefers-reduced-motion: reduce){ .panel{ animation:none; } *{ transition-duration:.01ms !important; } }
+
+h2.sec{ font-family:var(--serif); font-size:2.05rem; font-weight:600; letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance; line-height:1.18; }
+.sec-lede{ font-size:1.05rem; color:var(--ink-2); max-width:var(--maxw); margin:0 0 26px; }
+h3{ font-family:var(--serif); font-size:1.3rem; font-weight:600; letter-spacing:-.01em; margin:32px 0 10px; text-wrap:balance; }
+h4{ font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:24px 0 8px; font-family:var(--sans); }
+p{ max-width:var(--maxw); margin:0 0 14px; }
+ul,ol{ max-width:var(--maxw); margin:0 0 14px; padding-left:1.25em; }
+li{ margin-bottom:7px; }
+b,strong{ font-weight:650; color:var(--ink); }
+code, .seq{ font-family:var(--mono); font-size:.86em; background:var(--surface-2); padding:1px 6px; border-radius:4px; border:1px solid var(--line); white-space:nowrap; }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow); }
+.grid{ display:grid; gap:16px; }
+.g2{ grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
+.g3{ grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); }
+.g4{ grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+
+.callout{ border-radius:var(--r); padding:15px 18px; margin:18px 0; border:1px solid var(--line); background:var(--surface-2); max-width:var(--maxw); }
+.callout .tag{ display:block; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; font-weight:600; }
+.callout p:last-child, .callout ul:last-child{ margin-bottom:0; }
+.c-ask{ background:var(--amino-soft); border-color:color-mix(in srgb,var(--amino) 34%, transparent); } .c-ask .tag{ color:var(--amino); }
+.c-key{ background:var(--code-soft); border-color:color-mix(in srgb,var(--code) 30%, transparent); } .c-key .tag{ color:var(--code); }
+.c-warn{ background:var(--warn-soft); border-color:color-mix(in srgb,var(--warn) 34%, transparent); } .c-warn .tag{ color:var(--warn); }
+.c-say{ background:var(--good-soft); border-color:color-mix(in srgb,var(--good) 30%, transparent); } .c-say .tag{ color:var(--good); }
+
+.tw{ overflow-x:auto; margin:16px 0 22px; border:1px solid var(--line); border-radius:var(--r); background:var(--surface); }
+table{ border-collapse:collapse; width:100%; min-width:480px; font-size:.94rem; }
+th,td{ text-align:left; padding:11px 15px; border-bottom:1px solid var(--line); vertical-align:top; }
+thead th{ background:var(--surface-2); font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); font-weight:700; white-space:nowrap; }
+tbody tr:last-child td{ border-bottom:0; }
+td:first-child{ font-weight:600; color:var(--ink); }
+.num-cell{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
+
+/* ------------------------------------------------------ ingredient cards */
+.kit-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; box-shadow:var(--shadow); }
+.kit-card h5{ font-family:var(--serif); font-size:1.12rem; margin:0 0 6px; }
+.kit-card .role{ font-size:.93rem; color:var(--ink-2); margin:0 0 10px; }
+.kit-card .ana{ font-size:.89rem; background:var(--code-soft); padding:10px 12px; border-radius:8px; color:var(--ink-2); }
+.kit-card .ana b{ color:var(--code); }
+
+/* --------------------------------------------------------- cycle steps */
+.cycle-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin:18px 0; }
+.cycle-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:16px 18px; box-shadow:var(--shadow); position:relative; }
+.cycle-card .cn{ font-family:var(--mono); font-weight:700; font-size:.75rem; color:#fff; background:var(--code); width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-bottom:8px; }
+.cycle-card h5{ font-family:var(--serif); font-size:1.1rem; margin:0 0 4px; }
+.cycle-card .temp{ font-family:var(--mono); font-weight:700; color:var(--amino); font-size:1rem; margin-bottom:8px; }
+.cycle-card p{ font-size:.92rem; color:var(--ink-2); margin:0 0 8px; }
+.cycle-card p:last-child{ margin-bottom:0; }
+.cycle-card .why{ font-size:.86rem; color:var(--ink-3); border-top:1px dashed var(--line); padding-top:8px; margin-top:8px; }
+
+/* ---------------------------------------------------------- sav widget */
+.sav{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow); margin:18px 0; }
+.sav-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin:16px 0; }
+.stat{ background:var(--surface-2); border-radius:9px; padding:12px 14px; border:1px solid var(--line); }
+.stat .k{ font-family:var(--mono); font-size:.66rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); font-weight:600; }
+.stat .v{ font-family:var(--mono); font-size:1.42rem; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; line-height:1.3; }
+.stat .v small{ font-size:.6em; color:var(--ink-3); font-weight:500; }
+.stat.hero .v{ color:var(--amino); font-size:1.62rem; }
+input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30px; }
+.slabel{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+.slabel .cur{ font-family:var(--mono); font-weight:600; color:var(--code); font-variant-numeric:tabular-nums; }
+.dotgrid{ display:flex; flex-wrap:wrap; gap:4px; margin:14px 0 4px; min-height:22px; }
+.dotgrid span{ width:9px; height:9px; border-radius:50%; background:var(--code); display:inline-block; }
+.dotgrid .over{
+  width:auto; height:auto; border-radius:0; background:none; display:block;
+  font-family:var(--mono); font-size:.8rem; color:var(--ink-3); align-self:center; margin-left:4px;
+}
+
+/* ------------------------------------------------------------- flow steps */
+.flow{ display:flex; flex-direction:column; gap:0; margin:18px 0; }
+.flow-step{ display:grid; grid-template-columns:auto 1fr; gap:16px; padding:14px 0; border-bottom:1px dashed var(--line); }
+.flow-step:last-child{ border-bottom:0; }
+.flow-step .fn{ font-family:var(--mono); font-weight:700; font-size:.78rem; color:#fff; background:var(--good); width:26px; height:26px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; }
+.flow-step h5{ font-family:var(--serif); font-size:1.05rem; margin:0 0 3px; }
+.flow-step p{ font-size:.93rem; color:var(--ink-2); margin:0; }
+
+/* ------------------------------------------------------- doubt bank */
+.tools{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:0 0 16px; position:sticky; top:126px; z-index:20;
+  background:color-mix(in srgb, var(--ground) 92%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:10px 0; }
+.search{ flex:1 1 250px; min-width:0; font:inherit; font-size:.95rem; padding:10px 14px; border-radius:9px; border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); }
+.search::placeholder{ color:var(--ink-3); }
+.chips{ display:flex; gap:6px; flex-wrap:wrap; }
+.chip{ appearance:none; font:inherit; font-size:.82rem; font-weight:500; padding:7px 12px; border-radius:20px; cursor:pointer; background:var(--surface); border:1px solid var(--line-strong); color:var(--ink-3); }
+.chip[aria-pressed="true"]{ background:var(--code); border-color:var(--code); color:#fff; font-weight:600; }
+.q{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); margin-bottom:10px; overflow:hidden; }
+.q[hidden]{ display:none; }
+.q-head{ display:flex; gap:13px; align-items:flex-start; width:100%; padding:15px 18px; background:none; border:0; font:inherit; color:inherit; text-align:left; cursor:pointer; }
+.q-head:hover{ background:var(--surface-2); }
+.q-head .qm{ font-family:var(--mono); font-size:.9rem; font-weight:700; color:var(--amino); flex:0 0 auto; margin-top:1px; }
+.q-head .qt{ flex:1; font-weight:550; font-size:1rem; line-height:1.45; }
+.q-head .qc{ flex:0 0 auto; color:var(--ink-3); font-size:1.1rem; transition:transform .2s; }
+.q-head[aria-expanded="true"] .qc{ transform:rotate(45deg); }
+.q-body{ padding:0 18px 18px 49px; }
+.q-body[hidden]{ display:none; }
+.q-body p{ font-size:.96rem; margin-bottom:11px; }
+.q-body p:last-child{ margin-bottom:0; }
+.q-tags{ display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+.q-tag{ font-family:var(--mono); font-size:.64rem; letter-spacing:.07em; text-transform:uppercase; padding:3px 8px; border-radius:5px; background:var(--surface-2); color:var(--ink-3); border:1px solid var(--line); font-weight:600; }
+.q-tag.hard{ background:var(--amino-soft); color:var(--amino); border-color:transparent; }
+
+/* ------------------------------------------------------------- quiz */
+.quiz-q{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; margin-bottom:14px; box-shadow:var(--shadow); }
+.quiz-q .stem{ font-weight:600; margin-bottom:12px; font-size:1rem; }
+.opts{ display:flex; flex-direction:column; gap:8px; }
+.opt{ appearance:none; text-align:left; font:inherit; font-size:.94rem; padding:11px 15px; border-radius:8px; cursor:pointer; background:var(--surface-2); border:1px solid var(--line); color:var(--ink); transition:border-color .15s, background .15s; }
+.opt:hover:not(:disabled){ border-color:var(--code); }
+.opt:disabled{ cursor:default; }
+.opt.right{ background:var(--good-soft); border-color:var(--good); font-weight:600; }
+.opt.wrong{ background:var(--warn-soft); border-color:var(--warn); }
+.expl{ margin-top:12px; font-size:.93rem; color:var(--ink-2); padding:11px 14px; background:var(--code-soft); border-radius:8px; }
+.expl[hidden]{ display:none; }
+.score{ font-family:var(--mono); font-size:.95rem; font-weight:600; color:var(--code); padding:10px 0; }
+
+.mini{ font-size:.86rem; color:var(--ink-3); max-width:var(--maxw); }
+.foot{ margin-top:44px; padding-top:20px; border-top:1px solid var(--line); font-size:.84rem; color:var(--ink-3); max-width:var(--maxw); }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="mast-top">
+      <h1 class="mast-title">PCR — Study Guide</h1>
+      <span class="mast-sub">For you, not the class · read before writing Monday's script</span>
+      <span class="mast-actions"><button class="btn" id="themeBtn" type="button">Theme</button></span>
+    </div>
+    <nav class="nav" id="nav" role="tablist" aria-label="Sections"></nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================ START -->
+<section class="panel" id="p-start" role="tabpanel" hidden>
+  <h2 class="sec">Start here</h2>
+  <p class="sec-lede">You've had this exact reaction run on you — every COVID nasal swab was PCR. This page is for understanding it yourself first. No students, no performance, just get it straight in your own head before you build the script.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The one sentence to hold onto</span>
+    <p><b>PCR is a molecular photocopier: give it a test tube with a trace of DNA in it, tell it exactly which short stretch you want (with two short DNA "bookmarks" called primers), and it hands you back a billion identical copies of just that stretch — nothing else.</b> Everything else on this page is detail underneath that one sentence.</p>
+  </div>
+
+  <h3>What problem does it actually solve?</h3>
+  <p>DNA analysis — reading a sequence, testing for a mutation, matching a crime-scene sample — needs a <i>usable amount</i> of DNA to work with. A drop of blood, a hair root, a nasal swab: these contain real DNA, but only a few trillionths of a gram of the specific stretch you care about. That's not enough material for any machine to reliably read. PCR's only job is to close that gap — take an unusable trace and turn it into a usable quantity, of one exact target region, without needing a living cell at all.</p>
+
+  <h3>Before PCR existed</h3>
+  <p>The only way to get more of a specific DNA fragment was to splice it into a living bacterial cell (a plasmid) and let the bacteria's own division machinery copy it as the colony grew — a process called cloning. It worked, but it took days, needed a working cell-culture lab, and gave you an amount you couldn't finely control.</p>
+  <p>PCR (invented by Kary Mullis in 1983, at Cetus Corporation — he won the Nobel Prize in Chemistry for it in 1993, one of the fastest bench-to-Nobel turnarounds ever) replaced all of that with a 2–3 hour reaction in a single tube, in a machine you load and walk away from. That speed and simplicity is the entire reason it's now the default first step in nearly every corner of biology, medicine, and forensics.</p>
+
+  <div class="callout c-ask">
+    <span class="tag">Keep this framing as you read on</span>
+    <p>Everything below is really one machine doing one repeating job. The three sections after this — <b>the kit</b>, <b>the cycle</b>, <b>why it explodes</b> — are just: what's in the tube, what the machine does to it, and why the result grows the way it does. Read them in order once, then use the Doubt Bank and Cheat Sheet as reference.</p>
+  </div>
+</section>
+
+<!-- ============================================================== KIT -->
+<section class="panel" id="p-kit" role="tabpanel" hidden>
+  <h2 class="sec">The kit</h2>
+  <p class="sec-lede">Seven things go into the tube. Each has exactly one job. Analogies below lean on circuits and systems, since that's the language you already think in.</p>
+
+  <div class="grid g2">
+    <div class="kit-card">
+      <h5>1 · Template DNA</h5>
+      <p class="role">The sample — contains the target sequence somewhere inside it, even if it's a tiny trace.</p>
+      <div class="ana"><b>Like:</b> the source document you're photocopying. PCR never invents new sequence — it only exists if the template already contains it.</div>
+    </div>
+    <div class="kit-card">
+      <h5>2 · Forward &amp; reverse primers</h5>
+      <p class="role">Short (~18–25 base) synthetic DNA snippets. One binds each strand, flanking the target region on either side.</p>
+      <div class="ana"><b>Like:</b> setting a start address and an end address on a memory bus. Together they define exactly which window of the whole genome gets read out — and give the enzyme below a place it's <i>allowed</i> to start.</div>
+    </div>
+    <div class="kit-card">
+      <h5>3 · Taq DNA polymerase</h5>
+      <p class="role">The enzyme that actually builds the new strand, extending from each primer.</p>
+      <div class="ana"><b>Like:</b> the write head. It can only <i>extend</i> an existing end — it cannot start a strand from nothing, same as an assembler that needs a starting cursor position before it can lay down anything.</div>
+    </div>
+    <div class="kit-card">
+      <h5>4 · dNTPs (A, T, G, C)</h5>
+      <p class="role">The four loose nucleotide building blocks, each carrying its own energy-supplying phosphate tail.</p>
+      <div class="ana"><b>Like:</b> a parts bin the write head pulls from, one component at a time, choosing whichever one the template underneath calls for.</div>
+    </div>
+    <div class="kit-card">
+      <h5>5 · Mg²⁺ (as MgCl₂)</h5>
+      <p class="role">A required cofactor — Taq polymerase's active site literally does not function without it.</p>
+      <div class="ana"><b>Like:</b> a bias voltage the circuit needs to be powered from. It's not part of the final DNA output, but nothing runs without it present.</div>
+    </div>
+    <div class="kit-card">
+      <h5>6 · Buffer</h5>
+      <p class="role">Holds pH and ionic strength in the enzyme's working range for the whole reaction.</p>
+      <div class="ana"><b>Like:</b> a voltage regulator — keeps every other component operating inside its rated conditions instead of drifting.</div>
+    </div>
+    <div class="kit-card">
+      <h5>7 · Water (nuclease-free)</h5>
+      <p class="role">Brings the reaction to its final working volume. Must be free of contaminating enzymes/DNA.</p>
+      <div class="ana"><b>Like:</b> a clean ground rail in a sensitive analog circuit — noise anywhere in it corrupts the whole result.</div>
+    </div>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">Why Taq specifically mattered</span>
+    <p>Ordinary enzymes fall apart (denature) around 40–50°C, let alone the ~95°C the first step of every cycle needs. Taq is sourced from <i>Thermus aquaticus</i>, a bacterium that naturally lives in geothermal hot springs at 70–80°C — so it's built to survive heat that would destroy a normal protein. Before Taq was identified and purified (1976, put to use in PCR by 1983), a researcher had to manually pipette in a fresh dose of enzyme after every single heating step, all night, for every sample. Taq's heat tolerance is the one fact that turned PCR from a manual chore into something you load into a machine and walk away from.</p>
+  </div>
+</section>
+
+<!-- ============================================================ CYCLE -->
+<section class="panel" id="p-cycle" role="tabpanel" hidden>
+  <h2 class="sec">The 3-step cycle</h2>
+  <p class="sec-lede">One PCR "cycle" is nothing but three temperatures held in sequence for a set number of seconds each. The machine (a thermal cycler) is just a small, programmable heating/cooling block — no moving parts beyond that. Think of it as a 3-state clock-driven loop, repeated 25–40 times.</p>
+
+  <div class="cycle-row">
+    <div class="cycle-card">
+      <span class="cn">1</span>
+      <h5>Denaturation</h5>
+      <div class="temp">94–98 °C</div>
+      <p>Heat breaks the <i>hydrogen bonds</i> holding the two DNA strands together — the weak, sideways bonds, not the strong backbone. The double helix "unzips" into two separate single strands. Nothing is destroyed; it's a physical separation, fully reversible on cooling.</p>
+      <p class="why"><b>Why this temp:</b> hot enough to overcome even G-C base pairs (3 H-bonds, stronger than A-T's 2).</p>
+    </div>
+    <div class="cycle-card">
+      <span class="cn">2</span>
+      <h5>Annealing</h5>
+      <div class="temp">50–65 °C</div>
+      <p>Temperature drops enough for the short primers to find and grip their one exact complementary match among millions of possible positions on the template.</p>
+      <p class="why"><b>Why this temp:</b> a Goldilocks window tied to the primer's own melting point — too hot and even the correct primer can't hold on; too cold and primers stick loosely in the wrong places too.</p>
+    </div>
+    <div class="cycle-card">
+      <span class="cn">3</span>
+      <h5>Extension</h5>
+      <div class="temp">~72 °C</div>
+      <p>Taq polymerase attaches to each primer's free end and starts adding matching dNTPs one at a time (A↔T, G↔C), moving along the template — building a brand-new complementary strand.</p>
+      <p class="why"><b>Why this temp:</b> Taq's own working optimum — fastest, most accurate synthesis happens right here.</p>
+    </div>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">Say it like this</span>
+    <p>"Denaturation opens the zip. Annealing places a bookmark on each side of the page you want. Extension photocopies from bookmark to bookmark. Then the whole thing repeats — and every copy made in one round becomes raw material for the next."</p>
+  </div>
+
+  <h3>Why does the temperature need to <i>cycle</i> at all?</h3>
+  <p>Because the three steps need physically opposite conditions, and no single temperature satisfies all three at once: denaturation needs the strands <i>forced</i> apart by heat; annealing needs them cool enough for a short primer to grip firmly; extension needs the mid-range temperature Taq actually works best at. You can't hold one setting and get all three — so the machine ramps through all three, every round, like a clock driving a 3-phase state machine.</p>
+
+  <h3>A subtlety worth knowing (not essential, but it'll come up)</h3>
+  <p>In the very first couple of cycles, Taq often runs past the far end of the template before the cycle ends, producing variable-length "long" products rather than a clean, exact-length fragment. It's only from roughly the third cycle onward that the true primer-to-primer-length product starts to dominate and take over the exponential growth. Doesn't change the outcome — after 30 cycles it's overwhelmingly the correct-length product — but it explains why cycle counts below ~3 don't cleanly follow the doubling formula in the next section.</p>
+</section>
+
+<!-- ============================================================= MATH -->
+<section class="panel" id="p-math" role="tabpanel" hidden>
+  <h2 class="sec">Why it explodes</h2>
+  <p class="sec-lede">The name is "chain reaction" for a reason. This is the part of PCR that will feel most immediately familiar to you.</p>
+
+  <h3>The core trick</h3>
+  <p>It is <b>not</b> "add one copy per cycle." Every molecule present at the <i>start</i> of a cycle — the original template <b>and</b> every copy made so far — gets copied again during that same cycle. The copies become templates for the next round, which become templates for the round after that. That's compounding, not additive growth — the same shape as compound interest, or a binary counter doubling on every clock tick, or (the deck's own name for it) a chain reaction.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The formula</span>
+    <p style="font-size:1.15rem;"><code>Nₙ = N₀ × 2ⁿ</code></p>
+    <p>N₀ = molecules you start with · n = number of cycles run · 2ⁿ = the ideal amplification factor.</p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Cycle (n)</th><th>Molecules (2ⁿ)</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td class="num-cell">1</td></tr>
+        <tr><td>1</td><td class="num-cell">2</td></tr>
+        <tr><td>5</td><td class="num-cell">32</td></tr>
+        <tr><td>10</td><td class="num-cell">1,024</td></tr>
+        <tr><td>20</td><td class="num-cell">1,048,576 (~1 million)</td></tr>
+        <tr><td>30</td><td class="num-cell">1,073,741,824 (~1.07 billion)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Run it yourself</h3>
+  <div class="sav">
+    <div class="slabel"><label for="cycleSlider"><b>Cycles run</b></label><span class="cur" id="cycleOut">0</span></div>
+    <input type="range" id="cycleSlider" min="0" max="35" value="0" step="1" aria-label="Number of PCR cycles">
+    <div class="sav-row">
+      <div class="stat"><div class="k">Copies (2ⁿ)</div><div class="v" id="copyOut">1</div></div>
+      <div class="stat hero"><div class="k">vs. starting molecule</div><div class="v" id="factorOut">1×</div></div>
+    </div>
+    <div class="dotgrid" id="dotGrid" aria-hidden="true"></div>
+    <p class="mini" id="cycleNote"></p>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">The honest reality check</span>
+    <p>2ⁿ is an <i>ideal</i>, not what a real tube does forever. Somewhere around cycle 30–40, real reactions <b>plateau</b>: primers and dNTPs get physically used up (like a battery depleting), Taq's activity gradually declines from being heat-cycled dozens of times (thermal fatigue, in your terms), and at high product concentration the two complementary strands increasingly find and re-anneal to <i>each other</i> instead of waiting around for a primer — which stalls new priming. The curve you'd actually plot flattens out well before the formula does. This is exactly why real protocols don't just run 60 cycles "to be safe" — past the plateau, more cycles buys you almost nothing.</p>
+  </div>
+</section>
+
+<!-- ============================================================= USES -->
+<section class="panel" id="p-uses" role="tabpanel" hidden>
+  <h2 class="sec">What it's actually used for</h2>
+  <p class="sec-lede">Same machine, same 3-step cycle, every time. The only thing that changes between these is which primers you choose — i.e. which exact stretch of DNA you're asking it to copy — and what you do with the copies afterward.</p>
+
+  <h3>Crime-scene example (this is on your own slides)</h3>
+  <div class="flow">
+    <div class="flow-step"><span class="fn">1</span><div><h5>Sample collected</h5><p>A trace — blood, hair, saliva — is recovered from the scene.</p></div></div>
+    <div class="flow-step"><span class="fn">2</span><div><h5>DNA extraction</h5><p>DNA is isolated from the sample. There's nowhere near enough of it to analyze directly.</p></div></div>
+    <div class="flow-step"><span class="fn">3</span><div><h5>PCR amplification</h5><p>Primers targeting several STR loci (short repeating DNA stretches that vary a lot between people) copy those regions millions of times over.</p></div></div>
+    <div class="flow-step"><span class="fn">4</span><div><h5>Fragment analysis</h5><p>The amplified fragments are separated by size (capillary electrophoresis) and measured.</p></div></div>
+    <div class="flow-step"><span class="fn">5</span><div><h5>DNA profile</h5><p>The pattern of fragment sizes across all the loci together — not any single one — <i>is</i> the profile.</p></div></div>
+    <div class="flow-step"><span class="fn">6</span><div><h5>Comparison</h5><p>Match the profile against a suspect's. Matching at every tested marker means the suspect's DNA is consistent with the sample.</p></div></div>
+  </div>
+  <p class="mini">In one line, straight off your slide: <i>tiny amount of DNA → PCR makes many copies → DNA profile → compare with suspect.</i></p>
+
+  <h3>Your own COVID nasal swab (RT-PCR)</h3>
+  <p>SARS-CoV-2's genome is RNA, not DNA, so there's one extra step first: an enzyme called reverse transcriptase back-copies the viral RNA into DNA (the "RT" in RT-PCR). From there, it's standard PCR — the same 3-step cycle doubles that DNA copy 30-plus times, because a swab usually doesn't contain nearly enough viral material to detect directly. A <b>"positive" result means the amplification loop found something worth doubling</b> — not that anyone looked at an actual virus under a microscope.</p>
+
+  <h3>Two more, briefly</h3>
+  <div class="grid g2">
+    <div class="card"><h5 style="margin-top:0;font-family:var(--serif);">Paternity / relatedness testing</h5><p style="margin-bottom:0;font-size:.94rem;">Exactly the same STR-profile idea as forensics — compare a child's amplified profile against a parent's at the same loci.</p></div>
+    <div class="card"><h5 style="margin-top:0;font-family:var(--serif);">Genetic disease screening</h5><p style="margin-bottom:0;font-size:.94rem;">Primers target the specific gene region of interest (e.g. a sickle-cell or cystic-fibrosis marker); the amplified product is then sequenced or checked for the mutation.</p></div>
+  </div>
+</section>
+
+<!-- =========================================================== DOUBTS -->
+<section class="panel" id="p-doubts" role="tabpanel" hidden>
+  <h2 class="sec">Doubt bank</h2>
+  <p class="sec-lede">The questions you'd realistically ask yourself (or get asked) once you actually sit with this. Searchable.</p>
+
+  <div class="tools">
+    <input class="search" id="qSearch" type="search" placeholder="Search — try 'primer', 'plateau', 'cloning'…" aria-label="Search doubts">
+    <div class="chips" id="qChips"></div>
+  </div>
+  <div id="qList"></div>
+  <p class="mini" id="qCount"></p>
+</section>
+
+<!-- ============================================================= QUIZ -->
+<section class="panel" id="p-quiz" role="tabpanel" hidden>
+  <h2 class="sec">Check yourself</h2>
+  <p class="sec-lede">Active recall beats re-reading. Nine questions built from the sections above — try this once before you consider yourself done studying.</p>
+  <div class="score" id="score">Not started</div>
+  <div id="quiz"></div>
+  <p><button class="btn" id="resetQuiz" type="button">Reset quiz</button></p>
+</section>
+
+<!-- ============================================================ BONUS -->
+<section class="panel" id="p-bonus" role="tabpanel" hidden>
+  <h2 class="sec">Bonus: the codon slides (10–12)</h2>
+  <p class="sec-lede">Your deck tacks on a short genetic-code exercise after the PCR content. Not the main event, but here's the gist so it doesn't catch you cold.</p>
+
+  <div class="card">
+    <p><b>A codon</b> is a group of 3 mRNA bases. Each one specifies either one amino acid or "stop."</p>
+    <ul>
+      <li>64 possible codons total (4³) — <b>61</b> code for amino acids, <b>3</b> are stop signals (UAA, UAG, UGA).</li>
+      <li><code>AUG</code> is the start codon and also codes for the amino acid Methionine.</li>
+      <li><b>Degenerate:</b> most amino acids are specified by more than one codon (there are only 20 amino acids sharing 61 sense codons).</li>
+      <li><b>Unambiguous:</b> even so, each individual codon only ever points to one specific amino acid — never two.</li>
+    </ul>
+  </div>
+
+  <h3>The exercise on your slides</h3>
+  <p>Given a protein <code>Met–Ser–Arg–Trp–Lys–Stop</code>, write an mRNA sequence that could produce it — then notice more than one correct answer exists:</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Version</th><th>Sequence</th></tr></thead>
+      <tbody>
+        <tr><td>Answer 1</td><td class="num-cell">AUG UCU CGU UGG AAA UAA</td></tr>
+        <tr><td>Answer 2</td><td class="num-cell">AUG AGC AGA UGG AAG UAG</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="mini">Both are valid because <code>Ser</code> and <code>Stop</code> each have several possible codons — that's degeneracy, working exactly as described above.</p>
+</section>
+
+<!-- ============================================================ CHEAT -->
+<section class="panel" id="p-cheat" role="tabpanel" hidden>
+  <h2 class="sec">Cheat sheet</h2>
+  <p class="sec-lede">Everything on one screen. Glance at this right before you sit down to write the script.</p>
+
+  <h4>The one-line version</h4>
+  <div class="callout c-key"><p style="margin:0;">PCR is a molecular photocopier: point it at a short stretch of DNA with two primers, and it hands back a billion identical copies of exactly that stretch.</p></div>
+
+  <h4>The cycle</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Step</th><th>Temp</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr><td>1. Denaturation</td><td class="num-cell">94–98 °C</td><td>Strands separate</td></tr>
+        <tr><td>2. Annealing</td><td class="num-cell">50–65 °C</td><td>Primers bind their exact match</td></tr>
+        <tr><td>3. Extension</td><td class="num-cell">~72 °C</td><td>Taq builds the new strand</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>The kit, one line each</h4>
+  <div class="tw">
+    <table>
+      <tbody>
+        <tr><td>Template DNA</td><td>the source being copied</td></tr>
+        <tr><td>Primers ×2</td><td>mark the start/end of the target</td></tr>
+        <tr><td>Taq polymerase</td><td>heat-stable enzyme, builds the copy</td></tr>
+        <tr><td>dNTPs</td><td>the A/T/G/C building blocks</td></tr>
+        <tr><td>Mg²⁺</td><td>cofactor Taq needs to function</td></tr>
+        <tr><td>Buffer</td><td>keeps pH/ionic conditions stable</td></tr>
+        <tr><td>Water</td><td>final volume, must be nuclease-free</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Key numbers &amp; names</h4>
+  <div class="tw">
+    <table>
+      <tbody>
+        <tr><td>Formula</td><td class="num-cell">Nₙ = N₀ × 2ⁿ</td></tr>
+        <tr><td>Typical cycles</td><td class="num-cell">25–40 (real reactions plateau after)</td></tr>
+        <tr><td>After 30 cycles</td><td class="num-cell">~1.07 billion copies</td></tr>
+        <tr><td>Invented by</td><td class="num-cell">Kary Mullis, 1983 (Nobel Prize 1993)</td></tr>
+        <tr><td>Taq source</td><td class="num-cell"><i>Thermus aquaticus</i>, hot-spring bacterium</td></tr>
+        <tr><td>Your own example</td><td class="num-cell">COVID RT-PCR — RNA→DNA step first, then standard PCR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    <p>Built as personal study material ahead of TA duty (Monday 17th, PCR slides). Not for display to students — the deck's own images and slides stay the reference for what's actually shown in class. Once this has sunk in, the next step is turning it into a short read-aloud script, the same way Tutorial 2's was built.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ------------------------------------------------------------- theme */
+var root = document.documentElement;
+document.getElementById("themeBtn").addEventListener("click", function(){
+  var now = root.getAttribute("data-theme");
+  if(!now){ now = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+  root.setAttribute("data-theme", now === "dark" ? "light" : "dark");
+});
+
+/* --------------------------------------------------------- nav / tabs */
+var SECTIONS = [
+  ["start",  "Start Here"],
+  ["kit",    "The Kit"],
+  ["cycle",  "The Cycle"],
+  ["math",   "Why It Explodes"],
+  ["uses",   "Real Uses"],
+  ["doubts", "Doubt Bank"],
+  ["quiz",   "Check Yourself"],
+  ["bonus",  "Bonus: Codons"],
+  ["cheat",  "Cheat Sheet"]
+];
+var nav = document.getElementById("nav");
+SECTIONS.forEach(function(s, i){
+  var b = document.createElement("button");
+  b.type = "button";
+  b.setAttribute("role","tab");
+  b.setAttribute("aria-selected", i===0 ? "true":"false");
+  b.setAttribute("aria-controls","p-"+s[0]);
+  b.dataset.k = s[0];
+  b.innerHTML = '<span class="num">'+(i+1)+'</span>'+s[1];
+  b.addEventListener("click", function(){ show(s[0]); });
+  nav.appendChild(b);
+});
+function show(k){
+  SECTIONS.forEach(function(s){ document.getElementById("p-"+s[0]).hidden = (s[0] !== k); });
+  Array.prototype.forEach.call(nav.children, function(b){
+    b.setAttribute("aria-selected", b.dataset.k === k ? "true" : "false");
+  });
+  window.scrollTo({ top:0 });
+}
+show("start");
+
+/* -------------------------------------------------------- cycle slider */
+var slider = document.getElementById("cycleSlider");
+var copyOut = document.getElementById("copyOut");
+var factorOut = document.getElementById("factorOut");
+var cycleOut = document.getElementById("cycleOut");
+var cycleNote = document.getElementById("cycleNote");
+var dotGrid = document.getElementById("dotGrid");
+var MAX_DOTS = 64;
+
+function fmt(n){
+  if(n < 100000) return n.toLocaleString();
+  return n.toExponential(3).replace("e+", " × 10^");
+}
+function noteFor(n){
+  if(n === 0) return "Nothing run yet — this is just the starting template.";
+  if(n <= 3) return "Still in the noisy start-up phase — variable-length products haven't yet been outcompeted by the clean, primer-bounded fragment.";
+  if(n <= 15) return "Doubling steadily, but still far too little DNA to detect on a gel or by eye.";
+  if(n <= 25) return "Now in the range where the amplified product becomes detectable — this is roughly where real diagnostic PCR (like a COVID test) calls a result.";
+  if(n <= 32) return "Deep into exponential growth — but a real tube is approaching the plateau phase here as reagents run low.";
+  return "Past the point where the ideal formula and a real reaction start to diverge — real yield would be flattening out by now, not still doubling.";
+}
+function render(){
+  var n = parseInt(slider.value, 10);
+  var copies = Math.pow(2, n);
+  cycleOut.textContent = n;
+  copyOut.textContent = fmt(copies);
+  factorOut.textContent = (copies >= 100000 ? fmt(copies) : copies.toLocaleString()) + "×";
+  cycleNote.textContent = noteFor(n);
+
+  var shown = Math.min(copies, MAX_DOTS);
+  var html = "";
+  for(var i=0;i<shown;i++){ html += "<span></span>"; }
+  if(copies > MAX_DOTS){ html += '<span class="over">+ ' + fmt(copies - MAX_DOTS) + ' more (not drawn)</span>'; }
+  dotGrid.innerHTML = html;
+}
+slider.addEventListener("input", render);
+render();
+
+/* -------------------------------------------------------------- doubts */
+var DOUBTS = [
+["Is PCR making brand-new DNA, or just copying DNA that already exists?","kit",0,
+ "Purely copying. PCR cannot invent a sequence that isn't already present in the template — if the target region isn't in the tube to begin with, there is nothing for the primers to bind and nothing gets amplified.",
+ "",""],
+
+["Why can't the polymerase just start copying anywhere, without a primer?","kit",1,
+ "It's a fixed feature of DNA polymerase's chemistry — its active site is built to extend an existing free 3'-OH end, not to start a brand-new strand from nothing. With nothing there to attack, it has no reaction to catalyze.",
+ "This is also exactly why replication inside a living cell needs an RNA primer first, laid down by a different enzyme (primase) — the same underlying limitation, just solved differently in nature.",""],
+
+["Why two primers, not one?","kit",1,
+ "DNA is double-stranded and antiparallel, so you need one primer per strand — and together, the two primers mark both boundaries of exactly the stretch you want copied, like specifying a start address and an end address on the same request.",
+ "",""],
+
+["Won't the enzyme just die every time it's heated to 95°C?","kit",0,
+ "An ordinary enzyme would, yes. Taq polymerase specifically survives because it's sourced from Thermus aquaticus, a bacterium that lives naturally in ~70–80°C hot springs — it's built for heat that would destroy most proteins.",
+ "Before Taq was available for this purpose, a researcher had to manually pipette in a fresh dose of enzyme after every single cycle, all night, for every sample.",""],
+
+["Why does the temperature need to cycle at all — why not hold one steady temperature?","cycle",1,
+ "Because the three steps need physically opposite conditions: denaturation needs the strands forced apart by heat, annealing needs them cool enough for a short primer to grip firmly, and extension needs the mid-range temperature the enzyme actually works best at. No single setting satisfies all three.",
+ "",""],
+
+["Why is there a specific 'sweet spot' temperature for annealing instead of just going as cold as possible?","cycle",1,
+ "Too cold and primers stick loosely almost anywhere, including similar-but-wrong sequences — false priming. Too hot and even the correct primer can't hold on. The right window sits close to the primer's own melting temperature.",
+ "",""],
+
+["Does the DNA amount really double forever, exactly as the formula says?","math",1,
+ "No — real reactions plateau after roughly 30–40 cycles, as primers and dNTPs get used up and Taq's activity gradually declines from repeated heat cycling. The idealized 2ⁿ curve and the real yield curve diverge well before the formula stops climbing.",
+ "",""],
+
+["Why exponential, and not just 'one new copy per cycle'?","math",0,
+ "Because every molecule present at the start of a cycle — the original template and every copy made in earlier rounds — gets copied again in that same cycle. The copies become templates too, so growth compounds instead of just adding up.",
+ "",""],
+
+["What do you actually do with the copies once you have them?","uses",0,
+ "Depends on the goal: run them on a gel to see fragment size (electrophoresis), sequence them outright, attach a fluorescent probe to detect them in real time (qPCR), or compare a size pattern against a reference profile, as in forensics.",
+ "",""],
+
+["Is PCR the same thing as cloning?","uses",1,
+ "No. Classic molecular cloning inserts DNA into a living cell (usually bacteria) and lets that cell's own machinery copy it over days as the colony grows. PCR is entirely cell-free, done in a test tube, start to finish in about 2–3 hours.",
+ "",""],
+
+["What is a thermal cycler, physically?","cycle",0,
+ "Just a small programmable heating/cooling block that holds the tube and ramps its temperature up and down through the three set-points, on a timer, for a set number of repeats. No moving parts beyond that.",
+ "",""],
+
+["Are dNTPs different from the A/T/G/C bases I already know from DNA structure?","kit",1,
+ "Same four letters, different packaging. dNTPs are the loose, free-floating 'parts-bin' version, each carrying its own triphosphate energy tail that gets spent when the polymerase snaps it into place — versus a base already linked into a strand.",
+ "",""],
+
+["Forensic PCR only copies one small region — so how do you get a whole 'DNA profile' out of it?","uses",1,
+ "It doesn't target just one region. Forensic PCR runs several different primer pairs at once (multiplexing), each aimed at a different short repeating sequence (an STR locus) that varies a lot between individuals. The pattern of fragment sizes across all those loci together is the profile — not any single copy on its own.",
+ "",""],
+
+["Why does GC-content matter for PCR temperatures?","cycle",1,
+ "G-C base pairs have 3 hydrogen bonds versus A-T's 2, so a GC-rich stretch needs more heat to pull apart, and primers targeting it typically need a hotter annealing temperature too — the same physical fact that governs DNA melting behavior generally.",
+ "",""],
+
+["Is the very first cycle's product already the exact right length?","cycle",1,
+ "Not quite. In the earliest cycles, Taq often runs past the far end of the template before the cycle ends, producing variable-length 'long' products. Only from around the third cycle onward does the clean, exact primer-to-primer-length fragment start to dominate and take over the exponential climb — a mechanistic detail that doesn't change the final outcome.",
+ "",""]
+];
+
+var TAGS = [["all","All"],["start","Start Here"],["kit","The Kit"],["cycle","The Cycle"],["math","Why It Explodes"],["uses","Real Uses"]];
+var activeTag = "all", query = "";
+
+var chips = document.getElementById("qChips");
+TAGS.forEach(function(t){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = t[1];
+  b.setAttribute("aria-pressed", t[0]==="all" ? "true":"false");
+  b.dataset.t = t[0];
+  b.addEventListener("click", function(){
+    activeTag = t[0];
+    Array.prototype.forEach.call(chips.children, function(c){
+      c.setAttribute("aria-pressed", c.dataset.t === activeTag ? "true":"false");
+    });
+    filter();
+  });
+  chips.appendChild(b);
+});
+
+var qList = document.getElementById("qList");
+DOUBTS.forEach(function(d, i){
+  var wrap = document.createElement("article");
+  wrap.className = "q"; wrap.dataset.tag = d[1];
+  wrap.dataset.text = (d[0]+" "+d[3]+" "+d[4]).replace(/<[^>]+>/g,"").toLowerCase();
+
+  var head = document.createElement("button");
+  head.type = "button"; head.className = "q-head";
+  head.setAttribute("aria-expanded","false"); head.setAttribute("aria-controls","qb-"+i);
+  head.innerHTML = '<span class="qm">Q'+(i+1)+'</span><span class="qt">'+d[0]+'</span><span class="qc">+</span>';
+
+  var body = document.createElement("div");
+  body.className = "q-body"; body.id = "qb-"+i; body.hidden = true;
+  var html = '<p>'+d[3]+'</p>';
+  if(d[4]) html += '<p>'+d[4]+'</p>';
+  var tagName = (TAGS.filter(function(t){ return t[0]===d[1]; })[0]||["","—"])[1];
+  html += '<div class="q-tags"><span class="q-tag">'+tagName+'</span>'+
+          (d[2] ? '<span class="q-tag hard">likely follow-up</span>' : '')+'</div>';
+  body.innerHTML = html;
+
+  head.addEventListener("click", function(){
+    var open = head.getAttribute("aria-expanded")==="true";
+    head.setAttribute("aria-expanded", open?"false":"true");
+    body.hidden = open;
+  });
+
+  wrap.appendChild(head); wrap.appendChild(body);
+  qList.appendChild(wrap);
+});
+
+document.getElementById("qSearch").addEventListener("input", function(){
+  query = this.value.trim().toLowerCase(); filter();
+});
+function filter(){
+  var n = 0;
+  Array.prototype.forEach.call(qList.children, function(w){
+    var ok = (activeTag==="all" || w.dataset.tag===activeTag) &&
+             (!query || w.dataset.text.indexOf(query) > -1);
+    w.hidden = !ok; if(ok) n++;
+  });
+  document.getElementById("qCount").textContent =
+    n + " of " + DOUBTS.length + " question" + (n===1?"":"s") + " shown";
+}
+filter();
+
+/* -------------------------------------------------------------- quiz */
+var QUIZ = [
+["What does PCR need already present in the tube for it to work at all?",
+ ["Nothing — it builds DNA from raw chemicals alone","A template that already contains the target sequence","A living cell","An electric current"],
+ 1,
+ "PCR only copies — it can't invent a sequence that isn't already present in the template DNA."],
+
+["Why do both replication in a cell and PCR in a tube need a primer?",
+ ["Primers make the reaction go faster, but aren't strictly required","DNA polymerase can only extend an existing 3'-OH end, never start from scratch","Primers provide the energy for the reaction","It's a historical convention, not a chemical requirement"],
+ 1,
+ "It's a fixed feature of the enzyme's active site — it attacks an existing free end. With nothing there to extend, it has no reaction to catalyze."],
+
+["Put the three PCR steps in the correct order.",
+ ["Annealing → Extension → Denaturation","Extension → Denaturation → Annealing","Denaturation → Annealing → Extension","Annealing → Denaturation → Extension"],
+ 2,
+ "Strands must separate (denaturation) before primers can bind (annealing), before the polymerase can build from those primers (extension)."],
+
+["Why does PCR need to cycle through three different temperatures instead of holding one?",
+ ["It doesn't really matter, it's just convention","The three steps require physically opposite conditions that no single temperature satisfies","Cycling saves electricity","Taq polymerase requires constant temperature changes to stay active"],
+ 1,
+ "Denaturation needs heat to force strands apart; annealing needs it cool enough for primers to grip; extension needs Taq's own working optimum. One setting can't do all three."],
+
+["What makes Taq polymerase special compared to a typical enzyme?",
+ ["It works only at room temperature","It survives repeated heating to ~95°C without falling apart","It can start a new strand without a primer","It only works on RNA"],
+ 1,
+ "Sourced from a hot-spring bacterium, Taq is heat-stable — this is exactly what let PCR be automated into a machine you load once and walk away from."],
+
+["Why does the amount of DNA grow exponentially rather than just adding a fixed amount each cycle?",
+ ["The machine adds more template DNA every cycle","Every molecule present at the start of a cycle — original and prior copies — gets copied again that same cycle","Only the original template is ever copied","The enzyme works faster with each cycle"],
+ 1,
+ "The copies become templates too, so growth compounds — the same shape as compound interest or a doubling counter, not simple addition."],
+
+["Starting from one molecule, roughly how many copies exist after 30 ideal PCR cycles?",
+ ["About 30","About 900","About 1.07 billion (2^30)","About 1 trillion"],
+ 2,
+ "2^30 ≈ 1.07 billion — the same number as on your own slide's amplification table."],
+
+["Why do real PCR reactions plateau instead of doubling forever?",
+ ["The DNA becomes chemically unstable","Primers and dNTPs get used up and Taq's activity declines from repeated heat cycling","The thermal cycler runs out of electricity","Denaturation stops working after 20 cycles"],
+ 1,
+ "Reagents deplete, enzyme activity fades with repeated heat stress, and at high concentration strands increasingly re-anneal to each other instead of to primers — all of which flatten the real yield curve well before the ideal formula does."],
+
+["In the COVID nasal-swab RT-PCR test, what does a 'positive' result actually mean?",
+ ["A technician visually saw the virus under a microscope","The amplification loop found and doubled a target viral sequence enough times to detect it","The patient's temperature was above normal","The sample contained human DNA"],
+ 1,
+ "RT-PCR first back-copies the virus's RNA genome into DNA (reverse transcriptase), then standard PCR amplifies it. A positive result means that doubling loop found something worth doubling — not a direct visual observation."]
+];
+
+var quizEl = document.getElementById("quiz");
+var answered = {}, correct = 0;
+
+function renderQuiz(){
+  quizEl.innerHTML = ""; answered = {}; correct = 0; updateScore();
+  QUIZ.forEach(function(q, i){
+    var d = document.createElement("div");
+    d.className = "quiz-q";
+    var stem = document.createElement("div");
+    stem.className = "stem"; stem.textContent = (i+1)+". "+q[0];
+    var opts = document.createElement("div"); opts.className = "opts";
+
+    q[1].forEach(function(text, j){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "opt"; b.textContent = text;
+      b.addEventListener("click", function(){
+        if(answered[i]) return;
+        answered[i] = true;
+        var all = opts.querySelectorAll(".opt");
+        Array.prototype.forEach.call(all, function(o, k){
+          o.disabled = true;
+          if(k === q[2]) o.classList.add("right");
+        });
+        if(j !== q[2]) b.classList.add("wrong"); else correct++;
+        expl.hidden = false;
+        updateScore();
+      });
+      opts.appendChild(b);
+    });
+
+    var expl = document.createElement("div");
+    expl.className = "expl"; expl.hidden = true; expl.textContent = q[3];
+
+    d.appendChild(stem); d.appendChild(opts); d.appendChild(expl);
+    quizEl.appendChild(d);
+  });
+}
+function updateScore(){
+  var n = Object.keys(answered).length;
+  document.getElementById("score").textContent =
+    n === 0 ? "Not started — 9 questions"
+            : "Answered " + n + " of " + QUIZ.length + " · correct: " + correct;
+}
+document.getElementById("resetQuiz").addEventListener("click", renderQuiz);
+renderQuiz();
+
+})();
+</script>
+</body>
+</html>
