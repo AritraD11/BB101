@@ -1276,6 +1276,11 @@ Strand 2:  3′ —————————————————————�
     <div class="flow-step"><span class="fn">4</span><div><h5>Mutation</h5><p>A change anywhere in step 1 can alter step 3's protein — how much depends on whether it's a substitution or a frame-shifting indel.</p></div></div>
   </div>
 
+  <h4>One-line PCR memory map</h4>
+  <div class="callout c-key">
+    <p style="margin:0;">Template DNA → Primers → Taq polymerase + Mg²⁺ → dNTPs as building blocks → Denaturation → Annealing → Extension → amplified DNA.</p>
+  </div>
+
   <div class="foot">
     <p>Built for TA duty on Monday 17 August, from the PCR deck. The <b>Script</b> tab is the 30-minute delivery plan; every other tab is background for your own understanding. Not for display to students — the deck itself stays on the projector, and this page stays on the iPad.</p>
   </div>
@@ -1416,6 +1421,26 @@ var DOUBTS = [
 
 ["Are dNTPs different from the A/T/G/C bases I already know from DNA structure?","kit",1,
  "Same four letters, different packaging. dNTPs are the loose, free-floating 'parts-bin' version, each carrying its own triphosphate energy tail that gets spent when the polymerase snaps it into place — versus a base already linked into a strand.",
+ "",""],
+
+["What exactly is an enzyme?","kit",0,
+ "A biological catalyst — almost always a protein — that speeds up a specific reaction without being consumed or changed by it. Taq is one particular enzyme, doing one particular job (extending DNA). Cells make many others for entirely different jobs; hormones, for instance, are a different category altogether — signalling molecules, not catalysts.",
+ "",""],
+
+["Why are the sugar's carbons written with a prime — 1′, 2′, 3′ — instead of just 1, 2, 3?","kit",1,
+ "The prime distinguishes numbering on the sugar ring from a separate numbering system used within the nitrogenous base itself (bases have their own unprimed atom numbers). Without the prime, 'carbon 1' would be ambiguous between the two rings. The 1′ carbon is where the base attaches, the 5′ carbon is where the phosphate attaches, and the 3′ carbon carries the free -OH that DNA polymerase extends from.",
+ "",""],
+
+["What are the actual chemical bonds holding a nucleotide together and linking one to the next?","kit",1,
+ "Three distinct bonds, easy to blur into one: the base attaches to the sugar's 1′ carbon via a β-N-glycosidic bond; the phosphate attaches to the sugar's 5′ carbon via a phosphoester linkage; and consecutive nucleotides link sugar-phosphate-sugar via a 3′-5′ phosphodiester bond — this last one is what actually makes the backbone. Base pairing across the two strands is a separate, fourth thing entirely: hydrogen bonds, not a covalent bond at all, which is exactly why heat can pull the two strands apart in denaturation without breaking the strands themselves.",
+ "",""],
+
+["What is a cofactor, precisely — is it a second enzyme?","kit",0,
+ "No. A cofactor is a non-protein substance an enzyme needs in order to function correctly; it doesn't perform the catalysis itself. Taq is the catalyst, Mg²⁺ is the cofactor that enables Taq to work. It isn't 'a catalyst for a catalyst' — the catalyst does the chemistry, the cofactor makes that chemistry possible.",
+ "",""],
+
+["What's the difference between PCR itself and 'end-point analysis'?","cycle",1,
+ "PCR is the amplification. End-point analysis describes a separate choice about when you look at the result — after every cycle has finished, rather than during the run. That's in contrast to real-time PCR (qPCR), which monitors amplification as it happens, cycle by cycle, instead of waiting until the end. Same reaction either way; the difference is only when and how you're watching it.",
  "",""],
 
 ["Forensic PCR only copies one small region — so how do you get a whole 'DNA profile' out of it?","uses",1,
