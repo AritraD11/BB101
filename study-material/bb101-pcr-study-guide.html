@@ -226,6 +226,36 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
 .expl[hidden]{ display:none; }
 .score{ font-family:var(--mono); font-size:.95rem; font-weight:600; color:var(--code); padding:10px 0; }
 
+/* ------------------------------------------------------------ seq diagrams */
+.seqblock{
+  font-family:var(--mono); font-size:.92rem; line-height:1.9;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px 20px; margin:16px 0; overflow-x:auto; white-space:pre; box-shadow:var(--shadow);
+}
+.seqblock .fwd{ color:var(--good); font-weight:700; }
+.seqblock .rev{ color:var(--warn); font-weight:700; }
+.seqblock .tgt{ color:var(--code); font-weight:700; background:var(--code-soft); border-radius:3px; }
+.seqblock .dim{ color:var(--ink-3); }
+
+/* -------------------------------------------------------- three-way table */
+.role3{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin:18px 0; }
+.role3 .rc{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:16px 18px; box-shadow:var(--shadow); border-top:3px solid var(--code); }
+.role3 .rc h5{ font-family:var(--serif); font-size:1.08rem; margin:0 0 6px; }
+.role3 .rc p{ font-size:.92rem; color:var(--ink-2); margin:0; }
+
+/* ----------------------------------------------------------- mutation strip */
+.mutrow{ display:grid; grid-template-columns:120px 1fr; gap:14px; align-items:start; padding:14px 0; border-bottom:1px dashed var(--line); }
+.mutrow:last-child{ border-bottom:0; }
+.mutrow .ml{ font-weight:650; font-size:.94rem; padding-top:3px; }
+.mutseq{ font-family:var(--mono); font-size:.95rem; letter-spacing:.02em; display:flex; flex-wrap:wrap; gap:3px; margin-bottom:8px; }
+.mutseq span{ display:inline-block; padding:2px 5px; border-radius:4px; background:var(--surface-2); }
+.mutseq span.hit{ background:var(--warn-soft); color:var(--warn); font-weight:700; }
+.mutseq span.gone{ background:none; color:var(--ink-3); text-decoration:line-through; opacity:.55; }
+.protrow{ display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
+.protrow .aa{ font-family:var(--mono); font-size:.86rem; font-weight:700; padding:3px 9px; border-radius:6px; background:var(--code-soft); color:var(--code); }
+.protrow .aa.chg{ background:var(--warn-soft); color:var(--warn); }
+.protrow .arrow{ color:var(--ink-3); }
+
 .mini{ font-size:.86rem; color:var(--ink-3); max-width:var(--maxw); }
 .foot{ margin-top:44px; padding-top:20px; border-top:1px solid var(--line); font-size:.84rem; color:var(--ink-3); max-width:var(--maxw); }
 </style>
@@ -290,8 +320,8 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
       <div class="ana"><b>Like:</b> the write head. It can only <i>extend</i> an existing end — it cannot start a strand from nothing, same as an assembler that needs a starting cursor position before it can lay down anything.</div>
     </div>
     <div class="kit-card">
-      <h5>4 · dNTPs (A, T, G, C)</h5>
-      <p class="role">The four loose nucleotide building blocks, each carrying its own energy-supplying phosphate tail.</p>
+      <h5>4 · dNTPs</h5>
+      <p class="role">Deoxyribonucleotide triphosphates — the four DNA letters in loose, free-floating form: <code>dATP</code>, <code>dTTP</code>, <code>dGTP</code>, <code>dCTP</code>. Each carries its own energy-supplying phosphate tail.</p>
       <div class="ana"><b>Like:</b> a parts bin the write head pulls from, one component at a time, choosing whichever one the template underneath calls for.</div>
     </div>
     <div class="kit-card">
@@ -407,18 +437,82 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
 <!-- ============================================================= USES -->
 <section class="panel" id="p-uses" role="tabpanel" hidden>
   <h2 class="sec">What it's actually used for</h2>
-  <p class="sec-lede">Same machine, same 3-step cycle, every time. The only thing that changes between these is which primers you choose — i.e. which exact stretch of DNA you're asking it to copy — and what you do with the copies afterward.</p>
+  <p class="sec-lede">Same machine, same 3-step cycle, every time. What changes between applications is which primers you choose — which exact stretch of DNA you're asking it to copy — and what you do with the copies afterward. The crime-scene example below walks through that whole chain in enough detail to answer almost any follow-up question a student could ask about it.</p>
 
-  <h3>Crime-scene example (this is on your own slides)</h3>
-  <div class="flow">
-    <div class="flow-step"><span class="fn">1</span><div><h5>Sample collected</h5><p>A trace — blood, hair, saliva — is recovered from the scene.</p></div></div>
-    <div class="flow-step"><span class="fn">2</span><div><h5>DNA extraction</h5><p>DNA is isolated from the sample. There's nowhere near enough of it to analyze directly.</p></div></div>
-    <div class="flow-step"><span class="fn">3</span><div><h5>PCR amplification</h5><p>Primers targeting several STR loci (short repeating DNA stretches that vary a lot between people) copy those regions millions of times over.</p></div></div>
-    <div class="flow-step"><span class="fn">4</span><div><h5>Fragment analysis</h5><p>The amplified fragments are separated by size (capillary electrophoresis) and measured.</p></div></div>
-    <div class="flow-step"><span class="fn">5</span><div><h5>DNA profile</h5><p>The pattern of fragment sizes across all the loci together — not any single one — <i>is</i> the profile.</p></div></div>
-    <div class="flow-step"><span class="fn">6</span><div><h5>Comparison</h5><p>Match the profile against a suspect's. Matching at every tested marker means the suspect's DNA is consistent with the sample.</p></div></div>
+  <h3>The chain, end to end</h3>
+  <p>A hair is found at a scene. The question "how does that become a DNA profile" hides several separate steps, and it matters that you can tell them apart: <i>hair sample → biological cells → extracted DNA → template → target region selected → PCR amplification → DNA profile → comparison</i>. PCR is only one link in that chain — the amplification step. Everything before it is sample preparation; everything after it is analysis. A common mixing-up point is worth flagging early:</p>
+
+  <div class="callout c-warn">
+    <span class="tag">PCR does not extract DNA</span>
+    <p>PCR amplifies DNA that has already been extracted and purified. Getting DNA <i>out of</i> the hair in the first place is separate lab chemistry — lysis, protein and membrane removal, purification — that happens before the tube ever sees a thermal cycler. If a student asks "does the PCR machine pull the DNA out of the sample," the answer is no: by the time anything goes into that machine, the DNA is already sitting there, isolated and ready.</p>
   </div>
-  <p class="mini">In one line, straight off your slide: <i>tiny amount of DNA → PCR makes many copies → DNA profile → compare with suspect.</i></p>
+
+  <h3>Step 1 — what a hair actually gives you</h3>
+  <p>Not every part of a hair is useful. The shaft is largely dead, keratinized material with little to no intact nuclear DNA. The useful source is the root — specifically the follicle tissue and root sheath cells, which are nucleated and still carry a full copy of the genome. This is why forensic collection protocols care whether a hair was pulled (root attached) versus shed or cut (root often missing): it directly determines whether there's a nucleus to extract DNA from at all.</p>
+
+  <h3>Step 2 — extraction produces the template</h3>
+  <div class="flow">
+    <div class="flow-step"><span class="fn">1</span><div><h5>Break open the cells</h5><p>Lysis — chemically or mechanically rupturing the cell and nuclear membranes.</p></div></div>
+    <div class="flow-step"><span class="fn">2</span><div><h5>Release the DNA</h5><p>Once membranes are broken, the DNA is free in solution, mixed in with proteins, membrane fragments, and other cellular debris.</p></div></div>
+    <div class="flow-step"><span class="fn">3</span><div><h5>Purify it</h5><p>Everything that isn't DNA — proteins, lipids, salts — is removed, leaving a clean solution of DNA alone.</p></div></div>
+  </div>
+  <p>What comes out the far end is the <b>template</b>: not a separate substance, just the purified DNA itself, sitting ready to be copied. When your slide says "DNA template contains the target DNA sequence," it means exactly this — the DNA you pulled out of the hair is going to serve as the source PCR reads from.</p>
+
+  <h3>Step 3 — choosing what to amplify</h3>
+  <p>A single human cell's DNA runs to roughly three billion base pairs. PCR does not amplify all of it — one reaction copies one chosen region, typically a few hundred bases long. For forensic identification, that region is an <b>STR locus</b> (short tandem repeat): a short DNA motif that repeats back-to-back a variable number of times, where the repeat count differs enough from person to person to be useful for distinguishing individuals. Picture the extracted DNA as an unbroken line with one small stretch marked out as the target:</p>
+  <div class="seqblock">5′ ————————————————— <span class="tgt">[ TARGET REGION ]</span> ————————————————— 3′</div>
+  <p class="mini">Real forensic panels amplify several STR loci from the same sample simultaneously (multiplexing) — more on that below.</p>
+
+  <h3>Step 4 — the target region determines the primers, not the other way around</h3>
+  <p>This is the piece most easily glossed over: primers are not generic reagents that go looking for a match. The sequence immediately flanking a chosen target — on both sides — is already known in advance, because the STR locus itself has already been mapped and characterized by prior research. A primer is designed, deliberately, to be the exact complement of one specific flanking sequence. Two are needed because the target sits between two flanks:</p>
+  <div class="seqblock">5′ ———<span class="dim">AAAAA</span>&nbsp;<span class="tgt">[ TARGET REGION ]</span>&nbsp;<span class="dim">TTTTT</span>——— 3′
+    <span class="fwd">→ forward primer</span> binds here, matching <span class="dim">AAAAA</span>
+                                          <span class="rev">reverse primer ←</span> binds here, matching <span class="dim">TTTTT</span></div>
+  <p>Once mixed with the extracted DNA, a primer anneals only where its complementary sequence genuinely exists. If the sample's DNA does not contain that flanking sequence — wrong locus, degraded sample, contamination — the primer has nothing to bind, and no product forms. That is also, incidentally, why a failed or absent PCR result is itself informative: it tells you the target sequence was not present in usable form, not just that "something didn't work."</p>
+
+  <div class="callout c-key">
+    <span class="tag">Restating what a primer is, from the Kit tab</span>
+    <p>A primer is a short single-stranded DNA sequence supplying the free 3′-OH end that DNA polymerase needs before it can extend anything. The primer doesn't just mark a location — it physically provides the starting point synthesis attaches to. No primer, no 3′-OH, no reaction.</p>
+  </div>
+
+  <h3>Step 5 — why two primers, specifically</h3>
+  <p>DNA is double-stranded and the two strands run in opposite directions (antiparallel). Amplifying the region means copying both strands, so each strand needs its own primer, and the two are read toward each other from opposite ends of the target:</p>
+  <div class="seqblock">Strand 1:  5′ ———————————————————————————— 3′
+                  <span class="fwd">forward primer →</span>
+                            <span class="tgt">[ TARGET ]</span>
+                                          <span class="rev">← reverse primer</span>
+Strand 2:  3′ ———————————————————————————— 5′</div>
+  <p>Together, the two primers do double duty: they mark both boundaries of the region that gets copied, and each one hands DNA polymerase a 3′-OH to build from on its own strand. Neither primer alone could do both jobs.</p>
+
+  <h3>Step 6 — inside the tube, tied back to the hair</h3>
+  <div class="flow">
+    <div class="flow-step"><span class="fn">1</span><div><h5>Template + primers, mixed</h5><p>The extracted DNA and the two locus-specific primers (plus Taq, dNTPs, Mg²⁺, buffer, water — the full kit from the previous tab) go into one tube.</p></div></div>
+    <div class="flow-step"><span class="fn">2</span><div><h5>Denaturation, 94–98 °C</h5><p>Strands separate.</p></div></div>
+    <div class="flow-step"><span class="fn">3</span><div><h5>Annealing, 50–65 °C</h5><p>The forward and reverse primers find and bind their exact flanking matches.</p></div></div>
+    <div class="flow-step"><span class="fn">4</span><div><h5>Extension, ~72 °C</h5><p>Taq builds outward from each primer, across the target region.</p></div></div>
+    <div class="flow-step"><span class="fn">5</span><div><h5>Repeat 25–35 times</h5><p>Millions of copies of just that STR locus accumulate — nothing else in the genome is amplified.</p></div></div>
+    <div class="flow-step"><span class="fn">6</span><div><h5>Fragment analysis</h5><p>The amplified fragments are separated by size (capillary electrophoresis) and measured.</p></div></div>
+    <div class="flow-step"><span class="fn">7</span><div><h5>DNA profile</h5><p>The pattern of fragment sizes across several loci, run together, is the profile — not any single locus on its own.</p></div></div>
+    <div class="flow-step"><span class="fn">8</span><div><h5>Comparison</h5><p>The profile is checked against a suspect's. A match at every tested marker means the suspect's DNA is consistent with the sample.</p></div></div>
+  </div>
+
+  <h3>Three roles that are easy to blur together</h3>
+  <p>Extraction, primer design, and polymerase activity solve three different problems, in that order, and mixing them up is the single most common source of confusion in this whole topic:</p>
+  <div class="role3">
+    <div class="rc"><h5>Extraction</h5><p>Gets DNA physically out of the biological sample. Happens once, before PCR starts.</p></div>
+    <div class="rc"><h5>Primers</h5><p>Decide which region of that DNA gets copied. Chosen in advance, based on already-known flanking sequence.</p></div>
+    <div class="rc"><h5>DNA polymerase</h5><p>Does the actual copying, cycle after cycle, extending from wherever the primers attached.</p></div>
+  </div>
+
+  <div class="callout c-say">
+    <span class="tag">The whole chain as one analogy</span>
+    <p>Treat the entire human genome as a single enormous book. The hair sample hands you a physical copy of that book — extraction is what gets the book out of the evidence bag and onto the desk. You want one specific paragraph, not the whole text. The <b>template</b> is the book itself. The two <b>primers</b> are bookmarks, placed on either side of exactly the paragraph you want, based on already knowing which page it's on. <b>Taq polymerase</b> is the photocopier. Running PCR is running that photocopier repeatedly between the two bookmarks. What comes out is millions of copies of one paragraph — never the rest of the book.</p>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">One correction worth holding onto</span>
+    <p>The primer does not decide whose DNA it is. It decides <i>which region</i> gets copied — and it's the same primer pair for every person tested at that locus. What actually varies from person to person is the length or sequence <i>within</i> that amplified region (how many times an STR motif repeats, for instance). The primer is identical across everyone; the difference only shows up in what comes out the other end. This is the detail that makes DNA profiling work at all, and it's also the detail most likely to get flattened into "the primer matches your DNA" — which isn't quite it.</p>
+  </div>
 
   <h3>Your own COVID nasal swab (RT-PCR)</h3>
   <p>SARS-CoV-2's genome is RNA, not DNA, so there's one extra step first: an enzyme called reverse transcriptase back-copies the viral RNA into DNA (the "RT" in RT-PCR). From there, it's standard PCR — the same 3-step cycle doubles that DNA copy 30-plus times, because a swab usually doesn't contain nearly enough viral material to detect directly. A <b>"positive" result means the amplification loop found something worth doubling</b> — not that anyone looked at an actual virus under a microscope.</p>
@@ -436,7 +530,7 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
   <p class="sec-lede">The questions you'd realistically ask yourself (or get asked) once you actually sit with this. Searchable.</p>
 
   <div class="tools">
-    <input class="search" id="qSearch" type="search" placeholder="Search — try 'primer', 'plateau', 'cloning'…" aria-label="Search doubts">
+    <input class="search" id="qSearch" type="search" placeholder="Search — try 'primer', 'plateau', 'frameshift'…" aria-label="Search doubts">
     <div class="chips" id="qChips"></div>
   </div>
   <div id="qList"></div>
@@ -446,16 +540,28 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
 <!-- ============================================================= QUIZ -->
 <section class="panel" id="p-quiz" role="tabpanel" hidden>
   <h2 class="sec">Check yourself</h2>
-  <p class="sec-lede">Active recall beats re-reading. Nine questions built from the sections above — try this once before you consider yourself done studying.</p>
+  <p class="sec-lede">Active recall beats re-reading. Twelve questions built from the sections above — try this once before you consider yourself done studying.</p>
   <div class="score" id="score">Not started</div>
   <div id="quiz"></div>
   <p><button class="btn" id="resetQuiz" type="button">Reset quiz</button></p>
 </section>
 
-<!-- ============================================================ BONUS -->
-<section class="panel" id="p-bonus" role="tabpanel" hidden>
-  <h2 class="sec">Bonus: the codon slides (10–12)</h2>
-  <p class="sec-lede">Your deck tacks on a short genetic-code exercise after the PCR content. Not the main event, but here's the gist so it doesn't catch you cold.</p>
+<!-- ============================================================ GENETIC -->
+<section class="panel" id="p-genetic" role="tabpanel" hidden>
+  <h2 class="sec">Genetic code &amp; codons</h2>
+  <p class="sec-lede">Slides 10–12 shift topic — from making copies of DNA to reading what DNA says. Different half of the same deck, different question entirely: PCR asks "how do I get more of this sequence," the genetic code asks "what does this sequence actually mean."</p>
+
+  <h3>Where this sits relative to PCR</h3>
+  <p>DNA carries the instructions; a cell reads them in two further steps. Transcription copies a gene's DNA sequence into mRNA. Translation reads that mRNA, three bases at a time, and builds a protein one amino acid per triplet. PCR touches none of this — it only ever copies DNA. It doesn't transcribe, and it doesn't translate.</p>
+  <div class="flow">
+    <div class="flow-step"><span class="fn">1</span><div><h5>DNA</h5><p>The archived instructions. PCR can amplify a chosen region of this, and stops there.</p></div></div>
+    <div class="flow-step"><span class="fn">2</span><div><h5>Transcription → mRNA</h5><p>A working copy of one gene, made by an entirely different enzyme (RNA polymerase, not Taq).</p></div></div>
+    <div class="flow-step"><span class="fn">3</span><div><h5>Translation → Protein</h5><p>The ribosome reads mRNA in codons and assembles the corresponding amino acid chain.</p></div></div>
+  </div>
+  <p class="mini">Asked directly: does PCR make protein? No. PCR's output is always more DNA, never RNA or protein — those are separate cellular machinery, running afterward, on a different molecule.</p>
+
+  <h3>Why codons are 3 bases long, not 2 or 1</h3>
+  <p>mRNA has four possible letters (A, U, G, C) and needs to specify 20 amino acids. A 1-base code gives 4 possible signals — nowhere near enough. A 2-base code gives 4² = 16 — still short of 20. A 3-base code gives 4³ = 64 — comfortably more than 20, with room to spare. Three is the smallest word length that covers the alphabet needed, which is exactly why the code reads in triplets.</p>
 
   <div class="card">
     <p><b>A codon</b> is a group of 3 mRNA bases. Each one specifies either one amino acid or "stop."</p>
@@ -464,7 +570,13 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
       <li><code>AUG</code> is the start codon and also codes for the amino acid Methionine.</li>
       <li><b>Degenerate:</b> most amino acids are specified by more than one codon (there are only 20 amino acids sharing 61 sense codons).</li>
       <li><b>Unambiguous:</b> even so, each individual codon only ever points to one specific amino acid — never two.</li>
+      <li><b>Nearly universal:</b> the same codon table applies across almost all known life, with a handful of known exceptions in certain organelles.</li>
     </ul>
+  </div>
+
+  <div class="callout c-key">
+    <span class="tag">Codon vs. anticodon, in one example</span>
+    <p>The codon lives on mRNA; the matching <b>anticodon</b> lives on a tRNA molecule and pairs against it directly. For the start codon mRNA <code>5′-AUG-3′</code>, the tRNA carrying Methionine presents the anticodon <code>3′-UAC-5′</code> — read in the opposite direction, base-paired exactly the way two DNA strands pair. The ribosome holds codon and anticodon together just long enough to transfer that tRNA's amino acid onto the growing chain, then moves to the next codon.</p>
   </div>
 
   <h3>The codon chart (the actual one on your slides)</h3>
@@ -521,6 +633,75 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
   </div>
 </section>
 
+<!-- ========================================================= MUTATIONS -->
+<section class="panel" id="p-mutations" role="tabpanel" hidden>
+  <h2 class="sec">Mutations (slide 13)</h2>
+  <p class="sec-lede">The deck closes with one figure showing three ways a nucleotide sequence can change, and what each does to the resulting protein. This is where the triplet nature of the code from the last tab stops being an abstract fact and starts explaining something concrete: why some changes are minor and others rewrite everything downstream.</p>
+
+  <h3>The baseline — a normal gene</h3>
+  <p>Your slide's own worked example starts from this DNA/mRNA/protein triplet, read straight through:</p>
+  <div class="mutrow">
+    <div class="ml">DNA (template)</div>
+    <div><div class="mutseq"><span>T</span><span>A</span><span>C</span><span>T</span><span>T</span><span>C</span><span>A</span><span>A</span><span>A</span><span>C</span><span>C</span><span>G</span><span>C</span><span>G</span><span>T</span></div></div>
+  </div>
+  <div class="mutrow">
+    <div class="ml">mRNA</div>
+    <div><div class="mutseq"><span>A</span><span>U</span><span>G</span><span>A</span><span>A</span><span>G</span><span>U</span><span>U</span><span>U</span><span>G</span><span>G</span><span>C</span><span>G</span><span>C</span><span>A</span></div></div>
+  </div>
+  <div class="mutrow">
+    <div class="ml">Protein</div>
+    <div><div class="protrow"><span class="aa">Met</span><span class="arrow">–</span><span class="aa">Lys</span><span class="arrow">–</span><span class="aa">Phe</span><span class="arrow">–</span><span class="aa">Gly</span><span class="arrow">–</span><span class="aa">Ala</span></div></div>
+  </div>
+  <p class="mini">Grouped in triplets: AUG·AAG·UUU·GGC·GCA → Met·Lys·Phe·Gly·Ala. Check any of these against the codon table on the previous tab — they all match.</p>
+
+  <h3>1 · Nucleotide substitution</h3>
+  <p>One base is swapped for another. Here, the 10th mRNA base changes from G to A:</p>
+  <div class="mutrow">
+    <div class="ml">mRNA</div>
+    <div><div class="mutseq"><span>A</span><span>U</span><span>G</span><span>A</span><span>A</span><span>G</span><span>U</span><span>U</span><span>U</span><span class="hit">A</span><span>G</span><span>C</span><span>G</span><span>C</span><span>A</span></div></div>
+  </div>
+  <div class="mutrow">
+    <div class="ml">Protein</div>
+    <div><div class="protrow"><span class="aa">Met</span><span class="arrow">–</span><span class="aa">Lys</span><span class="arrow">–</span><span class="aa">Phe</span><span class="arrow">–</span><span class="aa chg">Ser</span><span class="arrow">–</span><span class="aa">Ala</span></div></div>
+  </div>
+  <p>The codon at that position changes from <code>GGC</code> (Gly) to <code>AGC</code> (Ser). Nothing else moves — every other triplet is exactly as it was, because a substitution replaces one letter without changing how many letters there are. The reading frame downstream is untouched.</p>
+
+  <h3>2 · Nucleotide deletion</h3>
+  <p>One base is removed outright — here, one of the U's inside the Phe codon:</p>
+  <div class="mutrow">
+    <div class="ml">mRNA</div>
+    <div><div class="mutseq"><span>A</span><span>U</span><span>G</span><span>A</span><span>A</span><span>G</span><span>U</span><span>U</span><span class="gone">U</span><span>G</span><span>G</span><span>C</span><span>G</span><span>C</span><span>A</span></div></div>
+  </div>
+  <div class="mutrow">
+    <div class="ml">Protein</div>
+    <div><div class="protrow"><span class="aa">Met</span><span class="arrow">–</span><span class="aa">Lys</span><span class="arrow">–</span><span class="aa chg">Leu</span><span class="arrow">–</span><span class="aa chg">Ala…</span></div></div>
+  </div>
+  <p>Removing one letter shifts every triplet boundary after it. The sequence still reads three letters at a time — it just now groups differently: <code>UUG</code> instead of <code>UUU</code>, and everything after that regrouped too. This is a <b>frameshift mutation</b>: not just the one position changes, but every codon downstream of the deletion point.</p>
+
+  <h3>3 · Nucleotide insertion</h3>
+  <p>One base is added — here, a G inserted a few positions in:</p>
+  <div class="mutrow">
+    <div class="ml">Protein</div>
+    <div><div class="protrow"><span class="aa">Met</span><span class="arrow">–</span><span class="aa">Lys</span><span class="arrow">–</span><span class="aa chg">Leu</span><span class="arrow">–</span><span class="aa chg">Trp</span><span class="arrow">–</span><span class="aa chg">Arg</span></div></div>
+  </div>
+  <p>Same mechanism as a deletion, opposite direction — adding a letter shifts the frame just as effectively as removing one. Three downstream codons come out different from the original, none of them by coincidence: the frame itself has moved.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The rule connecting all three</span>
+    <p>A codon is always read three letters at a time, starting from a fixed point. A substitution swaps a letter without changing the letter count, so only the one codon it falls inside is affected — everything else still lines up correctly. An insertion or deletion changes the letter count, so every codon boundary after that point shifts, and the entire downstream reading changes. The number of letters added or removed is what decides how much damage is done, not which letter it is.</p>
+  </div>
+
+  <div class="callout c-ask">
+    <span class="tag">Why doesn't inserting or deleting exactly 3 nucleotides cause a frameshift?</span>
+    <p>Because the frame is measured in units of three. Remove or add any multiple of 3 bases and every codon boundary after that point lands back in the same place it would have anyway — the triplet immediately at the change is altered (one amino acid gained, lost, or changed), but nothing downstream shifts. It's specifically indels <i>not</i> divisible by 3 that throw the frame off, which is exactly what happened above (1 base each time).</p>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">Is every substitution this disruptive?</span>
+    <p>No — a substitution can land three different ways. It can change the amino acid (a <b>missense</b> mutation, as above). It can create a premature stop codon partway through the protein (a <b>nonsense</b> mutation, which truncates everything after it). Or, thanks to degeneracy from the previous tab, the new codon can still code for the identical amino acid — a <b>silent</b> mutation, with no effect on the protein at all. Which of the three happens depends entirely on which codon the substitution lands in and which base within it changes.</p>
+  </div>
+</section>
+
 <!-- ============================================================ CHEAT -->
 <section class="panel" id="p-cheat" role="tabpanel" hidden>
   <h2 class="sec">Cheat sheet</h2>
@@ -570,6 +751,27 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </table>
   </div>
 
+  <h4>Genetic code &amp; mutations, one line each</h4>
+  <div class="tw">
+    <table>
+      <tbody>
+        <tr><td>Codon length</td><td>3 bases — smallest triplet that covers 20 amino acids (4³ = 64)</td></tr>
+        <tr><td>Codon split</td><td>61 sense + 3 stop (UAA, UAG, UGA)</td></tr>
+        <tr><td>Start codon</td><td>AUG = Methionine</td></tr>
+        <tr><td>Substitution</td><td>1 codon affected, frame unchanged — missense, nonsense, or silent</td></tr>
+        <tr><td>Insertion / deletion</td><td>frameshift, unless the indel is a multiple of 3 bases</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>The master diagram</h4>
+  <div class="flow">
+    <div class="flow-step"><span class="fn">1</span><div><h5>DNA</h5><p>PCR can amplify a chosen region of this — extraction first, then denature → anneal → extend, repeated 25–35 times.</p></div></div>
+    <div class="flow-step"><span class="fn">2</span><div><h5>Transcription</h5><p>DNA → mRNA (a separate cellular process; PCR plays no part in this step).</p></div></div>
+    <div class="flow-step"><span class="fn">3</span><div><h5>Translation</h5><p>Ribosome + tRNA read mRNA in codons, 3 bases at a time, and build a protein.</p></div></div>
+    <div class="flow-step"><span class="fn">4</span><div><h5>Mutation</h5><p>A change anywhere in step 1 can alter step 3's protein — how much depends on whether it's a substitution or a frame-shifting indel.</p></div></div>
+  </div>
+
   <div class="foot">
     <p>Built as personal study material ahead of TA duty (Monday 17th, PCR slides). Not for display to students — the deck's own images and slides stay the reference for what's actually shown in class. Once this has sunk in, the next step is turning it into a short read-aloud script, the same way Tutorial 2's was built.</p>
   </div>
@@ -591,15 +793,16 @@ document.getElementById("themeBtn").addEventListener("click", function(){
 
 /* --------------------------------------------------------- nav / tabs */
 var SECTIONS = [
-  ["start",  "Start Here"],
-  ["kit",    "The Kit"],
-  ["cycle",  "The Cycle"],
-  ["math",   "Why It Explodes"],
-  ["uses",   "Real Uses"],
-  ["doubts", "Doubt Bank"],
-  ["quiz",   "Check Yourself"],
-  ["bonus",  "Bonus: Codons"],
-  ["cheat",  "Cheat Sheet"]
+  ["start",     "Start Here"],
+  ["kit",       "The Kit"],
+  ["cycle",     "The Cycle"],
+  ["math",      "Why It Explodes"],
+  ["uses",      "Real Uses"],
+  ["doubts",    "Doubt Bank"],
+  ["quiz",      "Check Yourself"],
+  ["genetic",   "Genetic Code"],
+  ["mutations", "Mutations"],
+  ["cheat",     "Cheat Sheet"]
 ];
 var nav = document.getElementById("nav");
 SECTIONS.forEach(function(s, i){
@@ -720,10 +923,54 @@ var DOUBTS = [
 
 ["Is the very first cycle's product already the exact right length?","cycle",1,
  "Not quite. In the earliest cycles, Taq often runs past the far end of the template before the cycle ends, producing variable-length 'long' products. Only from around the third cycle onward does the clean, exact primer-to-primer-length fragment start to dominate and take over the exponential climb — a mechanistic detail that doesn't change the final outcome.",
+ "",""],
+
+["Does PCR extract the DNA from the hair itself?","uses",1,
+ "No. Extraction — lysis, then removing proteins and membrane debris to leave purified DNA — happens first, as separate lab chemistry. By the time anything goes into the thermal cycler, the DNA is already isolated and ready. PCR's only job is amplifying a chosen region of DNA that already exists in the tube.",
+ "",""],
+
+["What part of a hair actually contains usable DNA?","uses",1,
+ "The root — specifically the follicle and root sheath cells, which are nucleated and carry a full genome copy. The shaft itself is largely dead, keratinized material with little to no intact nuclear DNA, which is why whether a hair was pulled (root attached) or just shed matters so much to a forensic sample's usefulness.",
+ "",""],
+
+["Who decides the primer sequence, and how?","uses",1,
+ "The researcher, in advance — not the reaction itself. The sequence immediately flanking a chosen target region is already known from prior mapping of that locus, and each primer is designed as the exact complement of one flank. Nothing about primer design happens on the fly inside the tube.",
+ "",""],
+
+["Does a primer bind wherever it's roughly close enough to a match?","uses",1,
+ "No — annealing requires a genuine complementary match; a primer with no matching sequence in the sample simply has nothing to bind, and no product forms. That's actually useful information: a failed PCR reaction often means the target sequence wasn't present in usable form, not that something went wrong with the chemistry.",
+ "",""],
+
+["Does the primer determine whose DNA it is?","uses",0,
+ "No — this is a common flattening of the actual mechanism. The primer decides which region gets copied, and it's identical for every person tested at that locus. What differs between individuals is the length or sequence inside the amplified region itself (an STR locus's repeat count, for instance) — the primer never changes, only what comes out from it does.",
+ "",""],
+
+["What exactly is an STR locus?","uses",1,
+ "A short DNA motif that repeats back-to-back a variable number of times at a specific genome location, where the repeat count itself differs enough between people to be useful for identification. Forensic profiling runs primers against several STR loci at once and reads the pattern of fragment sizes across all of them together.",
+ "",""],
+
+["Does PCR make protein?","genetic",0,
+ "No. PCR's output is always more DNA. Transcription (DNA to mRNA) and translation (mRNA to protein) are separate cellular processes, run by entirely different enzymes, and PCR plays no part in either.",
+ "",""],
+
+["What's the actual difference between a codon and an anticodon?","genetic",1,
+ "A codon is the 3-base sequence on mRNA. The anticodon is the complementary 3-base sequence on a tRNA molecule that pairs against it, antiparallel, the same way two DNA strands pair. For mRNA's AUG, the matching tRNA presents the anticodon UAC read 3′→5′.",
+ "",""],
+
+["Why does a substitution usually change less than an insertion or deletion?","mutations",0,
+ "Because a substitution swaps one letter for another without changing how many letters there are — only the single codon it falls inside is affected, and every codon boundary after it stays exactly where it was. An insertion or deletion changes the letter count, so every triplet boundary downstream shifts, potentially altering every amino acid after that point.",
+ "",""],
+
+["Why doesn't inserting or deleting exactly 3 nucleotides cause a frameshift?","mutations",1,
+ "Because reading frame is measured in units of three. Add or remove a multiple of 3 bases and every codon boundary after that point lands back where it would have anyway — only the immediate triplet at the change is affected. It's specifically indels not divisible by 3 that shift everything downstream.",
+ "",""],
+
+["Is every substitution mutation harmful?","mutations",1,
+ "No — it depends entirely on which codon and which base within it changes. It can swap the amino acid (missense), create a premature stop codon (nonsense, truncating the rest of the protein), or land on a codon that still codes for the same amino acid thanks to degeneracy (silent, no effect at all).",
  "",""]
 ];
 
-var TAGS = [["all","All"],["start","Start Here"],["kit","The Kit"],["cycle","The Cycle"],["math","Why It Explodes"],["uses","Real Uses"]];
+var TAGS = [["all","All"],["start","Start Here"],["kit","The Kit"],["cycle","The Cycle"],["math","Why It Explodes"],["uses","Real Uses"],["genetic","Genetic Code"],["mutations","Mutations"]];
 var activeTag = "all", query = "";
 
 var chips = document.getElementById("qChips");
@@ -832,7 +1079,22 @@ var QUIZ = [
 ["In the COVID nasal-swab RT-PCR test, what does a 'positive' result actually mean?",
  ["A technician visually saw the virus under a microscope","The amplification loop found and doubled a target viral sequence enough times to detect it","The patient's temperature was above normal","The sample contained human DNA"],
  1,
- "RT-PCR first back-copies the virus's RNA genome into DNA (reverse transcriptase), then standard PCR amplifies it. A positive result means that doubling loop found something worth doubling — not a direct visual observation."]
+ "RT-PCR first back-copies the virus's RNA genome into DNA (reverse transcriptase), then standard PCR amplifies it. A positive result means that doubling loop found something worth doubling — not a direct visual observation."],
+
+["In the crime-scene example, what determines a primer's sequence?",
+ ["It's chosen at random and whichever one binds is used","The already-known sequence flanking the chosen target region","The suspect's DNA, once it's available for comparison","The temperature of the annealing step"],
+ 1,
+ "Primers are designed in advance as the exact complement of a target region's known flanking sequence — never discovered on the fly inside the tube."],
+
+["A DNA sequence has 1 nucleotide deleted partway through. What happens to the protein?",
+ ["Nothing — DNA polymerase automatically corrects it","Only the amino acid at that exact position changes","Every codon from that point onward can be read differently — a frameshift","The protein stops being made entirely, with no exceptions"],
+ 2,
+ "Removing a base not divisible by 3 shifts every triplet boundary after it, so the reading frame — and therefore every downstream amino acid — can change."],
+
+["Why does a nucleotide substitution typically affect only one amino acid?",
+ ["Because the cell repairs all substitutions immediately","Because it swaps one letter without changing the total letter count, so codon boundaries after it are undisturbed","Because substitutions can only happen in the last codon of a gene","Because DNA polymerase skips over substituted bases"],
+ 1,
+ "A substitution changes what a codon says, not how many letters make up the sequence — so only the single triplet it falls inside is affected."]
 ];
 
 var quizEl = document.getElementById("quiz");
@@ -875,7 +1137,7 @@ function renderQuiz(){
 function updateScore(){
   var n = Object.keys(answered).length;
   document.getElementById("score").textContent =
-    n === 0 ? "Not started — 9 questions"
+    n === 0 ? "Not started — " + QUIZ.length + " questions"
             : "Answered " + n + " of " + QUIZ.length + " · correct: " + correct;
 }
 document.getElementById("resetQuiz").addEventListener("click", renderQuiz);
