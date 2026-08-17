@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PCR — Study Guide (For You, Not the Class)</title>
+<title>PCR Study Guide &amp; Script</title>
 <style>
 /* ============================================================
    BB 101 — PCR Study Guide (personal, pre-script understanding)
@@ -226,6 +226,50 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
 .expl[hidden]{ display:none; }
 .score{ font-family:var(--mono); font-size:.95rem; font-weight:600; color:var(--code); padding:10px 0; }
 
+/* ------------------------------------------------------------ script tab */
+.plan-row{
+  display:grid; grid-template-columns:minmax(74px,88px) minmax(120px,1fr) 2fr;
+  gap:12px; align-items:baseline; padding:8px 0; border-bottom:1px solid var(--line);
+}
+.plan-row:last-child{ border-bottom:0; }
+.plan-row .t{ font-family:var(--mono); font-size:.85rem; color:var(--ink-3); font-variant-numeric:tabular-nums; }
+.plan-row .n{ font-weight:650; }
+.plan-row .d{ color:var(--ink-2); font-size:.94rem; }
+
+.slide-card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); box-shadow:var(--shadow); margin-bottom:22px; overflow:hidden;
+}
+.slide-head{
+  display:flex; align-items:center; gap:14px; padding:15px 22px;
+  background:var(--surface-2); border-bottom:1px solid var(--line); flex-wrap:wrap;
+}
+.slide-num{
+  font-family:var(--mono); font-weight:700; font-size:.78rem;
+  background:var(--code); color:#fff; padding:4px 10px; border-radius:6px; flex:0 0 auto;
+}
+.slide-clock{
+  font-family:var(--mono); font-weight:700; font-size:.78rem;
+  background:var(--amino); color:#fff; padding:4px 10px; border-radius:6px; flex:0 0 auto;
+}
+.slide-head h3{ margin:0; flex:1; min-width:180px; font-size:1.22rem; }
+.slide-onscreen{ font-family:var(--mono); font-size:.74rem; color:var(--ink-3); flex:0 0 100%; }
+.slide-body{ padding:18px 22px 20px; }
+.slide-body .callout{ margin:14px 0; }
+.slide-body .callout:first-child{ margin-top:0; }
+.slide-body .callout:last-child{ margin-bottom:0; }
+.say p{ font-size:1.02rem; line-height:1.68; }
+.say p.beat{ margin-bottom:10px; }
+.cue{
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--good); font-weight:700; display:block; margin:12px 0 4px;
+}
+.dq{ margin:0; padding:0; list-style:none; }
+.dq li{ margin-bottom:12px; }
+.dq li:last-child{ margin-bottom:0; }
+.dq .qq{ display:block; font-weight:650; font-size:.95rem; margin-bottom:3px; }
+.dq .aa2{ display:block; font-size:.94rem; color:var(--ink-2); }
+
 /* ------------------------------------------------------------ seq diagrams */
 .seqblock{
   font-family:var(--mono); font-size:.92rem; line-height:1.9;
@@ -265,8 +309,8 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
 <header class="mast">
   <div class="mast-in">
     <div class="mast-top">
-      <h1 class="mast-title">PCR — Study Guide</h1>
-      <span class="mast-sub">For you, not the class · read before writing Monday's script</span>
+      <h1 class="mast-title">PCR — Study Guide &amp; Script</h1>
+      <span class="mast-sub">BB 101 · Mon 17 Aug · Batch T1 · LT 206</span>
       <span class="mast-actions"><button class="btn" id="themeBtn" type="button">Theme</button></span>
     </div>
     <nav class="nav" id="nav" role="tablist" aria-label="Sections"></nav>
@@ -274,6 +318,466 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
 </header>
 
 <main>
+
+<!-- =========================================================== SCRIPT -->
+<section class="panel" id="p-script" role="tabpanel" hidden>
+  <h2 class="sec">The script</h2>
+  <p class="sec-lede">Thirty minutes, mapped slide by slide onto the deck that will be on the projector. Each block has a <b>read-aloud</b> part — say it close to word-for-word, it's written to be spoken, not read silently — and an <b>understanding for you</b> part so you know what you're actually saying. Doubts are placed at the slide where they'll actually get asked, with a short spoken answer. You have your iPad; this page is the iPad.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The spine of the whole lecture</span>
+    <p><b>PCR is an amplifier.</b> That's it. These students understand amplifiers already — a signal too small to measure goes in, a bigger copy of that same signal comes out, and nothing about the signal's content changes on the way through. PCR does that for DNA instead of voltage. Open with it, come back to it at the end, and if you lose your place mid-sentence at any point, say "remember, all of this is just an amplifier for DNA" and you'll be back on track.</p>
+  </div>
+
+  <h3>The 30-minute shape</h3>
+  <div class="card">
+    <div class="plan-row"><span class="t">0:00–2:00</span><span class="n">Hook</span><span class="d">Show of hands on COVID tests. Land the amplifier framing.</span></div>
+    <div class="plan-row"><span class="t">2:00–4:30</span><span class="n">Slide 2</span><span class="d">What PCR is, and the problem it solves.</span></div>
+    <div class="plan-row"><span class="t">4:30–6:30</span><span class="n">Slide 2</span><span class="d">Life before PCR. Mullis, 1983.</span></div>
+    <div class="plan-row"><span class="t">6:30–11:00</span><span class="n">Slides 3, 4</span><span class="d">The three steps. The core of the lecture — don't rush this.</span></div>
+    <div class="plan-row"><span class="t">11:00–15:00</span><span class="n">Slide 5</span><span class="d">What's in the tube, and why each thing is there.</span></div>
+    <div class="plan-row"><span class="t">15:00–18:30</span><span class="n">Slide 9</span><span class="d">Why it explodes. 2ⁿ, and the honest caveat.</span></div>
+    <div class="plan-row"><span class="t">18:30–23:00</span><span class="n">Slides 6, 7, 8</span><span class="d">Crime scene, start to finish.</span></div>
+    <div class="plan-row"><span class="t">23:00–24:30</span><span class="n">Callback</span><span class="d">Their own COVID swab. RT-PCR.</span></div>
+    <div class="plan-row"><span class="t">24:30–27:30</span><span class="n">Slides 10–12</span><span class="d">Codons, and the mRNA exercise.</span></div>
+    <div class="plan-row"><span class="t">27:30–29:30</span><span class="n">Slide 13</span><span class="d">Mutations. The frameshift is the payoff here.</span></div>
+    <div class="plan-row"><span class="t">29:30–30:00</span><span class="n">Close</span><span class="d">Back to the amplifier. One sentence, then stop.</span></div>
+  </div>
+
+  <!-- ---------------------------------------------------------- HOOK -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">0:00</span>
+      <span class="slide-num">Hook</span>
+      <h3>Before the first slide</h3>
+      <span class="slide-onscreen">On screen: title slide</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">Quick show of hands. How many of you had a COVID test at some point — the one where they push a swab up your nose?</p>
+        <span class="cue">Wait for hands. Almost every hand will go up.</span>
+        <p class="beat">Right. So all of you have already had today's topic performed on you. You just didn't know what it was called.</p>
+        <p class="beat">That test was PCR. And here's the thing I want to start with, because I think it's the only sentence you actually need to hold onto for the next half hour: <b>PCR is an amplifier.</b></p>
+        <p class="beat">You all know what an amplifier does. You have a signal that's too small to work with. You run it through something. A bigger version of the same signal comes out. The signal itself doesn't change — you're not adding information, you're just making what's already there big enough to actually measure.</p>
+        <p>That is exactly, precisely what PCR does. Except the signal is DNA.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>You are not oversimplifying here — this framing is genuinely accurate, which is why it's safe to build the whole lecture on it. A nasal swab contains real viral genetic material, but far too little to detect directly. PCR raises that quantity by a factor of a billion or so, without altering the sequence itself. Small signal in, large copy of the same signal out. That is an amplifier in the ordinary engineering sense of the word.</p>
+        <p>The reason to open this way: these are mechanical engineering students who last saw biology two years ago and are sitting there wondering why this is on their timetable. Do not open with a definition. Open with something that already happened to their own body, then hand them a concept they already own.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"Why are we studying this in a mechanical course?"</span><span class="aa2">Say: "Fair question. Because this is a technique, not a biology fact to memorise. It's a tool that takes a signal too small to use and makes it usable — and that idea shows up in every branch of engineering. Also, the professor will go deeper in the coming lectures; my job today is just to show you what it is."</span></li>
+          <li><span class="qq">"Is PCR the same thing as a COVID test?"</span><span class="aa2">Say: "PCR is the technique. The COVID test was one application of it. Same machine, same steps — they just pointed it at a virus. We'll come back to this at the end."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------------- SLIDE 2 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">2:00</span>
+      <span class="slide-num">Slide 2</span>
+      <h3>What PCR actually is</h3>
+      <span class="slide-onscreen">On screen: "Polymerase Chain Reaction (PCR)" — the text-heavy slide</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">So, the name first, because the name is doing a lot of work. <b>Polymerase Chain Reaction.</b> Three words, and each one tells you something.</p>
+        <p class="beat">"Polymerase" is the enzyme that does the copying. It's the machine part. "Chain reaction" — that's the part that matters — means every copy you make becomes something that gets copied again in the next round. It compounds. We'll do the maths on that in a bit and it's genuinely dramatic.</p>
+        <p class="beat">What it does, in one line: it takes a specific stretch of DNA and makes millions of copies of it. Not the whole genome. One chosen stretch.</p>
+        <p class="beat">And why do we need that? Because DNA analysis needs a usable amount of material. Suppose you have a single drop of blood, or one hair, or a nasal swab. There is real DNA in there. But the specific piece you care about might be a few trillionths of a gram. No machine can read that. It's below the noise floor.</p>
+        <p>So PCR's entire job is to close that gap. Unusable trace in, usable quantity out.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>"Below the noise floor" is worth saying out loud to this audience specifically — it maps the problem onto something they already have intuition for. The situation is not that the DNA is absent; it is present but undetectable, and amplification is what moves it above the detection threshold.</p>
+        <p>Keep hold of the word <b>specific</b>. It is the difference between PCR and every technique that came before it, and it is also what a student is most likely to miss. PCR does not photocopy the genome. It photocopies one region you chose in advance. When you get to primers, that choice is the thing primers implement.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"Does PCR create new DNA?"</span><span class="aa2">Say: "No — and this is important. It only copies what's already in the tube. If the stretch you're looking for isn't there to begin with, PCR gives you nothing. It's a photocopier, not a printing press. It can't invent a sequence."</span></li>
+          <li><span class="qq">"Why not just copy the whole genome?"</span><span class="aa2">Say: "You don't need it, and it would be a mess. Three billion base pairs, when the bit you care about might be three hundred. Copying only your target keeps the result clean and easy to read."</span></li>
+          <li><span class="qq">"How small an amount can it work from?"</span><span class="aa2">Say: "In principle, extremely small — that's the whole point of it. Practically it depends on how damaged the sample is. A degraded sample can fail, and that failure is itself information."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------- SLIDE 2 (continued) -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">4:30</span>
+      <span class="slide-num">Slide 2</span>
+      <h3>Why this was a big deal</h3>
+      <span class="slide-onscreen">On screen: same slide — the paragraph about cloning</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">Worth knowing what people did before this existed, because it tells you why PCR mattered so much.</p>
+        <p class="beat">If you wanted more of a specific DNA fragment, you had to put it inside a living bacterial cell and let the bacteria divide. As the colony grew, your fragment got copied along with everything else. That works. But it takes days, you need a working cell culture lab, and you can't finely control how much you end up with.</p>
+        <p class="beat">PCR replaced all of that with a reaction in a single test tube. Two to three hours. No living cells at all. You load the tube into a machine, press start, and walk away.</p>
+        <p>A man named Kary Mullis worked it out in 1983. He got the Nobel Prize for it ten years later, which by Nobel standards is almost indecently fast — that's how obviously useful it was.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>The contrast that matters: cloning is biological, PCR is chemical. Cloning outsources the copying to a living organism and waits for it to reproduce. PCR does the copying directly in a tube with purified components and no cell involved. Going from "days, with a cell culture facility" to "an afternoon, in one tube" is the reason this technique now sits at the front of nearly every protocol in biology, medicine, and forensics.</p>
+        <p>You do not need to know any more about cloning than this paragraph. If someone pushes, "that's a whole topic in itself, and it's genuinely interesting, but it's not today" is a complete answer.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"Is PCR the same as cloning then?"</span><span class="aa2">Say: "No. Cloning uses a living cell and takes days. PCR is entirely cell-free, in a tube, in a couple of hours. Different mechanism, same goal of getting more DNA."</span></li>
+          <li><span class="qq">"So is cloning obsolete?"</span><span class="aa2">Say: "No, it's still used — it does things PCR can't, like maintaining a sequence indefinitely in a living system. They're different tools. But if you just want a lot of one short region quickly, PCR wins easily."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------------ SLIDES 3,4 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">6:30</span>
+      <span class="slide-num">Slides 3, 4</span>
+      <h3>The three steps — the heart of it</h3>
+      <span class="slide-onscreen">On screen: the three-step slide, then the RT-qPCR / process diagrams</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">Right. This is the part to actually remember. One round of PCR — one <i>cycle</i> — is three steps, and each step is just a temperature.</p>
+        <p class="beat">That's worth pausing on. The machine that does this has no moving parts to speak of. It's a programmable heating and cooling block. It holds your tube and changes its temperature on a timer. That's the whole device.</p>
+        <span class="cue">Point at step 1 on the slide.</span>
+        <p class="beat"><b>Step one, denaturation. Around 95 degrees.</b> DNA is a double helix — two strands wound together, held by weak bonds across the middle. Heat it to 95 and those weak bonds let go. The two strands come apart. Think of a zip opening.</p>
+        <p class="beat">Nothing is destroyed here. You haven't broken the DNA, you've just separated the two halves. Each strand is completely intact.</p>
+        <span class="cue">Point at step 2.</span>
+        <p class="beat"><b>Step two, annealing. Down to about 50 to 65 degrees.</b> Now you cool it. And you add two short pieces of DNA called primers, which are designed to stick to the exact spot you care about — one on each side of your target region.</p>
+        <p class="beat">Primers are how you tell the reaction <i>which</i> stretch to copy. They're bookmarks. You're marking the start and the end of the paragraph you want.</p>
+        <span class="cue">Point at step 3.</span>
+        <p class="beat"><b>Step three, extension. Up to 72 degrees.</b> Now the copying enzyme — the polymerase — grabs onto each primer and starts building. It reads the strand underneath it and lays down matching letters, one at a time, from one bookmark to the other.</p>
+        <p class="beat">And then you do it again. And again. Twenty-five to thirty-five times.</p>
+        <p>Unzip, bookmark, copy. Unzip, bookmark, copy. That's PCR. Everything else today is detail hanging off those three steps.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>Two things you should genuinely understand rather than recite.</p>
+        <p><b>Why the temperature has to cycle.</b> The three steps need physically incompatible conditions. Denaturation needs enough heat to force the strands apart. Annealing needs it cool enough for a short primer to hold on. Extension needs the middle temperature where the enzyme works best. No single temperature satisfies all three, so the machine has to move through all three every round. It is a three-state loop driven by a clock, and describing it that way to this audience is both accurate and helpful.</p>
+        <p><b>Why annealing has a window rather than "as cold as possible."</b> Too hot and even the correct primer cannot hold on. Too cold and primers begin sticking to sequences that are merely similar rather than correct, and you amplify the wrong thing. The right temperature sits near the primer's own melting point.</p>
+        <p>If you only have time to make one point land properly in the whole thirty minutes, make it "unzip, bookmark, copy, repeat." Everything else is optional.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"Why can't it just start copying anywhere? Why do you need primers at all?"</span><span class="aa2">Say: "Because of how the enzyme physically works. It can only <i>extend</i> a piece of DNA that's already started — it can't begin one from nothing. The primer gives it something to build from. No primer, no starting point, no reaction. Same thing is true inside your own cells, incidentally."</span></li>
+          <li><span class="qq">"Why two primers and not one?"</span><span class="aa2">Say: "Because DNA has two strands running in opposite directions, so each one needs its own. And between them, the two primers mark both ends of the region you're copying. One primer couldn't do both jobs."</span></li>
+          <li><span class="qq">"Doesn't 95 degrees destroy the DNA?"</span><span class="aa2">Say: "No — and that's a good question, because it sounds like it should. It only breaks the weak bonds holding the two strands together sideways. The strands themselves have a much stronger backbone that survives. You're opening a zip, not cutting the fabric."</span></li>
+          <li><span class="qq">"Doesn't 95 degrees destroy the enzyme?"</span><span class="aa2">Say: "It would destroy a normal one. That's the next slide, and it's the best story in this whole topic."</span></li>
+          <li><span class="qq">"How does the primer find the right spot among billions of bases?"</span><span class="aa2">Say: "It doesn't search. It's floating around and it only sticks where it matches — everywhere else it just doesn't hold. You're not sending something out to look, you're setting a condition that only one place satisfies."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- -------------------------------------------------------- SLIDE 5 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">11:00</span>
+      <span class="slide-num">Slide 5</span>
+      <h3>What's actually in the tube</h3>
+      <span class="slide-onscreen">On screen: the components table (7 rows)</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">Seven things go into the tube. I'll go quickly, because most of them are obvious once you know what they're for.</p>
+        <p class="beat"><b>Template DNA</b> — your sample. The thing being copied.</p>
+        <p class="beat"><b>Two primers</b> — the bookmarks we just talked about. Forward and reverse, one for each side.</p>
+        <p class="beat"><b>DNA polymerase</b> — the enzyme that does the copying. And this is where it gets good, so let me stop here.</p>
+        <span class="cue">Slow down. This is the story students remember afterwards.</span>
+        <p class="beat">Every cycle heats this tube to 95 degrees. A normal enzyme is a protein, and proteins fall apart somewhere around 40 or 50 degrees. So the obvious problem: your copying machine dies in step one of cycle one.</p>
+        <p class="beat">And in the earliest days that is exactly what happened. Somebody had to sit there and pipette in a fresh dose of enzyme after every single heating step. All night. For every sample.</p>
+        <p class="beat">The fix came from a hot spring. There's a bacterium called <i>Thermus aquaticus</i> that lives in near-boiling water — seventy, eighty degrees, quite happily. Its enzymes are built for that. So they took the polymerase from that organism, and it survives being heated to 95 over and over.</p>
+        <p class="beat">It's called Taq polymerase, after the organism. And that single component is the reason PCR is a machine you press start on instead of a chore you stay up all night doing.</p>
+        <span class="cue">Back to normal pace.</span>
+        <p class="beat">Then, quickly: <b>dNTPs</b> — the four letters, A, T, G and C, loose in the tube. Raw material. The parts bin the enzyme pulls from.</p>
+        <p class="beat"><b>Magnesium ions</b> — the polymerase simply doesn't function without them. It's a supply rail. Not part of the output, but nothing runs without it.</p>
+        <p class="beat"><b>Buffer</b> — holds the chemical conditions steady. It's a voltage regulator, basically, keeping everything inside its rated operating range.</p>
+        <p>And <b>water</b>, to make up the volume — but it has to be scrupulously clean, because any stray DNA in your water gets amplified along with everything else.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>The Taq story is the part of this lecture with the best chance of actually sticking, so give it the time. It also demonstrates something real about engineering: the bottleneck was not the concept of PCR, which is straightforward, but the absence of a component rated for the operating conditions. Someone found a part with the right temperature spec, in a hot spring, and the whole technique became practical. Students respond to that, and it is a fair characterisation rather than a nice-sounding simplification.</p>
+        <p>On the water point: contamination genuinely matters in PCR precisely because the technique is so sensitive. A trace of foreign DNA gets amplified a billionfold along with your target. This is also why forensic labs are obsessive about contamination control, which connects forward to the crime-scene section.</p>
+        <p>The electronics analogies — supply rail, voltage regulator, parts bin — are for your own grip on it as much as theirs. Use them if they land, drop them if the room looks blank.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"Are dNTPs the same as the A, T, G, C in DNA?"</span><span class="aa2">Say: "Same four letters, different form. In DNA they're already linked into a chain. dNTPs are the loose version, floating free, each carrying its own bit of energy that gets spent when the enzyme snaps it into place."</span></li>
+          <li><span class="qq">"What happens if you leave one component out?"</span><span class="aa2">Say: "Nothing happens at all — the reaction just doesn't run. There's no partial version. Leave out the magnesium and the enzyme won't work; leave out the primers and there's no starting point."</span></li>
+          <li><span class="qq">"Why does Taq work at high temperature — what's different about it?"</span><span class="aa2">Say: "Its structure is more thermally stable. Honestly, at the level of why exactly, that's a protein-structure question and the professor's territory — but the reason it exists is straightforward: the organism it came from lives in near-boiling water, so evolution had to solve that problem."</span></li>
+          <li><span class="qq">"Is the DNA polymerase in PCR the same one in our cells?"</span><span class="aa2">Say: "Same job, different source. Ours works at body temperature and would be destroyed by the heating step. Taq does the same chemistry but survives the conditions."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- -------------------------------------------------------- SLIDE 9 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">15:00</span>
+      <span class="slide-num">Slide 9</span>
+      <h3>Why it explodes</h3>
+      <span class="slide-onscreen">On screen: Nₙ = N₀ × 2ⁿ and the cycle table</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">Now the part where the word "chain reaction" earns itself. This should be the most comfortable slide of the day for this room.</p>
+        <p class="beat">Here's the thing to get right. It is <i>not</i> one new copy per cycle. Every molecule sitting in that tube at the start of a cycle gets copied during that cycle — the original, and every copy made in every earlier round. So the copies become templates. They get copied too.</p>
+        <p class="beat">Which means it doubles. One becomes two, two becomes four, four becomes eight.</p>
+        <span class="cue">Point at the table. Read the numbers — don't just gesture at them, the numbers do the work.</span>
+        <p class="beat">Ten cycles gets you about a thousand. Twenty cycles, a million. Thirty cycles — one molecule becomes just over a billion.</p>
+        <p class="beat">The formula's on the slide: N equals N-nought times two to the n. Which is compound interest. It's the same curve as a doubling counter. You've all seen this shape before; it just happens to be running on molecules this time.</p>
+        <span class="cue">Optional, if the room is with you.</span>
+        <p class="beat">One honest caveat, because the formula is an idealisation. A real tube doesn't double forever. Around thirty to forty cycles it flattens out — you run out of primers and raw material, and the enzyme gets tired from being heated dozens of times. So real protocols don't just run sixty cycles to be safe. Past a point, more cycles buys you almost nothing.</p>
+        <p>Which is a very engineering-shaped fact, actually: the ideal model and the real system diverge, and knowing where they diverge is the useful part.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>This slide will be the easiest one for you to deliver confidently, because exponential growth is already in your bones. Lean on that. If your energy has dipped anywhere in the previous ten minutes, it recovers here.</p>
+        <p>The distinction to actually protect is <i>additive versus compounding</i>. A student who thinks PCR adds one copy per round has missed the entire mechanism, and it is a genuinely easy mistake to make. Saying "the copies become templates" explicitly, more than once, is what prevents it.</p>
+        <p>The plateau caveat is worth including if time allows. It is honest, it prevents a wrong mental model, and this particular audience appreciates being told where a clean model stops describing reality. If you are running behind, it is the safest thing in the whole lecture to cut.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"Why doesn't it keep doubling forever?"</span><span class="aa2">Say: "Because you physically run out of ingredients. The primers and the loose letters get used up, and the enzyme degrades from repeated heating. The curve flattens. Roughly thirty to forty cycles is where the ideal formula and reality part ways."</span></li>
+          <li><span class="qq">"Why 30 cycles specifically, and not 100?"</span><span class="aa2">Say: "Because by thirty you already have about a billion copies, which is far more than enough to analyse. Running longer just wastes time and reagents for almost no extra yield."</span></li>
+          <li><span class="qq">"Is it exactly 2ⁿ in practice?"</span><span class="aa2">Say: "No, slightly less — no reaction is perfectly efficient, so the real number is under the theoretical one. But the shape of the curve is right, and for understanding what's happening the formula is the right thing to hold onto."</span></li>
+          <li><span class="qq">"What if you start with more than one molecule?"</span><span class="aa2">Say: "Then you scale up proportionally — that's the N-nought in the formula. Start with ten molecules and you finish with ten times as many. Same curve, shifted up."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ----------------------------------------------------- SLIDES 6,7,8 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">18:30</span>
+      <span class="slide-num">Slides 6, 7, 8</span>
+      <h3>The crime scene, start to finish</h3>
+      <span class="slide-onscreen">On screen: "PCR in Crime Investigation" and the workflow infographics</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">Let's put the whole thing together with the example on the slide, because this is where it stops being abstract.</p>
+        <p class="beat">A single hair is found at a crime scene. Walk it through with me.</p>
+        <p class="beat">First — and this catches people out — <b>PCR does not pull the DNA out of the hair.</b> That's a separate step that happens first. You break the cells open, you strip away all the proteins and membranes and debris, and you're left with purified DNA in solution. That purified DNA is what we've been calling the template. By the time anything goes near the PCR machine, the DNA is already isolated and sitting in a tube.</p>
+        <span class="cue">Small aside, worth ten seconds.</span>
+        <p class="beat">Small detail with real consequences: it's the <i>root</i> of the hair you need, not the shaft. The shaft is basically dead material. The root has living cells with nuclei in them. Which is why it matters in practice whether a hair was pulled out or just fell out.</p>
+        <p class="beat">Now. You've got the DNA. Three billion base pairs of it. You don't want all of that — you want a few specific short regions that happen to vary a lot between people.</p>
+        <p class="beat">And here's the bit I want you to actually get, because it's the most misunderstood part of this whole topic. <b>The primers are designed in advance.</b> Nobody discovers them during the reaction. Scientists already know the sequence sitting on either side of these regions, because that mapping work was done long ago. So they design primers to match those known flanking sequences exactly, and they order them.</p>
+        <p class="beat">Then PCR runs — unzip, bookmark, copy, thirty-odd times — and you come out with millions of copies of just those regions. The amplified pieces get sorted by size, and the pattern of sizes across all the regions together is what people call a DNA profile. You compare that pattern against a suspect's.</p>
+        <span class="cue">This next point is the one worth being precise about.</span>
+        <p class="beat">One correction, because it's easy to get this backwards. The primer does <i>not</i> identify a person. The exact same primers are used for everyone. What differs between people is the <i>length</i> of the region that gets amplified — how many times a short pattern repeats in there. Same bookmarks for everybody; different amount of text between them.</p>
+        <p>That distinction is the whole basis of DNA profiling, so it's worth holding onto.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>Three roles that students blur together, and that you should keep separate in your own head before you teach it: <b>extraction</b> gets DNA out of the sample and happens before PCR; <b>primers</b> determine which region gets copied and are chosen in advance; <b>polymerase</b> does the copying itself, cycle after cycle. Extraction, selection, copying. If a question confuses you, work out which of those three it is about and the answer usually becomes obvious.</p>
+        <p>The regions being amplified are called STR loci, short tandem repeats — short motifs that repeat back to back a variable number of times. You do not have to use the term, but if a student reads it off the slide and asks, that is the plain-English version: a short pattern that repeats, where the number of repeats differs from person to person.</p>
+        <p>The primer-does-not-identify-the-person correction is the single most valuable thing in this section. The intuitive but wrong model is "the primer matches your DNA specifically." The correct model is that the primer is universal and the variation lies in what sits between the two primers. Get this right and a lot of follow-up questions answer themselves.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"So the machine extracts the DNA from the hair?"</span><span class="aa2">Say: "No — extraction is separate chemistry that happens before. By the time the tube goes into the machine, the DNA is already out and purified. PCR only amplifies."</span></li>
+          <li><span class="qq">"How do they know what primer to use if they don't know whose DNA it is?"</span><span class="aa2">Say: "Because the primers don't depend on the person at all. Everyone has these same regions in the same places in the genome — what varies is how long each region is. Same primers for everybody; the difference shows up in the result, not in the primer."</span></li>
+          <li><span class="qq">"What if the sample is contaminated with someone else's DNA?"</span><span class="aa2">Say: "Then you amplify both, and you get a mixed profile — which is a real and serious problem in forensics. It's exactly why labs are so obsessive about contamination. Remember, this technique amplifies a billionfold, so it amplifies your mistakes just as enthusiastically."</span></li>
+          <li><span class="qq">"Can a DNA profile be wrong / can two people match?"</span><span class="aa2">Say: "Identical twins share a profile. Beyond that, the more regions you test the smaller the chance of a coincidental match, which is why they test many rather than one. It's a probability argument, not an absolute one — and that's why a profile is usually described as 'consistent with' rather than 'proves'."</span></li>
+          <li><span class="qq">"What if PCR gives no result at all?"</span><span class="aa2">Say: "That's informative in itself. It usually means the target sequence wasn't there in usable condition — sample too degraded, or no nucleated cells in it. A blank result tells you something rather than nothing."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------------- CALLBACK -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">23:00</span>
+      <span class="slide-num">Callback</span>
+      <h3>Back to their own nose</h3>
+      <span class="slide-onscreen">On screen: leave the crime-scene slide up, or advance if you prefer</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">So let's go back to where we started, now that you know how it works.</p>
+        <p class="beat">Your COVID test. Same technique, one extra step at the front. The coronavirus doesn't store its information in DNA — it uses RNA. And PCR only works on DNA. So before anything else, an enzyme copies that viral RNA into DNA. That's the "RT" you might have seen written on the report — reverse transcription.</p>
+        <p class="beat">After that it's ordinary PCR. Unzip, bookmark, copy, thirty-plus times. Because a swab from your nose does not contain nearly enough virus to detect directly.</p>
+        <p class="beat">Which means a positive result is saying something quite specific. It means: the amplifier found something worth amplifying. Nobody looked at a virus. Nobody saw anything under a microscope. A machine ran a doubling loop and detected that the loop had something to work on.</p>
+        <p>That's it. That's what the test was. And you all sat through one.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>This is your strongest moment in the lecture and it costs ninety seconds. It closes the loop opened in the hook, it reframes something every person in the room personally experienced, and it explains a piece of recent history using only what they learned in the previous twenty minutes.</p>
+        <p>"The amplifier found something worth amplifying" is the sentence to get right, because it is precise as well as memorable. A PCR test detects the presence of a target sequence by amplifying it to detectable levels. It is not direct observation of a pathogen, and saying so plainly is accurate rather than deflationary.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"So the test could be wrong?"</span><span class="aa2">Say: "Any test can be. But be careful about what the failure modes actually are — the main ones are contamination, or sampling badly so you don't collect enough material. The amplification chemistry itself is very reliable. If the sequence is there, it finds it."</span></li>
+          <li><span class="qq">"Why did results take a day or two if the reaction is only 2-3 hours?"</span><span class="aa2">Say: "The reaction is quick. The queue isn't. Transport, batching, extraction, and reporting are what took the time — not the PCR itself."</span></li>
+          <li><span class="qq">"Does a positive result mean you're infectious?"</span><span class="aa2">Say: "Not necessarily, and that's a genuinely subtle point — it means the sequence was detectable. Whether that means active infection is a clinical question, not something the chemistry answers. Good question though, and it's exactly the right kind of thing to be careful about."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------- SLIDES 10-12 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">24:30</span>
+      <span class="slide-num">Slides 10, 11, 12</span>
+      <h3>Codons — a change of topic</h3>
+      <span class="slide-onscreen">On screen: codon definition slide, codon chart, then the exercise and answers</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">Right — flag that we're switching topics here. Everything up to now was about <i>copying</i> DNA. The rest is about <i>reading</i> it. Different question entirely.</p>
+        <p class="beat">So. DNA stores instructions for building proteins. The way it's read is in groups of three letters. Each group of three is called a codon, and each codon specifies one amino acid — one bead on the protein chain.</p>
+        <span class="cue">This next bit is a nice thirty seconds. Ask it as a question and let them work it out.</span>
+        <p class="beat">Why three? Let's derive it. You've got four letters to work with, and you need to specify twenty different amino acids. If one letter meant one amino acid, how many could you specify?</p>
+        <span class="cue">Wait. Someone will say four.</span>
+        <p class="beat">Four. Not enough. Two letters at a time?</p>
+        <span class="cue">Wait. Someone will say sixteen.</span>
+        <p class="beat">Sixteen. Still short of twenty. Three letters?</p>
+        <p class="beat">Four cubed. Sixty-four. Now you've got enough, with room to spare. So three is the smallest word length that does the job — and that's exactly what the genetic code uses. It's not arbitrary; it falls out of the arithmetic.</p>
+        <p class="beat">Sixty-four possible codons. Sixty-one of them specify amino acids, and three of them mean "stop" — end of protein. And one specific codon, AUG, means both "start here" and "methionine."</p>
+        <span class="cue">Now the chart, and the exercise.</span>
+        <p class="beat">The chart on screen lists all sixty-four. To read it: take your three letters, find the first one down the side, the second across the top, the third in the little column — where they meet is your amino acid.</p>
+        <p class="beat">Now the exercise on the slide. You're given a protein — methionine, serine, arginine, tryptophan, lysine, stop — and asked to write an mRNA sequence that would produce it.</p>
+        <p class="beat">Method: take each amino acid, look up its codons, pick one, and string them together. And here's the interesting part — you'll find most amino acids have more than one codon. Serine has six. So there isn't one right answer. There are lots.</p>
+        <span class="cue">Advance to the answers slide.</span>
+        <p class="beat">Two valid answers are on the slide. Look at what's the same and what's different. Methionine is AUG in both, tryptophan is UGG in both — because those two have only one codon each, so there's no choice. Everything else varies.</p>
+        <p>That property has a name: the code is <b>degenerate</b>. Multiple codons, same amino acid. Which sounds like a design flaw and turns out to matter enormously — you'll see why in about a minute.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>Deriving 4³ = 64 out loud, with the room answering, is the best thirty seconds available in this section. It converts an arbitrary-seeming fact into something the students worked out themselves, and it is real reasoning rather than a mnemonic. Ask, wait for the answer, move on. Do not explain it before they have had a chance to say it.</p>
+        <p>Two terms not to mix up, because they sound like opposites and are not. <b>Degenerate</b> means several different codons can specify the same amino acid — the mapping is many-to-one. <b>Unambiguous</b> means any single codon specifies exactly one amino acid and never two. Both are true simultaneously, and there is no contradiction: many-to-one in that direction, one-to-one in the other.</p>
+        <p>The deliberate setup at the end of this block: degeneracy will explain why some mutations do nothing at all, on the next slide. Flagging it as "you'll see why in a minute" earns you attention for the final section.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"Does PCR make protein?"</span><span class="aa2">Say: "No — good question, and worth being clear about. PCR only ever produces more DNA. Turning DNA into protein is separate machinery inside a cell, working on a different molecule. PCR stops at DNA."</span></li>
+          <li><span class="qq">"Why U instead of T?"</span><span class="aa2">Say: "Because this chart is for RNA, not DNA. RNA uses U where DNA uses T. If you're reading a codon table and you see U, you're looking at RNA — which is what actually gets read to build a protein."</span></li>
+          <li><span class="qq">"If several codons mean the same amino acid, isn't that wasteful?"</span><span class="aa2">Say: "It looks wasteful and it's actually protective. If a letter gets changed by accident, there's a decent chance the new codon still means the same amino acid — so nothing happens. It's built-in error tolerance. That's the next slide."</span></li>
+          <li><span class="qq">"So is there one correct answer to the exercise or not?"</span><span class="aa2">Say: "Not one — many. Any combination that decodes back to the right amino acids in the right order is correct. That's the actual point of the question."</span></li>
+          <li><span class="qq">"What's an anticodon?" (if it comes up)</span><span class="aa2">Say: "The matching three-letter sequence on the molecule that physically delivers the amino acid. The codon is on the message, the anticodon is on the delivery vehicle, and they pair up. That's about as far as we need to go today."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------------- SLIDE 13 -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">27:30</span>
+      <span class="slide-num">Slide 13</span>
+      <h3>Mutations — the frameshift payoff</h3>
+      <span class="slide-onscreen">On screen: the substitution / deletion / insertion figure</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">Last slide, and this one has a genuinely satisfying idea in it.</p>
+        <p class="beat">Three ways a DNA sequence can get changed. Look at the top row for the normal version — it reads methionine, lysine, phenylalanine, glycine, alanine.</p>
+        <p class="beat"><b>First case: substitution.</b> One letter gets swapped for a different letter. Look what happens — one codon changes meaning, glycine becomes serine, and everything else on the row is untouched. One amino acid different out of five. Usually survivable.</p>
+        <p class="beat"><b>Second case: deletion.</b> One letter is removed entirely. And now look at the protein row — it's not one amino acid that changed. It's everything after that point.</p>
+        <span class="cue">Stop. This is the payoff. Make them see why.</span>
+        <p class="beat">Why? Think about it. The sequence is read in fixed groups of three, starting from a set point. Take one letter out, and every group boundary after that shifts by one. The machinery doesn't know a letter went missing — it just keeps counting off in threes from where it is. So it reads a completely different set of triplets from there on.</p>
+        <p class="beat">If you've ever had a data stream misalign by one byte, this is exactly that. Everything downstream decodes to garbage, not because the data is gone, but because you've lost the frame.</p>
+        <p class="beat">It has a name that says precisely that: a <b>frameshift</b>.</p>
+        <p class="beat"><b>Third case: insertion.</b> Same thing, opposite direction. Add a letter, boundaries shift the other way, everything downstream changes.</p>
+        <p class="beat">So — and this is the whole lesson of the slide — it isn't <i>which</i> letter changed that determines how much damage is done. It's whether you changed the <i>count</i>. Swap a letter, one codon is affected. Add or remove one, and you've broken the alignment for the rest of the gene.</p>
+        <span class="cue">Optional, if you have thirty seconds spare — it's a good one.</span>
+        <p>And one neat consequence: if you delete exactly three letters, there's no frameshift at all. You lose one amino acid and everything after it lines up perfectly again. Three is a multiple of the word length, so the frame survives. Remove one or two and you've wrecked it. That's a strangely mechanical property for biology to have.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>The misaligned data stream is the best analogy in this entire lecture for this audience, and it is not a loose metaphor — it is structurally the same problem. Fixed-width records read sequentially from a start offset; remove one unit and every subsequent boundary is wrong. Biology and data parsing fail in precisely the same way, for precisely the same reason.</p>
+        <p>The reason to end on mutations rather than treat it as an afterthought: it is where the triplet structure from the previous slide stops being trivia and starts predicting consequences. A student who understands why a one-base deletion is worse than a one-base substitution has genuinely understood that the code is read in threes. That is a real conceptual gain, and it is a good note to finish on.</p>
+        <p>If a student asks whether all substitutions change the protein, the honest answer has three branches: the amino acid changes (missense), a premature stop appears and truncates the protein (nonsense), or degeneracy means the new codon still codes for the same amino acid and nothing changes at all (silent). You do not need the terminology, but the three outcomes are worth having ready.</p>
+      </div>
+      <div class="callout c-ask">
+        <span class="tag">Doubts that land here</span>
+        <ul class="dq">
+          <li><span class="qq">"Why doesn't a substitution shift the frame too?"</span><span class="aa2">Say: "Because you haven't changed how many letters there are. Swap one for another and the total count is identical, so every group boundary stays exactly where it was. Only that one codon reads differently."</span></li>
+          <li><span class="qq">"Does every substitution change the protein?"</span><span class="aa2">Say: "No — three things can happen. The amino acid changes. Or you accidentally create a stop signal and cut the protein short. Or, because of that degeneracy we just talked about, the new codon still means the same amino acid and nothing changes at all."</span></li>
+          <li><span class="qq">"Why doesn't deleting three letters cause a frameshift?"</span><span class="aa2">Say: "Because the frame is measured in threes. Remove a multiple of three and all the boundaries after it land exactly where they would have anyway. You lose one amino acid, but the alignment survives. It's only when you remove one or two that everything shifts."</span></li>
+          <li><span class="qq">"Do mutations happen naturally or only from damage?"</span><span class="aa2">Say: "Both. Copying isn't perfect, so errors happen spontaneously, and external things like radiation or chemicals cause them too. There's also repair machinery catching most of them. The details are the professor's territory."</span></li>
+          <li><span class="qq">"Is this how genetic diseases happen?"</span><span class="aa2">Say: "Yes, this is the basic mechanism — a change in sequence producing a changed or truncated protein. Which specific change causes which condition is a much bigger topic, and a real one, but that's the underlying idea."</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------------- CLOSE -->
+  <div class="slide-card">
+    <div class="slide-head">
+      <span class="slide-clock">29:30</span>
+      <span class="slide-num">Close</span>
+      <h3>Land it and stop</h3>
+      <span class="slide-onscreen">On screen: leave the last slide up</span>
+    </div>
+    <div class="slide-body">
+      <div class="callout c-say say">
+        <span class="tag">Read aloud</span>
+        <p class="beat">So, thirty seconds to wrap up.</p>
+        <p class="beat">One idea to take away from today: PCR is an amplifier. Something too small to measure goes in, a much bigger copy of the same thing comes out, and you choose exactly what gets amplified by where you put the two bookmarks. Unzip, bookmark, copy — thirty-odd times.</p>
+        <p class="beat">That's it. That technique underpins forensic identification, the test you had shoved up your nose, paternity testing, and a very large fraction of modern biology and medicine.</p>
+        <p>The professor takes it further from here. Anything you're unsure about, ask me now or catch me after.</p>
+      </div>
+      <div class="callout c-key">
+        <span class="tag">Understanding for you</span>
+        <p>Stop when you have said this. Do not add a summary of the summary — the most common way a good tutorial ends badly is by trailing off after the actual ending. Say the amplifier line, name the applications, offer to take questions, and be quiet.</p>
+        <p>"Ask me now or catch me after" is doing real work: it gives the quieter students a route that is not putting a hand up in front of everyone, and it signals that the session is genuinely finished rather than fading out.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Questions that could come from anywhere</h3>
+  <p>These are not tied to a slide, so they will arrive whenever they arrive. Short answers, ready to say.</p>
+  <div class="callout c-ask">
+    <span class="tag">Off-script, any time</span>
+    <ul class="dq">
+      <li><span class="qq">"Sir, I don't understand — can you repeat that?"</span><span class="aa2">Go back to "unzip, bookmark, copy" and rebuild from there. It works as a restart point for essentially any part of the mechanism.</span></li>
+      <li><span class="qq">Something genuinely beyond the slides.</span><span class="aa2">Say: "Genuinely good question, and it's past what we're covering today — that's exactly what the next few lectures are for." This is a completely legitimate answer and using it costs you nothing. Do not improvise biology you are not sure of; a student who catches you inventing an answer costs you more credibility than admitting the limit.</span></li>
+      <li><span class="qq">"Will this be in the exam?"</span><span class="aa2">Say: "The professor sets that, not me. What I'd make sure you know is the three steps, why the temperature has to cycle, and the 2ⁿ growth."</span></li>
+      <li><span class="qq">"Can PCR be used to modify DNA, or make a clone of a person?"</span><span class="aa2">Say: "No. PCR only copies a short stretch of existing DNA in a tube. It doesn't edit anything and it doesn't build organisms. You're thinking of gene editing and reproductive cloning, which are completely different technologies."</span></li>
+      <li><span class="qq">"How long does a real PCR run take?"</span><span class="aa2">Say: "Two to three hours for the reaction. Each cycle is a couple of minutes and you run thirty-odd of them."</span></li>
+      <li><span class="qq">"How much does it cost?"</span><span class="aa2">Say: "Cheap enough to be routine — that's a big part of why it's everywhere. I don't have a figure I'd stand behind, so I won't invent one."</span></li>
+      <li><span class="qq">"Why is it called a chain reaction — is it like a nuclear chain reaction?"</span><span class="aa2">Say: "Same idea, different mechanism. Each product triggers more products, so it compounds. Nobody's splitting atoms — but the growth curve has the same shape, and that's why the name."</span></li>
+    </ul>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">If you are running behind</span>
+    <p>Cut in this order, and nothing important is lost. First the plateau caveat on slide 9. Then the hair-root aside in the crime-scene section. Then the "delete exactly three letters" point at the end of mutations. Then compress the components slide to a fast list, keeping only the Taq story. What you must not cut: the three steps, the exponential doubling, and the frameshift. Those three carry the lecture.</p>
+  </div>
+</section>
 
 <!-- ============================================================ START -->
 <section class="panel" id="p-start" role="tabpanel" hidden>
@@ -773,7 +1277,7 @@ Strand 2:  3′ —————————————————————�
   </div>
 
   <div class="foot">
-    <p>Built as personal study material ahead of TA duty (Monday 17th, PCR slides). Not for display to students — the deck's own images and slides stay the reference for what's actually shown in class. Once this has sunk in, the next step is turning it into a short read-aloud script, the same way Tutorial 2's was built.</p>
+    <p>Built for TA duty on Monday 17 August, from the PCR deck. The <b>Script</b> tab is the 30-minute delivery plan; every other tab is background for your own understanding. Not for display to students — the deck itself stays on the projector, and this page stays on the iPad.</p>
   </div>
 </section>
 
@@ -793,6 +1297,7 @@ document.getElementById("themeBtn").addEventListener("click", function(){
 
 /* --------------------------------------------------------- nav / tabs */
 var SECTIONS = [
+  ["script",    "Script"],
   ["start",     "Start Here"],
   ["kit",       "The Kit"],
   ["cycle",     "The Cycle"],
@@ -823,7 +1328,7 @@ function show(k){
   });
   window.scrollTo({ top:0 });
 }
-show("start");
+show("script");
 
 /* -------------------------------------------------------- cycle slider */
 var slider = document.getElementById("cycleSlider");
