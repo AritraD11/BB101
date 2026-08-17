@@ -467,18 +467,58 @@ input[type=range]{ width:100%; margin:8px 0; accent-color:var(--code); height:30
     </ul>
   </div>
 
-  <h3>The exercise on your slides</h3>
-  <p>Given a protein <code>Met–Ser–Arg–Trp–Lys–Stop</code>, write an mRNA sequence that could produce it — then notice more than one correct answer exists:</p>
+  <h3>The codon chart (the actual one on your slides)</h3>
+  <p class="mini">Read it by picking a 1st base and 2nd base to land on a row, then reading across for the 3rd base. All 64 codons are here.</p>
   <div class="tw">
     <table>
-      <thead><tr><th>Version</th><th>Sequence</th></tr></thead>
+      <thead><tr><th>1st</th><th>2nd</th><th>Codons (3rd base varies) → Amino acid</th></tr></thead>
       <tbody>
-        <tr><td>Answer 1</td><td class="num-cell">AUG UCU CGU UGG AAA UAA</td></tr>
-        <tr><td>Answer 2</td><td class="num-cell">AUG AGC AGA UGG AAG UAG</td></tr>
+        <tr><td>U</td><td>U</td><td class="num-cell">UUU/UUC → Phe &nbsp;·&nbsp; UUA/UUG → Leu</td></tr>
+        <tr><td>U</td><td>C</td><td class="num-cell">UCU/UCC/UCA/UCG → Ser</td></tr>
+        <tr><td>U</td><td>A</td><td class="num-cell">UAU/UAC → Tyr &nbsp;·&nbsp; UAA/UAG → <b>Stop</b></td></tr>
+        <tr><td>U</td><td>G</td><td class="num-cell">UGU/UGC → Cys &nbsp;·&nbsp; UGA → <b>Stop</b> &nbsp;·&nbsp; UGG → Trp</td></tr>
+        <tr><td>C</td><td>U</td><td class="num-cell">CUU/CUC/CUA/CUG → Leu</td></tr>
+        <tr><td>C</td><td>C</td><td class="num-cell">CCU/CCC/CCA/CCG → Pro</td></tr>
+        <tr><td>C</td><td>A</td><td class="num-cell">CAU/CAC → His &nbsp;·&nbsp; CAA/CAG → Gln</td></tr>
+        <tr><td>C</td><td>G</td><td class="num-cell">CGU/CGC/CGA/CGG → Arg</td></tr>
+        <tr><td>A</td><td>U</td><td class="num-cell">AUU/AUC/AUA → Ile &nbsp;·&nbsp; AUG → <b>Met (start)</b></td></tr>
+        <tr><td>A</td><td>C</td><td class="num-cell">ACU/ACC/ACA/ACG → Thr</td></tr>
+        <tr><td>A</td><td>A</td><td class="num-cell">AAU/AAC → Asn &nbsp;·&nbsp; AAA/AAG → Lys</td></tr>
+        <tr><td>A</td><td>G</td><td class="num-cell">AGU/AGC → Ser &nbsp;·&nbsp; AGA/AGG → Arg</td></tr>
+        <tr><td>G</td><td>U</td><td class="num-cell">GUU/GUC/GUA/GUG → Val</td></tr>
+        <tr><td>G</td><td>C</td><td class="num-cell">GCU/GCC/GCA/GCG → Ala</td></tr>
+        <tr><td>G</td><td>A</td><td class="num-cell">GAU/GAC → Asp &nbsp;·&nbsp; GAA/GAG → Glu</td></tr>
+        <tr><td>G</td><td>G</td><td class="num-cell">GGU/GGC/GGA/GGG → Gly</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="mini">Both are valid because <code>Ser</code> and <code>Stop</code> each have several possible codons — that's degeneracy, working exactly as described above.</p>
+
+  <h3>The exercise on your slides — step by step</h3>
+  <p>Given a protein <code>Met–Ser–Arg–Trp–Lys–Stop</code>, write an mRNA sequence that could produce it. This method works for any such problem, not just this one:</p>
+  <div class="flow">
+    <div class="flow-step"><span class="fn">1</span><div><h5>List the amino acids in order</h5><p>Already given here: Met, Ser, Arg, Trp, Lys, Stop.</p></div></div>
+    <div class="flow-step"><span class="fn">2</span><div><h5>Look up every codon for each one</h5><p>Met → <code>AUG</code> only. Ser → 6 options. Arg → 6 options. Trp → <code>UGG</code> only. Lys → 2 options. Stop → 3 options (any one ends it).</p></div></div>
+    <div class="flow-step"><span class="fn">3</span><div><h5>Pick one codon per amino acid</h5><p>Any valid choice works — this is the whole point. Most amino acids have more than one legal codon, so there's no single "correct" answer, only valid ones.</p></div></div>
+    <div class="flow-step"><span class="fn">4</span><div><h5>String them together, in order, no gaps</h5><p>That concatenated sequence is your mRNA answer.</p></div></div>
+    <div class="flow-step"><span class="fn">5</span><div><h5>Check it</h5><p>Read your own answer back in groups of 3 from the start and confirm each triplet decodes, via the chart, back to Met–Ser–Arg–Trp–Lys–Stop in that exact order.</p></div></div>
+  </div>
+
+  <h4>Your slides' two answers, decoded with this method</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>Met</th><th>Ser</th><th>Arg</th><th>Trp</th><th>Lys</th><th>Stop</th></tr></thead>
+      <tbody>
+        <tr><td>Answer 1</td><td class="num-cell">AUG</td><td class="num-cell">UCU</td><td class="num-cell">CGU</td><td class="num-cell">UGG</td><td class="num-cell">AAA</td><td class="num-cell">UAA</td></tr>
+        <tr><td>Answer 2</td><td class="num-cell">AUG</td><td class="num-cell">AGC</td><td class="num-cell">AGA</td><td class="num-cell">UGG</td><td class="num-cell">AAG</td><td class="num-cell">UAG</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="mini">Met and Trp are identical in both — they only have one legal codon each, so there's no choice to make there. Ser, Arg, Lys, and Stop differ between the two answers — that's degeneracy, working exactly as described above.</p>
+
+  <div class="callout c-key">
+    <span class="tag">If a student asks for a third answer, live</span>
+    <p>Build one on the spot with the same method — e.g. <code>AUG UCA CGA UGG AAG UGA</code> is equally valid. Only Met (<code>AUG</code>) and Trp (<code>UGG</code>) are fixed; everything else has room to vary.</p>
+  </div>
 </section>
 
 <!-- ============================================================ CHEAT -->
