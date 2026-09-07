@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biomolecules Study Guide &amp; Answer Key</title>
+<style>
+/* ============================================================
+   BB 101 — Biomolecules Study Guide (Chapter 5, Campbell Biology)
+   Same visual system as the PCR / Tutorial 2 handbooks, for
+   consistency across the TA's own material set.
+   ============================================================ */
+
+:root{
+  --ground:      #F6F7FB;
+  --surface:     #FFFFFF;
+  --surface-2:   #EEF0F8;
+  --line:        #DFE3EF;
+  --line-strong: #C7CDE3;
+
+  --ink:         #161B2E;
+  --ink-2:       #40456A;
+  --ink-3:       #6A6F94;
+
+  --code:        #3454D1;
+  --code-soft:   #E7EBFB;
+  --amino:       #B9791A;
+  --amino-soft:  #FBF0DC;
+
+  --good:        #1D7A5F;
+  --good-soft:   #E2F2EC;
+  --warn:        #9A6510;
+  --warn-soft:   #FBF0DC;
+
+  --shadow: 0 1px 2px rgba(22,27,46,.05), 0 8px 24px -12px rgba(22,27,46,.18);
+
+  --serif: "Iowan Old Style", "Charter", "Bitstream Charter", Georgia, "Times New Roman", serif;
+  --sans:  "Avenir Next", "Avenir", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --mono:  "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --r: 10px;
+  --maxw: 78ch;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --ground:#0F1320; --surface:#171C2E; --surface-2:#212840;
+    --line:#2C3350; --line-strong:#3B4468;
+    --ink:#EAECF6; --ink-2:#B7BEDB; --ink-3:#8890B3;
+    --code:#7C93FF; --code-soft:#232B4A; --amino:#E3B255; --amino-soft:#3A2E14;
+    --good:#5FD3AC; --good-soft:#16332A; --warn:#E5B45F; --warn-soft:#35290F;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1320; --surface:#171C2E; --surface-2:#212840;
+  --line:#2C3350; --line-strong:#3B4468;
+  --ink:#EAECF6; --ink-2:#B7BEDB; --ink-3:#8890B3;
+  --code:#7C93FF; --code-soft:#232B4A; --amino:#E3B255; --amino-soft:#3A2E14;
+  --good:#5FD3AC; --good-soft:#16332A; --warn:#E5B45F; --warn-soft:#35290F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+:root[data-theme="light"]{
+  --ground:#F6F7FB; --surface:#FFFFFF; --surface-2:#EEF0F8;
+  --line:#DFE3EF; --line-strong:#C7CDE3;
+  --ink:#161B2E; --ink-2:#40456A; --ink-3:#6A6F94;
+  --code:#3454D1; --code-soft:#E7EBFB; --amino:#B9791A; --amino-soft:#FBF0DC;
+  --good:#1D7A5F; --good-soft:#E2F2EC; --warn:#9A6510; --warn-soft:#FBF0DC;
+  --shadow:0 1px 2px rgba(22,27,46,.05), 0 8px 24px -12px rgba(22,27,46,.18);
+}
+
+*{ box-sizing:border-box; }
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:17px; line-height:1.62;
+  -webkit-text-size-adjust:100%;
+}
+
+.mast{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.mast-in{ max-width:1180px; margin:0 auto; padding:12px 20px 0; display:flex; flex-direction:column; gap:10px; }
+.mast-top{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.mast-title{ font-family:var(--serif); font-size:1.32rem; font-weight:600; letter-spacing:-.01em; margin:0; }
+.mast-sub{ font-family:var(--mono); font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); }
+.mast-actions{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+.nav{ display:flex; gap:4px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; }
+.nav::-webkit-scrollbar{ display:none; }
+.nav button{
+  flex:0 0 auto; appearance:none; background:none; border:0; border-bottom:2px solid transparent;
+  padding:9px 13px 11px; margin:0; font-family:var(--sans); font-size:.92rem; font-weight:500;
+  color:var(--ink-3); cursor:pointer; white-space:nowrap; border-radius:6px 6px 0 0;
+  transition:color .15s, background .15s;
+}
+.nav button:hover{ color:var(--ink); background:var(--surface-2); }
+.nav button[aria-selected="true"]{ color:var(--code); border-bottom-color:var(--code); font-weight:600; }
+.nav .num{ font-family:var(--mono); font-size:.74em; opacity:.6; margin-right:6px; }
+
+.btn{
+  appearance:none; font-family:var(--sans); font-size:.85rem; font-weight:500;
+  padding:7px 13px; border-radius:7px; cursor:pointer;
+  background:var(--surface); color:var(--ink-2); border:1px solid var(--line-strong);
+  transition:background .15s, color .15s, border-color .15s;
+}
+.btn:hover{ background:var(--surface-2); color:var(--ink); }
+.btn-accent{ background:var(--code); border-color:var(--code); color:#fff; }
+.btn-accent:hover{ filter:brightness(1.08); background:var(--code); color:#fff; }
+:focus-visible{ outline:2.5px solid var(--amino); outline-offset:2px; border-radius:4px; }
+
+main{ max-width:1180px; margin:0 auto; padding:26px 20px 100px; }
+.panel[hidden]{ display:none; }
+.panel{ animation:rise .28s ease both; }
+@keyframes rise{ from{ opacity:0; transform:translateY(6px);} to{opacity:1;transform:none;} }
+@media (prefers-reduced-motion: reduce){ .panel{ animation:none; } *{ transition-duration:.01ms !important; } }
+
+h2.sec{ font-family:var(--serif); font-size:2.05rem; font-weight:600; letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance; line-height:1.18; }
+.sec-lede{ font-size:1.05rem; color:var(--ink-2); max-width:var(--maxw); margin:0 0 26px; }
+h3{ font-family:var(--serif); font-size:1.3rem; font-weight:600; letter-spacing:-.01em; margin:32px 0 10px; text-wrap:balance; }
+h4{ font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:24px 0 8px; font-family:var(--sans); }
+p{ max-width:var(--maxw); margin:0 0 14px; }
+ul,ol{ max-width:var(--maxw); margin:0 0 14px; padding-left:1.25em; }
+li{ margin-bottom:7px; }
+b,strong{ font-weight:650; color:var(--ink); }
+code{ font-family:var(--mono); font-size:.86em; background:var(--surface-2); padding:1px 6px; border-radius:4px; border:1px solid var(--line); white-space:nowrap; }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow); }
+.grid{ display:grid; gap:16px; }
+.g2{ grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
+.g3{ grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); }
+.g4{ grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+
+.callout{ border-radius:var(--r); padding:15px 18px; margin:18px 0; border:1px solid var(--line); background:var(--surface-2); max-width:var(--maxw); }
+.callout .tag{ display:block; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; font-weight:600; }
+.callout p:last-child, .callout ul:last-child{ margin-bottom:0; }
+.c-ask{ background:var(--amino-soft); border-color:color-mix(in srgb,var(--amino) 34%, transparent); } .c-ask .tag{ color:var(--amino); }
+.c-key{ background:var(--code-soft); border-color:color-mix(in srgb,var(--code) 30%, transparent); } .c-key .tag{ color:var(--code); }
+.c-warn{ background:var(--warn-soft); border-color:color-mix(in srgb,var(--warn) 34%, transparent); } .c-warn .tag{ color:var(--warn); }
+.c-say{ background:var(--good-soft); border-color:color-mix(in srgb,var(--good) 30%, transparent); } .c-say .tag{ color:var(--good); }
+
+.tw{ overflow-x:auto; margin:16px 0 22px; border:1px solid var(--line); border-radius:var(--r); background:var(--surface); }
+table{ border-collapse:collapse; width:100%; min-width:480px; font-size:.94rem; }
+th,td{ text-align:left; padding:11px 15px; border-bottom:1px solid var(--line); vertical-align:top; }
+thead th{ background:var(--surface-2); font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); font-weight:700; white-space:nowrap; }
+tbody tr:last-child td{ border-bottom:0; }
+td:first-child{ font-weight:600; color:var(--ink); }
+.num-cell{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
+
+/* ------------------------------------------------------------- flow steps */
+.flow{ display:flex; flex-direction:column; gap:0; margin:18px 0; }
+.flow-step{ display:grid; grid-template-columns:auto 1fr; gap:16px; padding:14px 0; border-bottom:1px dashed var(--line); }
+.flow-step:last-child{ border-bottom:0; }
+.flow-step .fn{ font-family:var(--mono); font-weight:700; font-size:.78rem; color:#fff; background:var(--good); width:26px; height:26px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; }
+.flow-step h5{ font-family:var(--serif); font-size:1.05rem; margin:0 0 3px; }
+.flow-step p{ font-size:.93rem; color:var(--ink-2); margin:0; }
+
+/* --------------------------------------------------------- blanks (click) */
+.blank{
+  cursor:pointer; display:inline-block; min-width:64px; text-align:center;
+  border-bottom:2px dotted var(--ink-3); color:var(--ink-3); font-weight:700;
+  padding:0 5px; user-select:none; border-radius:3px; transition:background .15s, color .15s, border-color .15s;
+}
+.blank:hover{ background:var(--surface-2); }
+.blank.revealed{ border-bottom:2px solid var(--good); color:var(--good); background:var(--good-soft); }
+.blank-hint{ font-size:.68rem; color:var(--ink-3); font-family:var(--mono); letter-spacing:.04em; }
+
+/* -------------------------------------------------------------- page card */
+.page-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--shadow); margin-bottom:24px; overflow:hidden; }
+.page-head{ display:flex; align-items:center; gap:14px; padding:15px 22px; background:var(--surface-2); border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.page-num{ font-family:var(--mono); font-weight:700; font-size:.78rem; background:var(--code); color:#fff; padding:4px 10px; border-radius:6px; flex:0 0 auto; }
+.page-head h3{ margin:0; flex:1; min-width:180px; font-size:1.22rem; }
+.page-body{ padding:20px 22px 22px; }
+.page-img{ width:100%; border-radius:8px; border:1px solid var(--line); display:block; margin-bottom:16px; }
+.page-body .callout{ margin:14px 0; }
+.page-body .callout:last-child{ margin-bottom:0; }
+
+.mini{ font-size:.86rem; color:var(--ink-3); max-width:var(--maxw); }
+.foot{ margin-top:44px; padding-top:20px; border-top:1px solid var(--line); font-size:.84rem; color:var(--ink-3); max-width:var(--maxw); }
+
+/* ------------------------------------------------------------ tricks grid */
+.trick-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; box-shadow:var(--shadow); }
+.trick-card h5{ font-family:var(--serif); font-size:1.1rem; margin:0 0 8px; }
+.trick-card p{ font-size:.93rem; color:var(--ink-2); margin:0; }
+.trick-card .say{ display:block; font-size:.92rem; background:var(--code-soft); padding:9px 12px; border-radius:8px; color:var(--ink-2); margin-top:10px; }
+.trick-card .say b{ color:var(--code); }
+
+/* ------------------------------------------------------- doubt bank */
+.tools{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:0 0 16px; position:sticky; top:126px; z-index:20;
+  background:color-mix(in srgb, var(--ground) 92%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:10px 0; }
+.search{ flex:1 1 250px; min-width:0; font:inherit; font-size:.95rem; padding:10px 14px; border-radius:9px; border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); }
+.search::placeholder{ color:var(--ink-3); }
+.chips{ display:flex; gap:6px; flex-wrap:wrap; }
+.chip{ appearance:none; font:inherit; font-size:.82rem; font-weight:500; padding:7px 12px; border-radius:20px; cursor:pointer; background:var(--surface); border:1px solid var(--line-strong); color:var(--ink-3); }
+.chip[aria-pressed="true"]{ background:var(--code); border-color:var(--code); color:#fff; font-weight:600; }
+.q{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); margin-bottom:10px; overflow:hidden; }
+.q[hidden]{ display:none; }
+.q-head{ display:flex; gap:13px; align-items:flex-start; width:100%; padding:15px 18px; background:none; border:0; font:inherit; color:inherit; text-align:left; cursor:pointer; }
+.q-head:hover{ background:var(--surface-2); }
+.q-head .qm{ font-family:var(--mono); font-size:.9rem; font-weight:700; color:var(--amino); flex:0 0 auto; margin-top:1px; }
+.q-head .qt{ flex:1; font-weight:550; font-size:1rem; line-height:1.45; }
+.q-head .qc{ flex:0 0 auto; color:var(--ink-3); font-size:1.1rem; transition:transform .2s; }
+.q-head[aria-expanded="true"] .qc{ transform:rotate(45deg); }
+.q-body{ padding:0 18px 18px 49px; }
+.q-body[hidden]{ display:none; }
+.q-body p{ font-size:.96rem; margin-bottom:11px; }
+.q-body p:last-child{ margin-bottom:0; }
+.q-tags{ display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+.q-tag{ font-family:var(--mono); font-size:.64rem; letter-spacing:.07em; text-transform:uppercase; padding:3px 8px; border-radius:5px; background:var(--surface-2); color:var(--ink-3); border:1px solid var(--line); font-weight:600; }
+.q-tag.hard{ background:var(--amino-soft); color:var(--amino); border-color:transparent; }
+
+/* ------------------------------------------------------------- quiz */
+.quiz-q{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; margin-bottom:14px; box-shadow:var(--shadow); }
+.quiz-q .stem{ font-weight:600; margin-bottom:12px; font-size:1rem; }
+.opts{ display:flex; flex-direction:column; gap:8px; }
+.opt{ appearance:none; text-align:left; font:inherit; font-size:.94rem; padding:11px 15px; border-radius:8px; cursor:pointer; background:var(--surface-2); border:1px solid var(--line); color:var(--ink); transition:border-color .15s, background .15s; }
+.opt:hover:not(:disabled){ border-color:var(--code); }
+.opt:disabled{ cursor:default; }
+.opt.right{ background:var(--good-soft); border-color:var(--good); font-weight:600; }
+.opt.wrong{ background:var(--warn-soft); border-color:var(--warn); }
+.expl{ margin-top:12px; font-size:.93rem; color:var(--ink-2); padding:11px 14px; background:var(--code-soft); border-radius:8px; }
+.expl[hidden]{ display:none; }
+.score{ font-family:var(--mono); font-size:.95rem; font-weight:600; color:var(--code); padding:10px 0; }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="mast-top">
+      <h1 class="mast-title">Biomolecules — Study Guide &amp; Answer Key</h1>
+      <span class="mast-sub">BB 101 · Mon 7 Sept · Batch T1 · LT 206 · Campbell Ch. 5</span>
+      <span class="mast-actions"><button class="btn" id="themeBtn" type="button">Theme</button></span>
+    </div>
+    <nav class="nav" id="nav" role="tablist" aria-label="Sections"></nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================ START -->
+<section class="panel" id="p-start" role="tabpanel" hidden>
+  <h2 class="sec">What is a biomolecule?</h2>
+  <p class="sec-lede">Start here, before any of the four categories. This is the one idea that makes the rest of the chapter click into place instead of feeling like four unrelated topics to memorise.</p>
+
+  <div class="callout c-key">
+    <span class="tag">The one sentence to hold onto</span>
+    <p><b>A biomolecule is a molecule that a living thing builds and needs to stay alive</b> — and almost all of them are built from the same six elements, on a carbon backbone, using the same handful of chemical tricks repeated over and over.</p>
+  </div>
+
+  <h3>The six elements everything is built from</h3>
+  <p>Nearly every atom in every biomolecule you'll see today is one of six elements: <b>C</b>arbon, <b>H</b>ydrogen, <b>N</b>itrogen, <b>O</b>xygen, <b>P</b>hosphorus, <b>S</b>ulfur — commonly remembered as <b>CHNOPS</b>. Carbon does the real work: it can form four bonds at once, which lets it build long chains, branches, and rings. Every biomolecule you're about to look at is really just carbon scaffolding with different groups of these other elements hung off it.</p>
+
+  <h3>Four classes — and a pattern that covers three of them</h3>
+  <p>Carbohydrates, proteins, and nucleic acids are all built the exact same way: small repeating units (<b>monomers</b>) link into long chains (<b>polymers</b>) by kicking out a water molecule at each join — <b>dehydration synthesis</b>. Run that reaction backward, add water back in, and the chain breaks apart again — <b>hydrolysis</b>. Once you've understood that one mechanism, you already understand 75% of this chapter's chemistry.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Class</th><th>Monomer</th><th>Built by</th><th>What it's for</th></tr></thead>
+      <tbody>
+        <tr><td>Carbohydrate</td><td>Monosaccharide</td><td>Dehydration synthesis</td><td>Energy, structure</td></tr>
+        <tr><td>Protein</td><td>Amino acid</td><td>Dehydration synthesis</td><td>Enzymes, structure, transport, defence, signalling — nearly everything</td></tr>
+        <tr><td>Nucleic acid</td><td>Nucleotide</td><td>Dehydration synthesis</td><td>Storing and transmitting information</td></tr>
+        <tr><td>Lipid</td><td class="num-cell">— no single monomer —</td><td>(mostly) dehydration synthesis, but not defined by it</td><td>Energy storage, membranes, signalling</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout c-warn">
+    <span class="tag">The one exception, and it's the whole trick of the chapter</span>
+    <p>Lipids are not grouped together because they share one repeating building block — they don't. They're grouped together because they share a <b>property</b>: they're <b>hydrophobic</b> (nonpolar, don't mix with water). A fat, a steroid, and a wax look nothing alike structurally, but all three refuse to dissolve in water — and that single property is the entire reason they're filed under the same heading. Every other class is defined by its <i>parts</i>; lipids are defined by their <i>behaviour</i>. That distinction alone will resolve most of the "wait, why is this a lipid" confusion later in the chapter.</p>
+  </div>
+
+  <div class="callout c-ask">
+    <span class="tag">Keep this framing as you go through the rest of the page</span>
+    <p>Every section below maps onto one slide from today's deck. Each has the blanks answered — click any dotted underline to reveal it, the same way the slide will fill in live. Tricky spots are flagged explicitly so you're not caught off guard.</p>
+  </div>
+</section>
+
+<!-- =========================================================== PAGES -->
+<section class="panel" id="p-pages" role="tabpanel" hidden>
+  <h2 class="sec">Page-by-page answer key</h2>
+  <p class="sec-lede">Every blank from the deck, answered. Click a dotted underline to reveal it — click again to hide it, so you can test yourself before looking.</p>
+  <p><button class="btn" id="revealAll" type="button">Reveal all blanks</button> <button class="btn" id="hideAll" type="button">Hide all blanks</button></p>
+
+  <!-- PAGE 2 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 2</span><h3>Identify the Biomolecules</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-identify-biomolecules.jpg" alt="Four images to identify: a branched chain of hexagon units, a rainbow-coloured folded protein ribbon, a DNA double helix, and a phospholipid bilayer with embedded proteins">
+      <p><b>1</b> — <span class="blank" data-answer="Carbohydrate">__________</span> &nbsp; <b>2</b> — <span class="blank" data-answer="Protein">__________</span> &nbsp; <b>3</b> — <span class="blank" data-answer="Nucleic Acid (DNA)">__________</span> &nbsp; <b>4</b> — <span class="blank" data-answer="Lipid">__________</span></p>
+      <p>1 is a branching chain of linked sugar units — a polysaccharide. 2 is a folded, coloured ribbon diagram — the classic way software draws a protein's tertiary structure. 3 is unmistakably the DNA double helix. 4 is a lipid bilayer.</p>
+      <div class="callout c-warn">
+        <span class="tag">Tricky — image 4</span>
+        <p>Look closely and image 4 also shows purple embedded channel proteins and green branching sugar chains — so it isn't <i>purely</i> lipid. The expected answer is still <b>lipid</b>, because the bilayer itself — the structure doing the organising — is built from phospholipids. But it's worth saying out loud to the room: a real cell membrane is never just one biomolecule. It's lipids, proteins, and attached carbohydrates all working together — this is called the <b>fluid mosaic model</b>, and it's a good preview of where the course goes next.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 3</span><h3>Formation &amp; Breakdown of Polymers</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-polymer-formation-breakdown.jpg" alt="Two monomers joining via dehydration synthesis to release water and form a polymer, with the reverse hydrolysis reaction shown">
+      <p><span class="blank" data-answer="Water (H₂O)">__________</span> is released.</p>
+      <p>Two monomers join, a bond forms between them, and a water molecule is kicked out as a byproduct — that's <b>dehydration synthesis</b> (the red arrow). Run it in reverse — add a water molecule back in to break that bond — and you get <b>hydrolysis</b> (the blue arrow), splitting the polymer back into monomers.</p>
+      <div class="callout c-key">
+        <span class="tag">The trick</span>
+        <p>The names describe the water, not the polymer. <b>De-hydration</b> = removing water (building up). <b>Hydro-lysis</b> = water breaking something apart (lysis = to loosen/split). This single diagram is the mechanism behind carbohydrates, proteins, and nucleic acids alike — only the monomer changes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 4</span><h3>Polysaccharides in Plants and Animals</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-polysaccharides-plants-animals.jpg" alt="Table of polysaccharide function versus organism: structural support and energy storage in plants and animals">
+      <div class="tw">
+        <table>
+          <thead><tr><th>Function</th><th>Plants</th><th>Animals</th></tr></thead>
+          <tbody>
+            <tr><td>Structural support</td><td><span class="blank" data-answer="Cellulose">__________</span> — most abundant carbohydrate in plant cell walls</td><td><span class="blank" data-answer="Chitin">__________</span> — found in exoskeletons of insects and crustaceans</td></tr>
+            <tr><td>Energy storage</td><td><span class="blank" data-answer="Starch">__________</span> — storage form of glucose in plants</td><td><span class="blank" data-answer="Glycogen">__________</span> — storage form of glucose in animals</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">Tricky — all four are (almost) the same monomer</span>
+        <p>Cellulose, starch, and glycogen are all polymers of the exact same sugar, glucose. Chitin uses a modified glucose (with a nitrogen-containing group attached — which is why chitin, unusually for a carbohydrate, contains nitrogen). What actually makes these four molecules behave so differently is the <b>type of bond</b> linking the glucose units together and how much the chain <b>branches</b> — not the building block itself. Cellulose's bonds make straight, tightly H-bonded fibres (strong — good for a wall); starch and glycogen's bonds make coiled, branched chains (easy to break back down fast — good for storage), with glycogen branching even more than starch to release glucose quicker, matching an animal's faster energy demand.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 5 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 5</span><h3>The Four Levels of Protein Structure</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-protein-structure-levels.jpg" alt="Four levels of protein structure: primary, secondary, tertiary, quaternary">
+      <div class="tw">
+        <table>
+          <thead><tr><th>Level</th><th>Fill in</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><span class="blank" data-answer="Primary">__________</span></td><td>Amino acid types, quantity, &amp; order</td></tr>
+            <tr><td>2</td><td>Secondary — <span class="blank" data-answer="alpha">____</span>-helices &amp; <span class="blank" data-answer="beta">____</span>-sheets</td><td>Local folding patterns from hydrogen bonding along the backbone</td></tr>
+            <tr><td>3</td><td><span class="blank" data-answer="Tertiary">__________</span></td><td>Overall 3-dimensional shape</td></tr>
+            <tr><td>4</td><td>Quaternary — <span class="blank" data-answer="multiple / two or more">__________</span> amino acid chains</td><td>More than one folded chain joining together</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">Tricky — tertiary vs. quaternary</span>
+        <p>This is the most commonly confused pair in the whole chapter. <b>Tertiary</b> is still just <i>one</i> polypeptide chain, folded up into its final 3D shape. <b>Quaternary</b> only exists if <i>two or more separate chains</i> (subunits) come together — like haemoglobin's four subunits. Not every protein has a quaternary structure; plenty of proteins do their job as a single folded chain and stop at tertiary. If you can't count more than one chain, it isn't quaternary.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 6 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 6</span><h3>DNA Base Pairing</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-dna-base-pairing.jpg" alt="Nitrogenous bases split into pyrimidines (cytosine, thymine, uracil) and purines (adenine, guanine), with a DNA base-pairing ladder">
+      <p>Pyrimidines (single ring): Cytosine, Thymine <i>(DNA only)</i>, Uracil <i>(RNA only)</i>. Purines (double ring): Adenine, Guanine.</p>
+      <p>Base pairing: <span class="blank" data-answer="Adenine">______</span> pairs with T. C pairs with <span class="blank" data-answer="Guanine">______</span>.</p>
+      <div class="callout c-key">
+        <span class="tag">The mnemonics already on your slide — use them, don't replace them</span>
+        <p><b>"Creepy Tombs Under Pyramids"</b> → Cytosine, Thymine, Uracil → Pyrimidines. <b>"Pure As Gold"</b> → Purines → Adenine, Guanine. Both are already good; introducing a second, competing mnemonic in class just gives students two things to mix up instead of one.</p>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">Tricky — why does the pairing rule even exist?</span>
+        <p>It isn't arbitrary. Purines are physically bigger (two fused rings); pyrimidines are smaller (one ring). Pairing a big one with a small one every time keeps the DNA ladder's rungs a constant width all the way up the helix — two purines together would be too wide, two pyrimidines too narrow. On the Thymine/Uracil mix-up: Thymine is chemically Uracil plus one extra methyl group, and that extra group is what lets DNA repair enzymes recognise "this doesn't belong" if a Uracil ever shows up in DNA by mistake (from damage) — RNA, being short-lived, doesn't need that safeguard and uses the simpler, cheaper Uracil instead.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 7 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 7</span><h3>Structure of DNA and RNA</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-dna-rna-structure.jpg" alt="DNA double helix versus single-stranded RNA, both with a sugar-phosphate backbone and directional strands">
+      <p><b>DNA</b> — <span class="blank" data-answer="Double">______</span> Helix. Strands run <span class="blank" data-answer="antiparallel">__________</span> — one strand reads 5′→3′ left to right, the other reads 3′→5′ left to right.</p>
+      <p><b>RNA</b> — <span class="blank" data-answer="Single">______</span> Stranded RNA, still read 5′→3′.</p>
+      <div class="callout c-warn">
+        <span class="tag">Tricky — why "antiparallel" at all?</span>
+        <p>The two strands run in opposite directions because of how the sugar-phosphate backbone is built: each strand has a chemically distinct 5′ end (where a phosphate group sits) and 3′ end (a free -OH group). For the bases to pair up correctly (A with T, C with G) between two strands stacked face to face, the strands have to be flipped relative to each other — that flip is what "antiparallel" means. It isn't a separate design choice layered on top of base pairing; it falls directly out of the chemistry of how the backbone is put together.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 8 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 8</span><h3>Types of Lipids</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-types-of-lipids.jpg" alt="Four types of lipids: fats and oils, steroids, phospholipids, and waxes">
+      <div class="tw">
+        <table>
+          <thead><tr><th>Fill in</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td><span class="blank" data-answer="Fats">______</span> &amp; Oils</td><td>Long-term energy storage in animals &amp; plants</td></tr>
+            <tr><td><span class="blank" data-answer="Steroids">__________</span></td><td>Component of plasma membranes &amp; hormones</td></tr>
+            <tr><td><span class="blank" data-answer="Phospho">________</span>lipids</td><td>Major component of cell membranes</td></tr>
+            <tr><td><span class="blank" data-answer="Waxes">______</span></td><td>Protection &amp; prevention of water loss (e.g. beeswax)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout c-warn">
+        <span class="tag">Tricky — steroids don't look like "fat" at all</span>
+        <p>Steroids are four fused rings, nothing like a greasy chain — which is exactly why students resist calling them a lipid. Remember the framing from the start of this page: lipids are defined by a <b>property</b> (hydrophobic), not a <b>shape</b>. Cholesterol and the steroid hormones (testosterone, oestrogen, cortisol) are built almost entirely from carbon and hydrogen, so they don't mix with water — that alone qualifies them as lipids, ring shape and all.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 9 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 9</span><h3>Saturated vs. Unsaturated</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-saturated-vs-unsaturated.jpg" alt="Saturated, unsaturated, and trans fatty acid chains compared">
+      <p><span class="blank" data-answer="Saturated">__________</span> Fatty Acid (butter) — straight chain, all single bonds.</p>
+      <p>Un<span class="blank" data-answer="saturated">__________</span> Fatty Acid (oil) — one double bond, kinked chain.</p>
+      <p><span class="blank" data-answer="Trans">______</span> Fatty Acid (fries/soda) — has a double bond, but stays straight.</p>
+      <div class="callout c-warn">
+        <span class="tag">Tricky — this one breaks the pattern on purpose</span>
+        <p>The intuitive rule so far is "double bond = kink," and the middle panel confirms it. Then the third panel has a double bond too — and stays <i>straight</i>. That's the entire point of showing trans fat here: the double bond's geometry (trans vs. cis configuration) decides whether the chain kinks or not, not just its presence. Because a trans fat's chain stays straight, it packs together and behaves chemically like a <i>saturated</i> fat — solid, and linked to raised LDL cholesterol — even though it's technically "unsaturated." This is why trans fats get singled out as the unhealthy exception rather than lumped in with normal unsaturated (cis) fats from vegetable oil.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 10 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 10</span><h3>Triglycerides</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-triglycerides.jpg" alt="Glycerol plus three fatty acids joining via dehydration synthesis to form a triglyceride, releasing three water molecules">
+      <p><span class="blank" data-answer="Glycerol">__________</span> + <span class="blank" data-answer="Three">______</span> Fatty Acids → (dehydration synthesis) → Tri<span class="blank" data-answer="glyceride">__________</span> + 3 H₂O</p>
+      <div class="callout c-warn">
+        <span class="tag">Tricky — it's three separate reactions, not one</span>
+        <p>Easy to glance at this and assume "one dehydration reaction happens, one water comes out." Look at the diagram again: <b>three</b> water molecules are released, because glycerol has three -OH groups, and each one forms its own ester bond with its own fatty acid. Three bonds form, three separate water molecules leave — that's the "tri" in triglyceride, and it's also why hydrolysing a triglyceride back down needs three water molecules put back in, not one.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 11 -->
+  <div class="page-card">
+    <div class="page-head"><span class="page-num">Slide 11</span><h3>Phospholipids</h3></div>
+    <div class="page-body">
+      <img class="page-img" src="assets/biomolecules/biomol-phospholipids.jpg" alt="Phospholipid structure: a hydrophilic phosphate head and two hydrophobic fatty acid tails">
+      <p>Hydro<span class="blank" data-answer="philic">________</span> "Head" (the phosphate group). Hydro<span class="blank" data-answer="phobic">________</span> "Tails" (the two fatty acid chains).</p>
+      <div class="callout c-key">
+        <span class="tag">The connection to the previous slide — worth saying out loud</span>
+        <p>Line this up against the triglyceride you just answered: a phospholipid is <i>a triglyceride with one of its three fatty acid tails swapped out for a phosphate group.</i> That single swap changes everything. A triglyceride is fully hydrophobic on all three arms — it just balls up and stores energy. A phospholipid has a polar, water-loving head (the phosphate) attached to two nonpolar, water-fearing tails, which makes it <b>amphipathic</b>. Amphipathic molecules in water spontaneously arrange into a two-layer sheet — heads facing outward to the water on both sides, tails hidden in the middle — which is exactly the bilayer that every cell membrane is built from. One substitution is the entire reason membranes are possible.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p>Answers and explanations built from the slide deck used in class (fill-in-the-blank format) plus Campbell Biology Chapter 5. Not for display to students — the original PPT stays on the projector; this page is your own reference.</p>
+  </div>
+</section>
+
+<!-- =========================================================== TRICKS -->
+<section class="panel" id="p-tricks" role="tabpanel" hidden>
+  <h2 class="sec">Tricks &amp; mnemonics to share</h2>
+  <p class="sec-lede">Memory aids you can say out loud in the room — each one is short enough to repeat back on the spot.</p>
+
+  <div class="grid g2">
+    <div class="trick-card">
+      <h5>CHNOPS</h5>
+      <p>The six elements that make up almost every biomolecule: Carbon, Hydrogen, Nitrogen, Oxygen, Phosphorus, Sulfur.</p>
+      <span class="say"><b>Say it like this:</b> "If you can name CHNOPS, you already know what 95% of your own body is made of."</span>
+    </div>
+    <div class="trick-card">
+      <h5>Dehydration vs. Hydrolysis</h5>
+      <p>The names describe what happens to water, not the molecule.</p>
+      <span class="say"><b>Say it like this:</b> "De-HYDRA-tion removes water to build up. HYDRO-lysis uses water to break down. If you can spot 'hydro' in the word, water is going in, not coming out."</span>
+    </div>
+    <div class="trick-card">
+      <h5>The monomer pattern</h5>
+      <p>Carbohydrate → monosaccharide. Protein → amino acid. Nucleic acid → nucleotide. Lipid → no single monomer at all.</p>
+      <span class="say"><b>Say it like this:</b> "Three of the four have a matching partner word you already say together naturally. Lipid is the odd one out on purpose — that's the exam trap."</span>
+    </div>
+    <div class="trick-card">
+      <h5>Purines vs. pyrimidines (from your own slide)</h5>
+      <p>"Creepy Tombs Under Pyramids" → Cytosine, Thymine, Uracil → Pyrimidines. "Pure As Gold" → Purines → Adenine, Guanine.</p>
+      <span class="say"><b>Say it like this:</b> "Big pairs with small, every rung, all the way up the ladder — that's why a purine always pairs with a pyrimidine and never with another purine."</span>
+    </div>
+    <div class="trick-card">
+      <h5>Saturated vs. unsaturated</h5>
+      <p>Saturated = "saturated with hydrogen," no double bonds, straight chain, solid at room temperature.</p>
+      <span class="say"><b>Say it like this:</b> "Saturated fat sits solid on the counter, like butter. Unsaturated has a kink from a double bond and stays liquid, like oil in a bottle."</span>
+    </div>
+    <div class="trick-card">
+      <h5>Trans fat, the exception</h5>
+      <p>Has a double bond like unsaturated fat, but stays straight like saturated fat.</p>
+      <span class="say"><b>Say it like this:</b> "Trans fat has the double bond of an unsaturated fat but the shape and health risk of a saturated one — worst of both."</span>
+    </div>
+    <div class="trick-card">
+      <h5>Cellulose · Chitin · Starch · Glycogen</h5>
+      <p>All (near enough) the same glucose monomer — the bond type and branching is what differs.</p>
+      <span class="say"><b>Say it like this:</b> "Plants build with cellulose, store with starch. Animals build with chitin (if you're an arthropod), store with glycogen. Same brick, different blueprint."</span>
+    </div>
+    <div class="trick-card">
+      <h5>Tertiary vs. quaternary</h5>
+      <p>Tertiary = one folded chain. Quaternary = two or more chains joined.</p>
+      <span class="say"><b>Say it like this:</b> "Count the chains. One folded chain stops at tertiary. The moment you have a second chain joining in, it's quaternary."</span>
+    </div>
+    <div class="trick-card">
+      <h5>Why a steroid still counts as a lipid</h5>
+      <p>Lipids are defined by a property, not a shape.</p>
+      <span class="say"><b>Say it like this:</b> "Don't ask what it looks like — ask whether it mixes with water. If it doesn't, it's a lipid, ring-shaped or not."</span>
+    </div>
+    <div class="trick-card">
+      <h5>Phospholipid = triglyceride, one swap</h5>
+      <p>Swap one of a triglyceride's three fatty acids for a phosphate group and you get a phospholipid.</p>
+      <span class="say"><b>Say it like this:</b> "One substitution turns a pure energy-storage molecule into the molecule every membrane on Earth is built from."</span>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== DOUBTS -->
+<section class="panel" id="p-doubts" role="tabpanel" hidden>
+  <h2 class="sec">Doubt bank</h2>
+  <p class="sec-lede">The questions likely to come up once students actually sit with this. Searchable.</p>
+
+  <div class="tools">
+    <input class="search" id="qSearch" type="search" placeholder="Search — try 'quaternary', 'trans fat', 'chitin'…" aria-label="Search doubts">
+    <div class="chips" id="qChips"></div>
+  </div>
+  <div id="qList"></div>
+  <p class="mini" id="qCount"></p>
+</section>
+
+<!-- ============================================================= QUIZ -->
+<section class="panel" id="p-quiz" role="tabpanel" hidden>
+  <h2 class="sec">Check yourself</h2>
+  <p class="sec-lede">Ten questions across all four biomolecule classes. Try this once before you consider yourself done studying.</p>
+  <div class="score" id="score">Not started</div>
+  <div id="quiz"></div>
+  <p><button class="btn" id="resetQuiz" type="button">Reset quiz</button></p>
+</section>
+
+<!-- ============================================================ CHEAT -->
+<section class="panel" id="p-cheat" role="tabpanel" hidden>
+  <h2 class="sec">Cheat sheet</h2>
+  <p class="sec-lede">Every answer on one screen. Glance at this right before the tutorial starts.</p>
+
+  <h4>The one-line version</h4>
+  <div class="callout c-key"><p style="margin:0;">Biomolecules are built on carbon from six elements (CHNOPS); three of the four classes are chains of monomers joined by dehydration synthesis and split by hydrolysis; lipids are the exception, grouped by being hydrophobic rather than by sharing one monomer.</p></div>
+
+  <h4>Every blank, by slide</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Slide</th><th>Answers</th></tr></thead>
+      <tbody>
+        <tr><td>2 · Identify</td><td>Carbohydrate · Protein · Nucleic Acid · Lipid</td></tr>
+        <tr><td>3 · Polymers</td><td>Water is released (dehydration synthesis / hydrolysis)</td></tr>
+        <tr><td>4 · Polysaccharides</td><td>Cellulose &amp; Chitin (structure) · Starch &amp; Glycogen (storage)</td></tr>
+        <tr><td>5 · Protein structure</td><td>Primary · alpha/beta (secondary) · Tertiary · multiple chains (quaternary)</td></tr>
+        <tr><td>6 · Base pairing</td><td>A pairs with T · C pairs with G</td></tr>
+        <tr><td>7 · DNA/RNA structure</td><td>Double Helix, antiparallel (DNA) · Single stranded (RNA)</td></tr>
+        <tr><td>8 · Lipid types</td><td>Fats &amp; Oils · Steroids · Phospholipids · Waxes</td></tr>
+        <tr><td>9 · Fatty acids</td><td>Saturated · Unsaturated · Trans</td></tr>
+        <tr><td>10 · Triglycerides</td><td>Glycerol + 3 Fatty Acids → Triglyceride + 3 H₂O</td></tr>
+        <tr><td>11 · Phospholipids</td><td>Hydrophilic head · Hydrophobic tails</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>The four classes</h4>
+  <div class="tw">
+    <table>
+      <tbody>
+        <tr><td>Carbohydrate</td><td>monomer: monosaccharide — energy + structure</td></tr>
+        <tr><td>Protein</td><td>monomer: amino acid — nearly everything a cell does</td></tr>
+        <tr><td>Nucleic acid</td><td>monomer: nucleotide — stores/transmits information</td></tr>
+        <tr><td>Lipid</td><td>no single monomer — defined by being hydrophobic</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    <p>Built for TA duty, Monday 7 September, from the Biomolecules deck (Campbell Biology Ch. 5). Not for display to students — the original PPT stays on the projector; this page stays on the iPad.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ------------------------------------------------------------- theme */
+var root = document.documentElement;
+document.getElementById("themeBtn").addEventListener("click", function(){
+  var now = root.getAttribute("data-theme");
+  if(!now){ now = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+  root.setAttribute("data-theme", now === "dark" ? "light" : "dark");
+});
+
+/* --------------------------------------------------------- nav / tabs */
+var SECTIONS = [
+  ["start",  "What Is a Biomolecule?"],
+  ["pages",  "Page-by-Page Answers"],
+  ["tricks", "Tricks & Mnemonics"],
+  ["doubts", "Doubt Bank"],
+  ["quiz",   "Check Yourself"],
+  ["cheat",  "Cheat Sheet"]
+];
+var nav = document.getElementById("nav");
+SECTIONS.forEach(function(s, i){
+  var b = document.createElement("button");
+  b.type = "button";
+  b.setAttribute("role","tab");
+  b.setAttribute("aria-selected", i===0 ? "true":"false");
+  b.setAttribute("aria-controls","p-"+s[0]);
+  b.dataset.k = s[0];
+  b.innerHTML = '<span class="num">'+(i+1)+'</span>'+s[1];
+  b.addEventListener("click", function(){ show(s[0]); });
+  nav.appendChild(b);
+});
+function show(k){
+  SECTIONS.forEach(function(s){ document.getElementById("p-"+s[0]).hidden = (s[0] !== k); });
+  Array.prototype.forEach.call(nav.children, function(b){
+    b.setAttribute("aria-selected", b.dataset.k === k ? "true" : "false");
+  });
+  window.scrollTo({ top:0 });
+}
+show("start");
+
+/* ------------------------------------------------------------- blanks */
+function wireBlank(b){
+  var answer = b.dataset.answer;
+  var blankText = b.textContent;
+  b.dataset.blankText = blankText;
+  b.addEventListener("click", function(){
+    if(b.classList.contains("revealed")){
+      b.textContent = b.dataset.blankText;
+      b.classList.remove("revealed");
+    } else {
+      b.textContent = answer;
+      b.classList.add("revealed");
+    }
+  });
+}
+var blanks = document.querySelectorAll(".blank");
+Array.prototype.forEach.call(blanks, wireBlank);
+
+document.getElementById("revealAll").addEventListener("click", function(){
+  Array.prototype.forEach.call(blanks, function(b){
+    b.textContent = b.dataset.answer; b.classList.add("revealed");
+  });
+});
+document.getElementById("hideAll").addEventListener("click", function(){
+  Array.prototype.forEach.call(blanks, function(b){
+    b.textContent = b.dataset.blankText; b.classList.remove("revealed");
+  });
+});
+
+/* -------------------------------------------------------------- doubts */
+var DOUBTS = [
+["What actually makes something a 'biomolecule' rather than just any molecule?","start",0,
+ "A molecule that a living organism builds and needs in order to function — built on a carbon backbone, almost always from just six elements (CHNOPS). It's less about one exact chemical test and more about the role the molecule plays in a living system.",
+ "",""],
+
+["Why are carbs, proteins, and nucleic acids all built the same way, but lipids aren't?","start",1,
+ "The first three are true polymers — a repeating monomer, linked by dehydration synthesis, split by hydrolysis. Lipids don't have one repeating unit at all; they're grouped together purely because they share a property (hydrophobic), not a building block. That's the single most useful distinction in the whole chapter.",
+ "",""],
+
+["Is water itself a biomolecule?","start",1,
+ "Not usually counted as one of the four classes, even though it's essential to every reaction discussed here (it's released in dehydration synthesis and consumed in hydrolysis). The four classes are specifically the carbon-based organic molecules; water is inorganic and doesn't have the carbon backbone that defines the other four.",
+ "",""],
+
+["Are cellulose, starch, and glycogen made of the same sugar?","carbs",0,
+ "Yes — all three are polymers of glucose. What differs is the type of glycosidic bond linking the glucose units and how much the chain branches, which is what makes one a rigid structural fibre and the others coiled, easily-broken-down storage molecules.",
+ "",""],
+
+["Why can humans digest starch but not cellulose, if both are just glucose?","carbs",1,
+ "The glucose units are linked by different bond geometries — alpha bonds in starch, beta bonds in cellulose. Human digestive enzymes are shaped to break alpha bonds only. Cellulose passes through undigested as dietary fibre. Some herbivores manage it only because gut microbes supply the right enzyme.",
+ "",""],
+
+["What's the real chemical difference between starch and glycogen if both store glucose?","carbs",1,
+ "Branching. Glycogen is considerably more branched than starch. More branch points means more free ends the cell can pull glucose from at once, letting an animal release stored sugar faster than a plant typically needs to — matching each organism's metabolic pace.",
+ "",""],
+
+["What bond forms when monosaccharides link together?","carbs",1,
+ "A glycosidic bond, formed by the same dehydration-synthesis mechanism used everywhere else in this chapter — just applied to sugars specifically, the way a peptide bond is the protein version and a phosphodiester bond is the nucleic-acid version.",
+ "",""],
+
+["Does every protein have a quaternary structure?","proteins",0,
+ "No. Quaternary structure only exists for proteins built from more than one polypeptide chain. A protein that does its job as a single folded chain stops at tertiary structure — quaternary isn't a level every protein has to reach.",
+ "",""],
+
+["What actually holds a protein's tertiary structure together?","proteins",1,
+ "Interactions between the amino acid side chains (R-groups): hydrogen bonds, ionic bonds, hydrophobic clustering away from water, and occasionally a covalent disulfide bridge between two cysteines. Which ones dominate depends entirely on which amino acids are present.",
+ "",""],
+
+["Why is Thymine only in DNA and Uracil only in RNA?","nucleic",1,
+ "Thymine is chemically Uracil plus one extra methyl group. That extra group lets DNA repair enzymes recognise a Uracil as damage if one ever appears in DNA (a common spontaneous lesion is Cytosine degrading into Uracil) and excise it on sight. RNA is short-lived and disposable, so it doesn't need that repair signal and uses the cheaper, simpler Uracil.",
+ "",""],
+
+["Why do the two DNA strands have to run in opposite directions?","nucleic",1,
+ "It falls directly out of the backbone chemistry — each strand has a distinct 5′ end and 3′ end, and for bases to pair correctly across the two strands stacked together, the strands must be flipped relative to each other. It isn't an extra rule on top of base pairing; it's a consequence of it.",
+ "",""],
+
+["Is RNA always single-stranded?","nucleic",1,
+ "As a working rule for this course, yes. In reality RNA can fold back on itself to pair internally, and a few viruses use double-stranded RNA genomes — but 'RNA = single-stranded, DNA = double-stranded' is the correct simplification for everything covered here.",
+ "",""],
+
+["How can a steroid be a lipid if it doesn't look anything like a fat?","lipids",0,
+ "Because lipids are classified by a shared property — hydrophobic, built mostly from carbon and hydrogen, won't mix with water — not by a shared shape. A steroid's four fused rings are still overwhelmingly carbon and hydrogen, so it behaves like every other lipid even though it looks nothing like a fatty acid chain.",
+ "",""],
+
+["Why is a trans fat worse for you than a regular unsaturated fat?","lipids",1,
+ "Both have a double bond, but a trans fat's chain stays straight instead of kinking, so it packs together and behaves like a saturated fat in the body — raising LDL cholesterol — while losing the health benefit that the kinked, natural cis-shape normally provides.",
+ "",""],
+
+["What's actually different between a fat (triglyceride) and a phospholipid?","lipids",0,
+ "One substitution: a phospholipid is a triglyceride with one of its three fatty acid tails replaced by a phosphate group. That swap turns a fully hydrophobic energy-storage molecule into an amphipathic one, with a water-loving head and water-fearing tails.",
+ "",""],
+
+["Why do phospholipids specifically form a bilayer in water?","lipids",1,
+ "Because they're amphipathic — the hydrophilic phosphate heads want to face water, the hydrophobic fatty acid tails want to hide from it. A two-layer sheet, heads out and tails sandwiched in the middle, is the arrangement that satisfies both preferences at once, which is exactly the structure of every cell membrane.",
+ "",""],
+
+["On the 'Identify the Biomolecules' slide, image 4 shows a membrane with proteins in it too — is the answer 'lipid' or 'protein'?","pages",1,
+ "The expected answer is lipid, since the bilayer structure itself is what's being highlighted and it's built from phospholipids. But it's worth pointing out to the class that a real membrane is never just one biomolecule — lipids, embedded proteins, and attached carbohydrates all work together, which is the fluid mosaic model.",
+ "",""],
+
+["Does CHNOPS cover every atom in every biomolecule, or are there exceptions?","start",1,
+ "It covers the overwhelming majority. The known exceptions are mostly trace metal ions that certain enzymes require as cofactors — iron, zinc, and magnesium among them — which enable a reaction without becoming part of the biomolecule's core structure themselves.",
+ "",""]
+];
+
+var TAGS = [["all","All"],["start","Big Picture"],["carbs","Carbohydrates"],["proteins","Proteins"],["nucleic","Nucleic Acids"],["lipids","Lipids"],["pages","Slide-specific"]];
+var activeTag = "all", query = "";
+
+var chips = document.getElementById("qChips");
+TAGS.forEach(function(t){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = t[1];
+  b.setAttribute("aria-pressed", t[0]==="all" ? "true":"false");
+  b.dataset.t = t[0];
+  b.addEventListener("click", function(){
+    activeTag = t[0];
+    Array.prototype.forEach.call(chips.children, function(c){
+      c.setAttribute("aria-pressed", c.dataset.t === activeTag ? "true":"false");
+    });
+    filter();
+  });
+  chips.appendChild(b);
+});
+
+var qList = document.getElementById("qList");
+DOUBTS.forEach(function(d, i){
+  var wrap = document.createElement("article");
+  wrap.className = "q"; wrap.dataset.tag = d[1];
+  wrap.dataset.text = (d[0]+" "+d[3]+" "+d[4]).replace(/<[^>]+>/g,"").toLowerCase();
+
+  var head = document.createElement("button");
+  head.type = "button"; head.className = "q-head";
+  head.setAttribute("aria-expanded","false"); head.setAttribute("aria-controls","qb-"+i);
+  head.innerHTML = '<span class="qm">Q'+(i+1)+'</span><span class="qt">'+d[0]+'</span><span class="qc">+</span>';
+
+  var body = document.createElement("div");
+  body.className = "q-body"; body.id = "qb-"+i; body.hidden = true;
+  var html = '<p>'+d[3]+'</p>';
+  if(d[4]) html += '<p>'+d[4]+'</p>';
+  var tagName = (TAGS.filter(function(t){ return t[0]===d[1]; })[0]||["","—"])[1];
+  html += '<div class="q-tags"><span class="q-tag">'+tagName+'</span>'+
+          (d[2] ? '<span class="q-tag hard">likely follow-up</span>' : '')+'</div>';
+  body.innerHTML = html;
+
+  head.addEventListener("click", function(){
+    var open = head.getAttribute("aria-expanded")==="true";
+    head.setAttribute("aria-expanded", open?"false":"true");
+    body.hidden = open;
+  });
+
+  wrap.appendChild(head); wrap.appendChild(body);
+  qList.appendChild(wrap);
+});
+
+document.getElementById("qSearch").addEventListener("input", function(){
+  query = this.value.trim().toLowerCase(); filter();
+});
+function filter(){
+  var n = 0;
+  Array.prototype.forEach.call(qList.children, function(w){
+    var ok = (activeTag==="all" || w.dataset.tag===activeTag) &&
+             (!query || w.dataset.text.indexOf(query) > -1);
+    w.hidden = !ok; if(ok) n++;
+  });
+  document.getElementById("qCount").textContent =
+    n + " of " + DOUBTS.length + " question" + (n===1?"":"s") + " shown";
+}
+filter();
+
+/* -------------------------------------------------------------- quiz */
+var QUIZ = [
+["Which class of biomolecule is NOT built from one single repeating monomer?",
+ ["Carbohydrates","Proteins","Nucleic acids","Lipids"],
+ 3,
+ "Lipids are grouped by a shared property (hydrophobic), not a shared building block — the exception to the monomer/polymer pattern that covers the other three classes."],
+
+["Dehydration synthesis does what?",
+ ["Breaks a polymer apart using water","Joins two monomers together and releases water","Joins two monomers together and absorbs water","Breaks a polymer apart and releases water"],
+ 1,
+ "Dehydration synthesis links monomers and kicks out a water molecule at the new bond. Hydrolysis is the reverse: water goes in, the bond breaks."],
+
+["Cellulose and starch are both polymers of glucose. What actually makes them behave so differently?",
+ ["They aren't really both made of glucose","The type of glycosidic bond and amount of branching","Cellulose contains nitrogen and starch doesn't","Starch is a protein, cellulose is a carbohydrate"],
+ 1,
+ "Same monomer, different bond geometry (alpha vs. beta) and branching pattern — that's what turns one into a rigid structural fibre and the other into an easily-digested storage molecule."],
+
+["A protein made of a single folded polypeptide chain, with no other chains attached, has reached which level of structure?",
+ ["Secondary","Tertiary","Quaternary","It has no structure until a second chain joins"],
+ 1,
+ "Tertiary structure is the complete 3D fold of one chain. Quaternary only applies once a second (or more) chain joins in — plenty of proteins never go further than tertiary."],
+
+["Which nitrogenous base is found only in RNA, never in DNA?",
+ ["Thymine","Cytosine","Uracil","Guanine"],
+ 2,
+ "Uracil replaces Thymine in RNA. Thymine (Uracil plus a methyl group) is DNA's version, and that extra group helps DNA repair machinery recognise damage."],
+
+["Why do the two strands of a DNA double helix run in opposite (antiparallel) directions?",
+ ["It's an arbitrary convention with no chemical basis","Each strand has a distinct 5′ and 3′ end, and correct base pairing across the two strands requires them to be flipped relative to each other","DNA polymerase forces them apart during replication","Only one strand actually has a direction"],
+ 1,
+ "Antiparallel arrangement isn't a separate rule — it falls directly out of the sugar-phosphate backbone's chemistry and what's needed for the bases to pair correctly."],
+
+["A steroid is classified as a lipid because:",
+ ["It has a long hydrocarbon tail like a fatty acid","It is hydrophobic, regardless of its ring shape","It is a polymer of glycerol","It contains a phosphate group"],
+ 1,
+ "Lipids are defined by a shared property — being hydrophobic — not by sharing one particular shape. A steroid's fused rings are still overwhelmingly carbon and hydrogen, so it qualifies."],
+
+["What makes a trans fat behave like a saturated fat despite having a double bond?",
+ ["Trans fats don't actually have a double bond","The double bond's geometry keeps the chain straight instead of kinking it","Trans fats have no fatty acid tails at all","Trans fats are missing a glycerol backbone"],
+ 1,
+ "The trans configuration lets the chain stay straight even with a double bond present, so it packs together and behaves like a saturated fat — solid, and linked to raised LDL cholesterol."],
+
+["Forming one triglyceride from glycerol and three fatty acids releases how many water molecules?",
+ ["One","Two","Three","None — water is absorbed, not released"],
+ 2,
+ "Glycerol has three -OH groups, each forming its own ester bond with a fatty acid — three bonds, three separate water molecules released."],
+
+["What single structural change turns a triglyceride into a phospholipid?",
+ ["Adding a fourth fatty acid tail","Replacing one fatty acid tail with a phosphate group","Removing the glycerol backbone entirely","Adding a nitrogenous base"],
+ 1,
+ "Swap one of the three fatty acid tails for a phosphate group and the fully hydrophobic triglyceride becomes an amphipathic phospholipid — a hydrophilic head plus two hydrophobic tails, which is what makes cell membranes possible."]
+];
+
+var quizEl = document.getElementById("quiz");
+var answered = {}, correct = 0;
+
+function renderQuiz(){
+  quizEl.innerHTML = ""; answered = {}; correct = 0; updateScore();
+  QUIZ.forEach(function(q, i){
+    var d = document.createElement("div");
+    d.className = "quiz-q";
+    var stem = document.createElement("div");
+    stem.className = "stem"; stem.textContent = (i+1)+". "+q[0];
+    var opts = document.createElement("div"); opts.className = "opts";
+
+    q[1].forEach(function(text, j){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "opt"; b.textContent = text;
+      b.addEventListener("click", function(){
+        if(answered[i]) return;
+        answered[i] = true;
+        var all = opts.querySelectorAll(".opt");
+        Array.prototype.forEach.call(all, function(o, k){
+          o.disabled = true;
+          if(k === q[2]) o.classList.add("right");
+        });
+        if(j !== q[2]) b.classList.add("wrong"); else correct++;
+        expl.hidden = false;
+        updateScore();
+      });
+      opts.appendChild(b);
+    });
+
+    var expl = document.createElement("div");
+    expl.className = "expl"; expl.hidden = true; expl.textContent = q[3];
+
+    d.appendChild(stem); d.appendChild(opts); d.appendChild(expl);
+    quizEl.appendChild(d);
+  });
+}
+function updateScore(){
+  var n = Object.keys(answered).length;
+  document.getElementById("score").textContent =
+    n === 0 ? "Not started — " + QUIZ.length + " questions"
+            : "Answered " + n + " of " + QUIZ.length + " · correct: " + correct;
+}
+document.getElementById("resetQuiz").addEventListener("click", renderQuiz);
+renderQuiz();
+
+})();
+</script>
+</body>
+</html>
