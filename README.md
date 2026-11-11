@@ -49,3 +49,14 @@ Interactive pieces worth knowing about before you teach:
 - **Tappable cell diagram** (§5) — every organelle gives its function plus
   the doubt most often attached to it. Toggles between animal and plant.
 - **Doubt bank search** (§7) — usable live, mid-tutorial.
+
+### `study-material/endsem-2026/` — end-sem revision (Lectures 15–23)
+
+- `BB101_EndSem_Practice_QandA.pdf` — exam-pattern analysis, a 60-mark model
+  paper, 225 practice questions in every exam format (MCQ, match the following,
+  assertion–reason, numericals, pedigrees, micrographs…), with answers,
+  explanations and Campbell section references.
+- `BB101_EndSem_Short_Notes.pdf` — 15 pages of short notes and a last-minute
+  revision sheet.
+
+See `study-material/endsem-2026/README.md` to rebuild or edit questions.
